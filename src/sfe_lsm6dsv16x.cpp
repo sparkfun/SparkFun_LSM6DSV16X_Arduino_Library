@@ -1,13 +1,11 @@
-#include "sfe_ism330dhcx.h"
+#include "sfe_lsm6dsv16x.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// init()
-//
-// init the system
-//
-// Return Value: false on error, true on success
-//
+/// @brief Resets all registers. 
+/// @param dataRate 
+/// @return true on successful execution.
 
+/// @brief Sets the struct that interfaces with STMicroelectronic's C Library.
+/// @return true on successful execution.
 bool QwDevLSM6DSV16X::init(void)
 {
     //  do we have a bus yet? is the device connected?
@@ -25,17 +23,9 @@ bool QwDevLSM6DSV16X::init(void)
 }
 
 
-
-///////////////////////////////////////////////////////////////////////
-// isConnected()
-//
-// Called to determine if a LSM6DSV16X device, at the provided i2c address
-// is connected.
-//
-//  Parameter   Description
-//  ---------   -----------------------------
-//  retVal      true if device is connected, false if not connected
-
+/// @brief Checks that the bus is connected with the LSM6DSV16X by checking
+/// it's unique ID. 
+/// @return True on successful execution.
 bool QwDevLSM6DSV16X::isConnected()
 {
 		if (getUniqueId() != LSM6DSV16X_ID)
@@ -45,89 +35,54 @@ bool QwDevLSM6DSV16X::isConnected()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// setCommunicationBus()
-//
-// Method to set the bus object that is used to communicate with the device
-//
-//  Parameter    Description
-//  ---------    -----------------------------
-//  theBus       The communication bus object
-//  i2cAddress   I2C address for the 6DoF
-
-void QwDevLSM6DSV16X::setCommunicationBus(sfe_ISM330DHCX::QwIDeviceBus &theBus, uint8_t i2cAddress)
+/// @brief Sets the pointer to the data bus for read and writes.
+/// @param theBus
+/// @param i2cAddress
+void QwDevLSM6DSV16X::setCommunicationBus(sfe_LSM6DSV16X::QwIDeviceBus &theBus, uint8_t i2cAddress)
 {
     _sfeBus = &theBus;
 		_i2cAddress = i2cAddress; 
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// setCommunicationBus()
-//
-// Overloaded option for setting the data bus (theBus) object to a SPI bus object.
-//
-//  Parameter    Description
-//  ---------    -----------------------------
-//  theBus       The communication bus object
-//  
-
-void QwDevLSM6DSV16X::setCommunicationBus(sfe_ISM330DHCX::QwIDeviceBus &theBus)
+/// @brief Sets the pointer to the data bus for read and writes.
+/// @param theBus
+void QwDevLSM6DSV16X::setCommunicationBus(sfe_LSM6DSV16X::QwIDeviceBus &theBus)
 {
     _sfeBus = &theBus;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// writeRegisterRegion()
-//
-// Writes data to the given register
-//
-//  Parameter    Description
-//  ---------    -----------------------------
-//  offset       The register to be written to
-//  data         Data to be written
-//  length       Number of bytes to be written
-
+/// @brief Writes to the data to the given register using the set data bas. 
+/// @param  offset
+/// @param  data 
+/// @param  length
+/// @return The successful (0) or unsuccessful (-1) write to the given register.
 int32_t QwDevLSM6DSV16X::writeRegisterRegion(uint8_t offset, uint8_t *data, uint16_t length)
 {
     return _sfeBus->writeRegisterRegion(_i2cAddress, offset, data, length);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// readRegisterRegion()
-//
-// Reads data from the given register, auto-incrementing fore each successive read
-//
-//  Parameter    Description
-//  ---------    -----------------------------
-//  offset       The register to be read from
-//  data         Pointer to where data will be saved
-//  length       Number of bytes to be read
 
+/// @brief Reads data from the specified register using the set data bas. 
+/// @param  offset
+/// @param  data 
+/// @param  length
+/// @return The successful (0) or unsuccessful (-1) read of the given register.
 int32_t QwDevLSM6DSV16X::readRegisterRegion(uint8_t offset, uint8_t *data, uint16_t length)
 {
     return _sfeBus->readRegisterRegion(_i2cAddress, offset, data, length);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// setAccelFullScale()
-//
-// Sets the scale of the acceleromter's readings 2g - 16g
-//
-//  Parameter    Description
-//  ---------    -----------------------------
-//  val          The scale to be applied to the accelerometer (0 - 3)
-//
-// See sfe_ism330dhcx_defs.h for a list of valid arguments
-//
-
+/// @brief Sets the scale of the acceleromter's readings 2g - 16g.
+/// @param val
+/// @return True upon successful write or false otherwise.
 bool QwDevLSM6DSV16X::setAccelFullScale(uint8_t val)
 {
-	//0 = 2g, 1 = 16g, 2 = 4g, 3 = 8g
+	//0 = 2g, 1 = 4g, 2 = 8g, 3 = 16g
 	if( val > 3 )
 		return false;
 	
-	int32_t retVal = (ism330dhcx_xl_full_scale_set(&sfe_dev, 
-																								(ism330dhcx_fs_xl_t)val));
+	int32_t retVal = (lsm6dsv16x_xl_full_scale_set(&sfe_dev, 
+																								(lsm6dsv16x_xl_full_scale_t) val));
 	
 	fullScaleAccel = val; 
 
@@ -137,26 +92,17 @@ bool QwDevLSM6DSV16X::setAccelFullScale(uint8_t val)
 	return true; 
 }
 
-
-//////////////////////////////////////////////////////////////////////////////
-// setGyroFullScale()
-//
-// Sets the scale of the gyroscopes's readings 125, 250, 500, 1000, 2000, 4000 degrees per second
-//
-//  Parameter    Description
-//  ---------    -----------------------------
-//  val          The scale to be applied to the gyroscope (0,1,2,4,6,12)
-//   
-// See sfe_ism330dhcx_defs.h for a list of valid arguments
-//
+/// @brief Sets the scale of the gyroscopes's readings 125, 250, 500, 1000, 2000, or 4000 degrees per second
+/// @param val
+/// @return True upon successful write or false otherwise.
 bool QwDevLSM6DSV16X::setGyroFullScale(uint8_t val)
 {
 	//0,1,2,4,8,12
 	if( val > 12 )
 		return false;
 	
-	int32_t retVal = ism330dhcx_gy_full_scale_set(&sfe_dev,
-																							  (ism330dhcx_fs_g_t)val);
+	int32_t retVal = lsm6dsv16x_gy_full_scale_set(&sfe_dev,
+																							  (lsm6dsv16x_gy_full_scale_t)val);
 	
 	fullScaleGyro = val; 
 
@@ -166,17 +112,13 @@ bool QwDevLSM6DSV16X::setGyroFullScale(uint8_t val)
 	return true; 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// getAccelFullScale()
-//
-// Retrieves the scale of the accelerometer's readings 
-//
-
+/// @brief Retrieves the scale of the accelerometer's readings 
+/// @return Returns the gyroscope's scale setting. 
 uint8_t QwDevLSM6DSV16X::getAccelFullScale()
 {
 
-	ism330dhcx_fs_xl_t val; 
-	int32_t retVal = ism330dhcx_xl_full_scale_get(&sfe_dev, &val);
+	lsm6dsv16x_xl_full_scale_t val; 
+	int32_t retVal = lsm6dsv16x_xl_full_scale_get(&sfe_dev, &val);
 
 	if( retVal != 0 )
 		return -1; 
@@ -184,17 +126,13 @@ uint8_t QwDevLSM6DSV16X::getAccelFullScale()
 	return (uint8_t)val; 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// getUniqueId()
-//
-// Retrieves the the device's ID: 0x6B for the LSM6DSV16X
-//
-
+/// @brief Retrieves the the device's ID: 0x6B for the LSM6DSV16X
+/// @return Returns the unique ID. 
 uint8_t QwDevLSM6DSV16X::getUniqueId()
 {
 
 	uint8_t buff = 0;
-	int32_t retVal = (ism330dhcx_device_id_get(&sfe_dev, &buff));
+	int32_t retVal = (lsm6dsv16x_device_id_get(&sfe_dev, &buff));
 
 	if(retVal != 0)
 		return 0; 
@@ -202,18 +140,13 @@ uint8_t QwDevLSM6DSV16X::getUniqueId()
 	return buff;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////
-// getTemp()
-//
-// Gets the temperature
-//
-
+/// @brief Retrieves raw temperature values.
+/// @return Returns raw temperature value. 
 int16_t QwDevLSM6DSV16X::getTemp()
 {
 	
 	int16_t tempVal;	
-	int32_t retVal = ism330dhcx_temperature_raw_get(&sfe_dev, &tempVal);
+	int32_t retVal = lsm6dsv16x_temperature_raw_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0 )
 		return -1;
@@ -223,19 +156,13 @@ int16_t QwDevLSM6DSV16X::getTemp()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// getRawAccel()
-//
-// Retrieves raw register values for accelerometer data 
-//
-//  Parameter    Description
-//  ---------    -----------------------------
-//  accelData    Accel data type pointer at which data will be stored. 
-
-bool QwDevLSM6DSV16X::getRawAccel(sfe_ism_raw_data_t* accelData)
+/// @brief Retrieves raw register values for accelerometer data 
+/// @param accelData    
+/// @return True on successful execution.
+bool QwDevLSM6DSV16X::getRawAccel(sfe_lsm_raw_data_t* accelData)
 {
 	int16_t tempVal[3] = {0};	
-	int32_t retVal = ism330dhcx_acceleration_raw_get(&sfe_dev, tempVal);
+	int32_t retVal = lsm6dsv16x_acceleration_raw_get(&sfe_dev, tempVal);
 
 	if( retVal != 0 )
 		return false;
@@ -248,22 +175,14 @@ bool QwDevLSM6DSV16X::getRawAccel(sfe_ism_raw_data_t* accelData)
 
 }
 
-
-//////////////////////////////////////////////////////////////////////////////
-// getRawGyro()
-//
-// Retrieves raw register values for gyroscope data 
-//
-//  Parameter    Description
-//  ---------   -----------------------------
-//  gyroData    Gyro data type pointer at which data will be stored. 
-//
-
-bool QwDevLSM6DSV16X::getRawGyro(sfe_ism_raw_data_t* gyroData)
+/// @brief Retrieves raw register values for gyroscope data 
+/// @param gyroData    
+/// @return True on successful execution.
+bool QwDevLSM6DSV16X::getRawGyro(sfe_lsm_raw_data_t* gyroData)
 {
 	
 	int16_t tempVal[3] = {0};	
-	int32_t retVal = ism330dhcx_angular_rate_raw_get(&sfe_dev, tempVal);
+	int32_t retVal = lsm6dsv16x_angular_rate_raw_get(&sfe_dev, tempVal);
 
 	if( retVal != 0 )
 		return false;
@@ -288,11 +207,11 @@ bool QwDevLSM6DSV16X::getRawGyro(sfe_ism_raw_data_t* gyroData)
 //  accelData    Accel data type pointer at which data will be stored. 
 //
 
-bool QwDevLSM6DSV16X::getAccel(sfe_ism_data_t* accelData)
+bool QwDevLSM6DSV16X::getAccel(sfe_lsm_data_t* accelData)
 {
 	
 	int16_t tempVal[3] = {0};	
-	int32_t retVal = ism330dhcx_acceleration_raw_get(&sfe_dev, tempVal);
+	int32_t retVal = lsm6dsv16x_acceleration_raw_get(&sfe_dev, tempVal);
 
 	if( retVal != 0 )
 		return false;
@@ -338,11 +257,11 @@ bool QwDevLSM6DSV16X::getAccel(sfe_ism_data_t* accelData)
 //
 
 
-bool QwDevLSM6DSV16X::getGyro(sfe_ism_data_t* gyroData)
+bool QwDevLSM6DSV16X::getGyro(sfe_lsm_data_t* gyroData)
 {
 	
 	int16_t tempVal[3] = {0};	
-	int32_t retVal = ism330dhcx_angular_rate_raw_get(&sfe_dev, tempVal);
+	int32_t retVal = lsm6dsv16x_angular_rate_raw_get(&sfe_dev, tempVal);
 
 	if( retVal != 0 )
 		return false;
@@ -396,57 +315,57 @@ bool QwDevLSM6DSV16X::getGyro(sfe_ism_data_t* gyroData)
 
 float QwDevLSM6DSV16X::convert2gToMg(int16_t data)
 {
-	return(ism330dhcx_from_fs2g_to_mg(data));
+	return(lsm6dsv16x_from_fs2_to_mg(data));
 }
 
 float QwDevLSM6DSV16X::convert4gToMg(int16_t data)
 {
-	return(ism330dhcx_from_fs4g_to_mg(data));
+	return(lsm6dsv16x_from_fs4_to_mg(data));
 }
 
 float QwDevLSM6DSV16X::convert8gToMg(int16_t data)
 {
-	return(ism330dhcx_from_fs8g_to_mg(data));
+	return(lsm6dsv16x_from_fs8_to_mg(data));
 }
 
 float QwDevLSM6DSV16X::convert16gToMg(int16_t data)
 {
-	return(ism330dhcx_from_fs16g_to_mg(data));
+	return(lsm6dsv16x_from_fs16_to_mg(data));
 }
 
 float QwDevLSM6DSV16X::convert125dpsToMdps(int16_t data)
 {
-	return(ism330dhcx_from_fs125dps_to_mdps(data));
+	return(lsm6dsv16x_from_fs125_to_mdps(data));
 }
 
 float QwDevLSM6DSV16X::convert250dpsToMdps(int16_t data)
 {
-	return(ism330dhcx_from_fs250dps_to_mdps(data));
+	return(lsm6dsv16x_from_fs250_to_mdps(data));
 }
 
 float QwDevLSM6DSV16X::convert500dpsToMdps(int16_t data)
 {
-	return(ism330dhcx_from_fs500dps_to_mdps(data));
+	return(lsm6dsv16x_from_fs500_to_mdps(data));
 }
 
 float QwDevLSM6DSV16X::convert1000dpsToMdps(int16_t data)
 {
-	return(ism330dhcx_from_fs1000dps_to_mdps(data));
+	return(lsm6dsv16x_from_fs1000_to_mdps(data));
 }
 
 float QwDevLSM6DSV16X::convert2000dpsToMdps(int16_t data)
 {
-	return(ism330dhcx_from_fs2000dps_to_mdps(data));
+	return(lsm6dsv16x_from_fs2000_to_mdps(data));
 }
 
 float QwDevLSM6DSV16X::convert4000dpsToMdps(int16_t data)
 {
-	return(ism330dhcx_from_fs4000dps_to_mdps(data));
+	return(lsm6dsv16x_from_fs4000_to_mdps(data));
 }
 
 float QwDevLSM6DSV16X::convertToCelsius(int16_t data)
 {
-	return(ism330dhcx_from_lsb_to_celsius(data));
+	return(lsm6dsv16x_from_lsb_to_celsius(data));
 }
 
 //
@@ -471,18 +390,18 @@ float QwDevLSM6DSV16X::convertToCelsius(int16_t data)
 //  ---------   -----------------------------
 //  enable      Enable the general device configuration - this is a configuration 
 //							register in the LSM6DSV16X, not a library implementation. 
-
-bool QwDevLSM6DSV16X::setDeviceConfig(bool enable)
-{
-	int32_t retVal;
-
-	retVal = ism330dhcx_device_conf_set(&sfe_dev, (uint8_t)enable);
-
-	if( retVal != 0 )
-		return false;
-
-	return true;
-}
+// NOT IN LIB
+//bool QwDevLSM6DSV16X::setDeviceConfig(bool enable)
+//{
+//	int32_t retVal;
+//
+//	retVal = lsm6dsv16x_device_conf_set(&sfe_dev, (uint8_t)enable);
+//
+//	if( retVal != 0 )
+//		return false;
+//
+//	return true;
+//}
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -491,11 +410,14 @@ bool QwDevLSM6DSV16X::setDeviceConfig(bool enable)
 // Resets the deivice to default settings
 // 
 
+/// @brief Resets all registers. 
+/// @param dataRate 
+/// @return true on successful execution.
 bool QwDevLSM6DSV16X::deviceReset()
 {
 	int32_t retVal;
 
-	retVal = ism330dhcx_reset_set(&sfe_dev, 1);
+	retVal = lsm6dsv16x_reset_set(&sfe_dev,(lsm6dsv16x_reset_t)1);
 
 	if( retVal != 0 )
 		return false;
@@ -514,14 +436,13 @@ bool QwDevLSM6DSV16X::getDeviceReset()
 
 	int32_t retVal;
 	uint8_t tempVal;
-	retVal = ism330dhcx_reset_get(&sfe_dev, &tempVal);
+	retVal = lsm6dsv16x_reset_get(&sfe_dev, (lsm6dsv16x_reset_t)&tempVal);
 
 	if( retVal != 0 )
 		return false;
 
-	if( (tempVal & 0x01) == 0x00 ){
+	if( (tempVal) == 0x00 )
 		return true; 
-	}
 
 	return false; 
 	
@@ -529,24 +450,24 @@ bool QwDevLSM6DSV16X::getDeviceReset()
 
 
 //////////////////////////////////////////////////////////////////////////////////
-// setAccelSlopeFilter()
+// enableAccelHPSlopeFilter()
 // 
-// Sets the accelerometer's slope filter
+//Sets the accelerometer's slope filter
 // 
 //  Parameter   Description
 //  ---------   -----------------------------
-//  val         This parameter determines the intensity of the filter - (0-7) 
+//  enable         This parameter selects the high/low pass filter
 //
-// See sfe_ism330dhcx_defs.h for a list of valid arguments
+// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
 
-bool QwDevLSM6DSV16X::setAccelSlopeFilter(uint8_t val)
+bool QwDevLSM6DSV16X::setFilter(uint8_t lowHigh)
 {
 	int32_t retVal;
-	if( val > 7 )
-		return false;
 
-	retVal = ism330dhcx_xl_hp_path_on_out_set(&sfe_dev,
-                                         (ism330dhcx_hp_slope_xl_en_t)val);
+	if( lowHigh > 1 )
+		return false; 
+
+	retVal = lsm6dsv16x_filt_xl_hp_set(&sfe_dev, (uint8_t)enable);
 
 	if( retVal != 0 )
 		return false;
@@ -557,7 +478,7 @@ bool QwDevLSM6DSV16X::setAccelSlopeFilter(uint8_t val)
 
 
 //////////////////////////////////////////////////////////////////////////////////
-// setAccelFilterLP2()
+// enableAccelFilterLP2()
 // 
 // Enables the accelerometer's high resolution slope filter
 // 
@@ -566,11 +487,14 @@ bool QwDevLSM6DSV16X::setAccelSlopeFilter(uint8_t val)
 //  enable      Enables/Disables the high resolution slope filter
 //
 
-bool QwDevLSM6DSV16X::setAccelFilterLP2(bool enable)
+bool QwDevLSM6DSV16X::setXLHighRes(uint8_t val)
 {
 	int32_t retVal;
 
-	retVal = ism330dhcx_xl_filter_lp2_set(&sfe_dev, (uint8_t)enable);
+	if( val > 1)
+		return false; 
+
+	retVal = lsm6dsv16x_xl_filter_lp2_set(&sfe_dev, val);
 
 	if( retVal != 0 )
 		return false;
@@ -593,7 +517,7 @@ bool QwDevLSM6DSV16X::setGyroFilterLP1(bool enable)
 {
 	int32_t retVal;
 
-	retVal = ism330dhcx_gy_filter_lp1_set(&sfe_dev, (uint8_t)enable);
+	retVal = lsm6dsv16x_gy_filter_lp1_set(&sfe_dev, (uint8_t)enable);
 
 	if( retVal != 0 )
 		return false;
@@ -610,7 +534,7 @@ bool QwDevLSM6DSV16X::setGyroFilterLP1(bool enable)
 //  ---------   -----------------------------
 //  val					Sets the bandwidth's value
 //
-// See sfe_ism330dhcx_defs.h for a list of valid arguments
+// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
 //
 
 bool QwDevLSM6DSV16X::setGyroLP1Bandwidth(uint8_t val)
@@ -619,8 +543,8 @@ bool QwDevLSM6DSV16X::setGyroLP1Bandwidth(uint8_t val)
 	if( val > 7 )
 		return false;
 
-	retVal = ism330dhcx_gy_lp1_bandwidth_set(&sfe_dev, 
-																				  (ism330dhcx_ftype_t)val);
+	retVal = lsm6dsv16x_gy_lp1_bandwidth_set(&sfe_dev, 
+																				  (lsm6dsv16x_ftype_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -642,7 +566,7 @@ bool QwDevLSM6DSV16X::setGyroLP1Bandwidth(uint8_t val)
 bool QwDevLSM6DSV16X::setBlockDataUpdate(bool enable)
 {
 
-	int32_t retVal = ism330dhcx_block_data_update_set(&sfe_dev, (uint8_t)enable);
+	int32_t retVal = lsm6dsv16x_block_data_update_set(&sfe_dev, (uint8_t)enable);
 
 	if( retVal != 0 )
 		return false;
@@ -662,7 +586,7 @@ uint8_t QwDevLSM6DSV16X::getBlockDataUpdate()
 {
 
 	uint8_t tempVal;
-	int32_t retVal = ism330dhcx_block_data_update_get(&sfe_dev, &tempVal);
+	int32_t retVal = lsm6dsv16x_block_data_update_get(&sfe_dev, &tempVal);
 
 	(void)retVal;
 	return tempVal; 
@@ -678,14 +602,14 @@ uint8_t QwDevLSM6DSV16X::getBlockDataUpdate()
 //  ---------   -----------------------------
 //  rate        Sets the output data rate, expects some value < 11. 
 //
-// See sfe_ism330dhcx_defs.h for a list of valid arguments
+// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
 
 bool QwDevLSM6DSV16X::setAccelDataRate(uint8_t rate)
 {
 	if( rate > 11 )
 		return false; 
 
-	int32_t retVal = ism330dhcx_xl_data_rate_set(&sfe_dev, (ism330dhcx_odr_xl_t)rate);
+	int32_t retVal = lsm6dsv16x_xl_data_rate_set(&sfe_dev, (lsm6dsv16x_odr_xl_t)rate);
 
 	if( retVal != 0)
 		return false;
@@ -703,7 +627,7 @@ bool QwDevLSM6DSV16X::setAccelDataRate(uint8_t rate)
 //  ---------   -----------------------------
 //  rate        Sets the output data rate, expects some value < 10. 
 //
-// See sfe_ism330dhcx_defs.h for a list of valid arguments
+// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
 //
 
 bool QwDevLSM6DSV16X::setGyroDataRate(uint8_t rate)
@@ -711,7 +635,7 @@ bool QwDevLSM6DSV16X::setGyroDataRate(uint8_t rate)
 	if( rate > 10 )
 		return false;
 
-	int32_t retVal = ism330dhcx_gy_data_rate_set(&sfe_dev,(ism330dhcx_odr_g_t)rate);
+	int32_t retVal = lsm6dsv16x_gy_data_rate_set(&sfe_dev,(lsm6dsv16x_odr_g_t)rate);
 
 	if( retVal != 0 )
 		return false;
@@ -735,7 +659,7 @@ bool QwDevLSM6DSV16X::enableTimestamp(bool enable)
 {
 	int32_t retVal;
 
-	retVal = ism330dhcx_timestamp_set(&sfe_dev, (uint8_t)enable);
+	retVal = lsm6dsv16x_timestamp_set(&sfe_dev, (uint8_t)enable);
 
 	if( retVal != 0 )
 		return false;
@@ -755,7 +679,7 @@ bool QwDevLSM6DSV16X::resetTimestamp()
 {
 	int32_t retVal; 
 
-	retVal = ism330dhcx_timestamp_rst(&sfe_dev);
+	retVal = lsm6dsv16x_timestamp_rst(&sfe_dev);
 
 	if( retVal != 0 )
 		return false;
@@ -792,7 +716,7 @@ bool QwDevLSM6DSV16X::setFifoWatermark(uint16_t val)
 	if( val > 511 ) 
 		return false; 
 
-	retVal = ism330dhcx_fifo_watermark_set(&sfe_dev, val);
+	retVal = lsm6dsv16x_fifo_watermark_set(&sfe_dev, val);
 
 	if( retVal != 0 )
 		return false;
@@ -810,7 +734,7 @@ bool QwDevLSM6DSV16X::setFifoWatermark(uint16_t val)
 //  ---------   -----------------------------
 //  val					Selects the FIFO's mode
 //
-// See sfe_ism330dhcx_defs.h for a list of valid arguments
+// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
 //
 
 bool QwDevLSM6DSV16X::setFifoMode(uint8_t val)
@@ -820,8 +744,8 @@ bool QwDevLSM6DSV16X::setFifoMode(uint8_t val)
 	if( val > 7 )
 		return false;
 
-	retVal = ism330dhcx_fifo_mode_set(&sfe_dev,
-                                 (ism330dhcx_fifo_mode_t)val);
+	retVal = lsm6dsv16x_fifo_mode_set(&sfe_dev,
+                                 (lsm6dsv16x_fifo_mode_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -839,7 +763,7 @@ bool QwDevLSM6DSV16X::setFifoMode(uint8_t val)
 //  ---------   -----------------------------
 //  val					Sets the batch data rate. 
 //
-// See sfe_ism330dhcx_defs.h for a list of valid arguments
+// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
 //
 
 bool QwDevLSM6DSV16X::setAccelFifoBatchSet(uint8_t val)
@@ -848,8 +772,8 @@ bool QwDevLSM6DSV16X::setAccelFifoBatchSet(uint8_t val)
 	if( val > 11)
 		return false;
 
-	retVal = ism330dhcx_fifo_xl_batch_set(&sfe_dev,
-                                     (ism330dhcx_bdr_xl_t)val);
+	retVal = lsm6dsv16x_fifo_xl_batch_set(&sfe_dev,
+                                     (lsm6dsv16x_bdr_xl_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -868,7 +792,7 @@ bool QwDevLSM6DSV16X::setAccelFifoBatchSet(uint8_t val)
 //  ---------   -----------------------------
 //  val					Sets the batch data rate. 
 //
-// See sfe_ism330dhcx_defs.h for a list of valid arguments
+// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
 
 bool QwDevLSM6DSV16X::setGyroFifoBatchSet(uint8_t val)
 {
@@ -876,8 +800,8 @@ bool QwDevLSM6DSV16X::setGyroFifoBatchSet(uint8_t val)
 	if( val > 11)
 		return false;
 
-	retVal = ism330dhcx_fifo_gy_batch_set(&sfe_dev,
-                                     (ism330dhcx_bdr_gy_t)val);
+	retVal = lsm6dsv16x_fifo_gy_batch_set(&sfe_dev,
+                                     (lsm6dsv16x_bdr_gy_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -894,7 +818,7 @@ bool QwDevLSM6DSV16X::setGyroFifoBatchSet(uint8_t val)
 //  ---------   -----------------------------
 //  val					Sets the time stamp decimation rate, 
 //
-// See sfe_ism330dhcx_defs.h for a list of valid arguments
+// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
 
 bool QwDevLSM6DSV16X::setFifoTimestampDec(uint8_t val)
 {
@@ -902,8 +826,8 @@ bool QwDevLSM6DSV16X::setFifoTimestampDec(uint8_t val)
 	if( val > 3 )
 		return false;
 
-	retVal = ism330dhcx_fifo_timestamp_decimation_set(&sfe_dev,
-                                                   (ism330dhcx_odr_ts_batch_t)val);
+	retVal = lsm6dsv16x_fifo_timestamp_decimation_set(&sfe_dev,
+                                                   (lsm6dsv16x_odr_ts_batch_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -939,7 +863,7 @@ bool QwDevLSM6DSV16X::setPinMode(bool activeLow )
 	int32_t retVal;
 
 	//0 = active high :  active low, 1  
-	retVal = ism330dhcx_pin_polarity_set(&sfe_dev, (ism330dhcx_h_lactive_t)activeLow);
+	retVal = lsm6dsv16x_pin_polarity_set(&sfe_dev, (lsm6dsv16x_h_lactive_t)activeLow);
 
 	if( retVal != 0 )
 		return false;
@@ -947,7 +871,7 @@ bool QwDevLSM6DSV16X::setPinMode(bool activeLow )
 	if( activeLow )
 		// pinmode must be set to push-pull when active low is set.
 		// See section 9.14 on pg 51 of datasheet for more information
-		retVal = ism330dhcx_pin_mode_set(&sfe_dev, (ism330dhcx_pp_od_t)0);
+		retVal = lsm6dsv16x_pin_mode_set(&sfe_dev, (lsm6dsv16x_pp_od_t)0);
 
 	if( retVal != 0 )
 		return false;
@@ -965,7 +889,7 @@ bool QwDevLSM6DSV16X::setPinMode(bool activeLow )
 //  ---------   -----------------------------
 //  val         Sets which event triggers an interrupt.   
 //
-// See sfe_ism330dhcx_defs.h for a list of valid arguments
+// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
 
 bool QwDevLSM6DSV16X::setIntNotification(uint8_t val)
 {
@@ -973,8 +897,8 @@ bool QwDevLSM6DSV16X::setIntNotification(uint8_t val)
 	if( val > 4)
 		return false;
 
-	retVal = ism330dhcx_int_notification_set(&sfe_dev,
-                                        (ism330dhcx_lir_t)val);
+	retVal = lsm6dsv16x_int_notification_set(&sfe_dev,
+                                        (lsm6dsv16x_lir_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -994,16 +918,16 @@ bool QwDevLSM6DSV16X::setAccelStatustoInt1(bool enable)
 
 	int32_t retVal;
 
-	ism330dhcx_pin_int1_route_t int1_route;
+	lsm6dsv16x_pin_int1_route_t int1_route;
 
-	retVal = ism330dhcx_pin_int1_route_get(&sfe_dev, &int1_route);
+	retVal = lsm6dsv16x_pin_int1_route_get(&sfe_dev, &int1_route);
 
 	if( retVal != 0 )
 		return false;
 
 	int1_route.int1_ctrl.int1_drdy_xl = (uint8_t)enable;
 	
-	retVal = ism330dhcx_pin_int1_route_set(&sfe_dev, &int1_route);
+	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int1_route);
 
 	if( retVal != 0 )
 		return false;
@@ -1023,16 +947,16 @@ bool QwDevLSM6DSV16X::setAccelStatustoInt2(bool enable)
 
 	int32_t retVal;
 
-	ism330dhcx_pin_int2_route_t int2_route; 
+	lsm6dsv16x_pin_int2_route_t int2_route; 
 
-	retVal = ism330dhcx_pin_int2_route_get(&sfe_dev, &int2_route);
+	retVal = lsm6dsv16x_pin_int2_route_get(&sfe_dev, &int2_route);
 
 	if( retVal != 0 )
 		return false;
 
 	int2_route.int2_ctrl.int2_drdy_xl = (uint8_t)enable;
 	
-	retVal = ism330dhcx_pin_int2_route_set(&sfe_dev, &int2_route);
+	retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int2_route);
 
 	if( retVal != 0 )
 		return false;
@@ -1051,16 +975,16 @@ bool QwDevLSM6DSV16X::setGyroStatustoInt1(bool enable)
 
 	int32_t retVal;
 
-	ism330dhcx_pin_int1_route_t int1_route; 
+	lsm6dsv16x_pin_int1_route_t int1_route; 
 
-	retVal = ism330dhcx_pin_int1_route_get(&sfe_dev, &int1_route);
+	retVal = lsm6dsv16x_pin_int1_route_get(&sfe_dev, &int1_route);
 
 	if( retVal != 0 )
 		return false;
 
 	int1_route.int1_ctrl.int1_drdy_g = (uint8_t)enable;
 	
-	retVal = ism330dhcx_pin_int1_route_set(&sfe_dev, &int1_route);
+	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int1_route);
 
 	if( retVal != 0 )
 		return false;
@@ -1079,16 +1003,16 @@ bool QwDevLSM6DSV16X::setGyroStatustoInt2(bool enable)
 
 	int32_t retVal;
 
-	ism330dhcx_pin_int2_route_t int2_route; 
+	lsm6dsv16x_pin_int2_route_t int2_route; 
 
-	retVal = ism330dhcx_pin_int2_route_get(&sfe_dev, &int2_route);
+	retVal = lsm6dsv16x_pin_int2_route_get(&sfe_dev, &int2_route);
 
 	if( retVal != 0 )
 		return false;
 
 	int2_route.int2_ctrl.int2_drdy_g = (uint8_t)enable;
 	
-	retVal = ism330dhcx_pin_int2_route_set(&sfe_dev, &int2_route);
+	retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int2_route);
 
 	if( retVal != 0 )
 		return false;
@@ -1110,8 +1034,8 @@ bool QwDevLSM6DSV16X::setDataReadyMode(uint8_t val)
 	if( val > 1 )
 		return false;
 
-	retVal = ism330dhcx_data_ready_mode_set(&sfe_dev,
-                                       (ism330dhcx_dataready_pulsed_t)val);
+	retVal = lsm6dsv16x_data_ready_mode_set(&sfe_dev,
+                                       (lsm6dsv16x_dataready_pulsed_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -1142,7 +1066,7 @@ bool QwDevLSM6DSV16X::setDataReadyMode(uint8_t val)
 //  ---------   -----------------------------
 //  rate				Selects the rate
 //
-// See sfe_ism330dhcx_defs.h for a list of valid arguments
+// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
 
 bool QwDevLSM6DSV16X::setHubODR(uint8_t rate)
 {
@@ -1150,7 +1074,7 @@ bool QwDevLSM6DSV16X::setHubODR(uint8_t rate)
 	if( rate > 3 )
 		return false;
 
-	int32_t retVal = ism330dhcx_sh_data_rate_set(&sfe_dev, (ism330dhcx_shub_odr_t)rate);
+	int32_t retVal = lsm6dsv16x_sh_data_rate_set(&sfe_dev, (lsm6dsv16x_shub_odr_t)rate);
 
 	if( retVal != 0 )
 		return false;
@@ -1175,7 +1099,7 @@ bool QwDevLSM6DSV16X::setHubODR(uint8_t rate)
 bool QwDevLSM6DSV16X::setHubSensorRead(uint8_t sensor, sfe_hub_sensor_settings_t* settings)
 {
 	int32_t retVal;
-	ism330dhcx_sh_cfg_read_t tempSett;
+	lsm6dsv16x_sh_cfg_read_t tempSett;
 
 	if( sensor > 3 )
 		return false;
@@ -1188,16 +1112,16 @@ bool QwDevLSM6DSV16X::setHubSensorRead(uint8_t sensor, sfe_hub_sensor_settings_t
 	switch( sensor )
 	{
 		case 0:
-			retVal = ism330dhcx_sh_slv0_cfg_read(&sfe_dev, &tempSett);
+			retVal = lsm6dsv16x_sh_slv0_cfg_read(&sfe_dev, &tempSett);
 			break;
 		case 1:
-			retVal = ism330dhcx_sh_slv1_cfg_read(&sfe_dev, &tempSett);
+			retVal = lsm6dsv16x_sh_slv1_cfg_read(&sfe_dev, &tempSett);
 			break;
 		case 2:
-			retVal = ism330dhcx_sh_slv2_cfg_read(&sfe_dev, &tempSett);
+			retVal = lsm6dsv16x_sh_slv2_cfg_read(&sfe_dev, &tempSett);
 			break;
 		case 3:
-			retVal = ism330dhcx_sh_slv3_cfg_read(&sfe_dev, &tempSett);
+			retVal = lsm6dsv16x_sh_slv3_cfg_read(&sfe_dev, &tempSett);
 			break;
 		default:
 			return false;
@@ -1225,13 +1149,13 @@ bool QwDevLSM6DSV16X::setHubSensorRead(uint8_t sensor, sfe_hub_sensor_settings_t
 bool QwDevLSM6DSV16X::setHubSensorWrite(sfe_hub_sensor_settings_t* settings)
 {
 	int32_t retVal;
-	ism330dhcx_sh_cfg_write_t tempSett;
+	lsm6dsv16x_sh_cfg_write_t tempSett;
 
 	tempSett.slv0_add = settings->address; 
 	tempSett.slv0_subadd = settings->subAddress; 
 	tempSett.slv0_data = settings->lenData; 
 
-	retVal = ism330dhcx_sh_cfg_write(&sfe_dev, &tempSett);
+	retVal = lsm6dsv16x_sh_cfg_write(&sfe_dev, &tempSett);
 
 	if( retVal != 0 )
 		return false;
@@ -1242,7 +1166,7 @@ bool QwDevLSM6DSV16X::setHubSensorWrite(sfe_hub_sensor_settings_t* settings)
 //////////////////////////////////////////////////////////////////////////////////
 // setNumberHubSensors
 //
-// Sets the number of external sensor connected to the ISM
+// Sets the number of external sensor connected to the LSM6DSV16X
 // 
 //  Parameter   Description
 //  ---------   -----------------------------
@@ -1256,8 +1180,8 @@ bool QwDevLSM6DSV16X::setNumberHubSensors(uint8_t numSensors)
 	if( numSensors > 3 ) 
 		return false; 
 
-	retVal = ism330dhcx_sh_slave_connected_set(&sfe_dev, 
-																					 (ism330dhcx_aux_sens_on_t)numSensors);
+	retVal = lsm6dsv16x_sh_slave_connected_set(&sfe_dev, 
+																					 (lsm6dsv16x_aux_sens_on_t)numSensors);
 
 	if( retVal != 0 )
 		return false;
@@ -1277,7 +1201,7 @@ bool QwDevLSM6DSV16X::enableSensorI2C(bool enable)
 {
 	int32_t retVal;
 
-	retVal = ism330dhcx_sh_master_set(&sfe_dev, (uint8_t)enable);
+	retVal = lsm6dsv16x_sh_master_set(&sfe_dev, (uint8_t)enable);
 
 	if( retVal != 0 )
 		return false;
@@ -1300,7 +1224,7 @@ bool QwDevLSM6DSV16X::readPeripheralSensor(uint8_t* shReg, uint8_t len)
 {
 	int32_t retVal;
 
-	retVal = ism330dhcx_sh_read_data_raw_get(&sfe_dev, (ism330dhcx_emb_sh_read_t*)shReg, len);
+	retVal = lsm6dsv16x_sh_read_data_raw_get(&sfe_dev, (lsm6dsv16x_emb_sh_read_t*)shReg, len);
 
 	if( retVal != 0 )
 		return false;
@@ -1319,9 +1243,9 @@ bool QwDevLSM6DSV16X::getHubStatus()
 {
 
 	int32_t retVal;
-	ism330dhcx_status_master_t tempVal;
+	lsm6dsv16x_status_master_t tempVal;
 
-	retVal = ism330dhcx_sh_status_get(&sfe_dev, &tempVal);
+	retVal = lsm6dsv16x_sh_status_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0 )
 		return false;
@@ -1346,9 +1270,9 @@ bool QwDevLSM6DSV16X::getExternalSensorNack(uint8_t sensor)
 {
 
 	int32_t retVal;
-	ism330dhcx_status_master_t tempVal;
+	lsm6dsv16x_status_master_t tempVal;
 
-	retVal = ism330dhcx_sh_status_get(&sfe_dev, &tempVal);
+	retVal = lsm6dsv16x_sh_status_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0 )
 		return false;
@@ -1402,8 +1326,8 @@ bool QwDevLSM6DSV16X::setHubWriteMode(uint8_t config)
 
 	// 0 = Write each cycle 
 	// 1 = Write once
-	retVal = ism330dhcx_sh_write_mode_set(&sfe_dev,
-																			 (ism330dhcx_write_once_t)config);
+	retVal = lsm6dsv16x_sh_write_mode_set(&sfe_dev,
+																			 (lsm6dsv16x_write_once_t)config);
 
 	if( retVal != 0 )
 		return false;
@@ -1425,7 +1349,7 @@ bool QwDevLSM6DSV16X::setHubWriteMode(uint8_t config)
 bool QwDevLSM6DSV16X::setHubPassThrough(bool enable)
 {
 
-	int32_t retVal = ism330dhcx_sh_pass_through_set(&sfe_dev, (uint8_t)enable);
+	int32_t retVal = lsm6dsv16x_sh_pass_through_set(&sfe_dev, (uint8_t)enable);
 
 	if( retVal != 0 )
 		return false;
@@ -1446,7 +1370,7 @@ bool QwDevLSM6DSV16X::setHubFifoBatching(bool enable)
 {
 	int32_t retVal;
 
-	retVal = ism330dhcx_sh_batch_slave_0_set(&sfe_dev, (uint8_t)enable);
+	retVal = lsm6dsv16x_sh_batch_slave_0_set(&sfe_dev, (uint8_t)enable);
 
 	if( retVal != 0 )
 		return false;
@@ -1469,7 +1393,7 @@ bool QwDevLSM6DSV16X::setHubPullUps(bool enable)
 
 	int32_t retVal;
 
-	retVal = ism330dhcx_sh_pin_mode_set(&sfe_dev, (ism330dhcx_shub_pu_en_t)enable);
+	retVal = lsm6dsv16x_sh_pin_mode_set(&sfe_dev, (lsm6dsv16x_shub_pu_en_t)enable);
 
 	if( retVal != 0 )
 		return false;
@@ -1489,7 +1413,7 @@ bool QwDevLSM6DSV16X::resetSensorHub()
 
 	int32_t retVal;  
 
-	retVal = ism330dhcx_sh_reset_set(&sfe_dev);
+	retVal = lsm6dsv16x_sh_reset_set(&sfe_dev);
 
 	if( retVal != 0 )
 		return false;
@@ -1517,8 +1441,8 @@ bool QwDevLSM6DSV16X::setAccelSelfTest(uint8_t val)
 	if( val > 2)
 		return false;
 
-	retVal = ism330dhcx_xl_self_test_set(&sfe_dev,
-                                    (ism330dhcx_st_xl_t)val);
+	retVal = lsm6dsv16x_xl_self_test_set(&sfe_dev,
+                                    (lsm6dsv16x_st_xl_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -1534,8 +1458,8 @@ bool QwDevLSM6DSV16X::setGyroSelfTest(uint8_t val)
 	if( val > 3)
 		return false;
 
-	retVal = ism330dhcx_gy_self_test_set(&sfe_dev,
-                                    (ism330dhcx_st_g_t)val);
+	retVal = lsm6dsv16x_gy_self_test_set(&sfe_dev,
+                                    (lsm6dsv16x_st_g_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -1554,8 +1478,8 @@ bool QwDevLSM6DSV16X::setGyroSelfTest(uint8_t val)
 
 bool QwDevLSM6DSV16X::checkStatus()
 {
-	ism330dhcx_status_reg_t tempVal;
-	int32_t retVal = ism330dhcx_status_reg_get(&sfe_dev, &tempVal);
+	lsm6dsv16x_status_reg_t tempVal;
+	int32_t retVal = lsm6dsv16x_status_reg_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0)
 		return false;
@@ -1574,8 +1498,8 @@ bool QwDevLSM6DSV16X::checkStatus()
 
 bool QwDevLSM6DSV16X::checkAccelStatus()
 {
-	ism330dhcx_status_reg_t tempVal;
-	int32_t retVal = ism330dhcx_status_reg_get(&sfe_dev, &tempVal);
+	lsm6dsv16x_status_reg_t tempVal;
+	int32_t retVal = lsm6dsv16x_status_reg_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0)
 		return false;
@@ -1594,8 +1518,8 @@ bool QwDevLSM6DSV16X::checkAccelStatus()
 
 bool QwDevLSM6DSV16X::checkGyroStatus()
 {
-	ism330dhcx_status_reg_t tempVal;
-	int32_t retVal = ism330dhcx_status_reg_get(&sfe_dev, &tempVal);
+	lsm6dsv16x_status_reg_t tempVal;
+	int32_t retVal = lsm6dsv16x_status_reg_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0)
 		return false;
@@ -1614,8 +1538,8 @@ bool QwDevLSM6DSV16X::checkGyroStatus()
 
 bool QwDevLSM6DSV16X::checkTempStatus()
 {
-	ism330dhcx_status_reg_t tempVal;
-	int32_t retVal = ism330dhcx_status_reg_get(&sfe_dev, &tempVal);
+	lsm6dsv16x_status_reg_t tempVal;
+	int32_t retVal = lsm6dsv16x_status_reg_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0)
 		return false;

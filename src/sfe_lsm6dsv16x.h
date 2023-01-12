@@ -1,17 +1,23 @@
 #include "sfe_bus.h"
-#include "sfe_ism_shim.h"
+#include "sfe_lsm_shim.h"
+
+
+/*
+ * Link to example code:
+ * https://github.com/STMicroelectronics/STMems_Standard_C_drivers/tree/master/lsm6dsv16x_STdC/examples
+ */
 
 #define LSM6DSV16X_ADDRESS_LOW 0x6A
 #define LSM6DSV16X_ADDRESS_HIGH 0x6B
 
-struct sfe_ism_raw_data_t
+struct sfe_lsm_raw_data_t
 {
 	int16_t xData;	
 	int16_t yData;	
 	int16_t zData;
 };
 
-struct sfe_ism_data_t
+struct sfe_lsm_data_t
 {
 	float xData;	
 	float yData;	
@@ -33,50 +39,13 @@ class QwDevLSM6DSV16X
 
 		QwDevLSM6DSV16X() : _i2cAddress{0}, _cs{0} {};
 			
-
-    ///////////////////////////////////////////////////////////////////////
-    // init()
-    //
-    // Called to init the system. Connects to the device and sets it up for 
-    // operation
-
     bool init();
 
-    ///////////////////////////////////////////////////////////////////////
-    // isConnected()
-    //
-    //
-    //  Parameter   Description
-    //  ---------   -----------------------------
-    //  retval      true if device is connected, false if not connected
 
     bool isConnected(); // Checks if sensor ack's the I2C request
 
-    int32_t writeRegisterRegion(uint8_t reg, uint8_t *data, uint16_t length);
-
-    //////////////////////////////////////////////////////////////////////////////////
-    // readRegisterRegion()
-    //
-    //
-    //  Parameter    Description
-    //  ---------    -----------------------------
-    //  reg          register to read from
-    //  data         Array to store data in
-    //  length       Length of the data to read
-    //  retval       -1 = error, 0 = success
-
-    int32_t readRegisterRegion(uint8_t reg, uint8_t *data, uint16_t length);
-
-    //////////////////////////////////////////////////////////////////////////////////
-    // setCommunicationBus()
-    //
-    // Called to set the Communication Bus object to use
-    //
-    //  Parameter    Description
-    //  ---------    -----------------------------
-    //  theBus       The Bus object to use
-    //  idBus        The bus ID for the target device.
-    //
+    int32_t writeRegisterRegion(uint8_t reg, uint8_t *data, uint16_t length = 1);
+    int32_t readRegisterRegion(uint8_t reg, uint8_t *data, uint16_t length = 1);
 
 		void setCommunicationBus(sfe_LSM6DSV16X::QwIDeviceBus &theBus, uint8_t i2cAddress);
 		void setCommunicationBus(sfe_LSM6DSV16X::QwIDeviceBus &theBus);
@@ -89,17 +58,17 @@ class QwDevLSM6DSV16X
 
 		// Linear, Angular, and Temp Data retrieval 
 		int16_t getTemp();
-		bool getRawAccel(sfe_ism_raw_data_t* accelData);
-		bool getRawGyro(sfe_ism_raw_data_t* gyroData);
-		bool getAccel(sfe_ism_data_t* accelData);
-		bool getGyro(sfe_ism_data_t* gyroData);
+		bool getRawAccel(sfe_lsm_raw_data_t* accelData);
+		bool getRawGyro(sfe_lsm_raw_data_t* gyroData);
+		bool getAccel(sfe_lsm_data_t* accelData);
+		bool getGyro(sfe_lsm_data_t* gyroData);
 
 		// General Settings
 		bool setDeviceConfig(bool enable = true);
 		bool deviceReset();
 		bool getDeviceReset();
-		bool setAccelSlopeFilter(uint8_t val);
-		bool setAccelFilterLP2(bool enable = true);
+		bool enableAccelHPSlopeFilter(bool enable = true);
+		bool enableAccelFilterLP2(bool enable = true);
 		bool setGyroFilterLP1(bool enable = true);
 		bool setGyroLP1Bandwidth(uint8_t val);
 		bool setBlockDataUpdate(bool enable = true);
