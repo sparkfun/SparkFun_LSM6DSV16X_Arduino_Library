@@ -637,27 +637,18 @@ bool QwDevLSM6DSV16X::setFifoMode(uint8_t val)
 	return true;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setAccelFifoBatchSet()
-// 
-// Sets the batch data rate for the accelerometer
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  val					Sets the batch data rate. 
-//
-// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
-//
-
+// @brief FIFO Batch data rate selection for the accelerometer
+// @param val
+// @return True on successful executuion
 bool QwDevLSM6DSV16X::setAccelFifoBatchSet(uint8_t val)
 {
 	int32_t retVal;
+
 	if( val > 11)
 		return false;
 
 	retVal = lsm6dsv16x_fifo_xl_batch_set(&sfe_dev,
-                                     (lsm6dsv16x_bdr_xl_t)val);
+                                     (lsm6dsv16x_fifo_xl_batch_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -666,18 +657,9 @@ bool QwDevLSM6DSV16X::setAccelFifoBatchSet(uint8_t val)
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setGyroFifoBatchSet()
-// 
-// Sets the batch data rate for the gyroscope
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  val					Sets the batch data rate. 
-//
-// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
-
+// @brief FIFO Batch data rate selection for the gyroscope
+// @param val
+// @return True on successful executuion
 bool QwDevLSM6DSV16X::setGyroFifoBatchSet(uint8_t val)
 {
 	int32_t retVal;
@@ -685,7 +667,7 @@ bool QwDevLSM6DSV16X::setGyroFifoBatchSet(uint8_t val)
 		return false;
 
 	retVal = lsm6dsv16x_fifo_gy_batch_set(&sfe_dev,
-                                     (lsm6dsv16x_bdr_gy_t)val);
+                                     (lsm6dsv16x_fifo_gy_batch_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -693,25 +675,18 @@ bool QwDevLSM6DSV16X::setGyroFifoBatchSet(uint8_t val)
 	return true;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// setFifoTimestampDec()
-// 
-// Sets the FIFO time stamp decimation rate.
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  val					Sets the time stamp decimation rate, 
-//
-// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
-
+// @brief Selects decimation for timestamp batching in FIFO
+// @param val
+// @return True on successful executuion
 bool QwDevLSM6DSV16X::setFifoTimestampDec(uint8_t val)
 {
 	int32_t retVal;
+
 	if( val > 3 )
 		return false;
 
-	retVal = lsm6dsv16x_fifo_timestamp_decimation_set(&sfe_dev,
-                                                   (lsm6dsv16x_odr_ts_batch_t)val);
+	retVal = lsm6dsv16x_fifo_timestamp_decimation_batch_set(&sfe_dev,
+                                                   (lsm6dsv16x_fifo_timestamp_batch_t)val);
 
 	if( retVal != 0 )
 		return false;
