@@ -141,7 +141,7 @@ class QwDevLSM6DSV16X
 		uint8_t _i2cAddress;
 		uint8_t _cs;
 		stmdev_ctx_t sfe_dev; 
-		uint8_t fullScaleAccel = 0; //Powered down by default
+		int8_t fullScaleAccel = -1; //Powered down by default
 		uint8_t fullScaleGyro = 0;  //Powered down by default
 };
 

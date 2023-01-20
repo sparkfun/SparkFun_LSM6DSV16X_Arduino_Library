@@ -67,24 +67,6 @@ bool QwI2C::ping(uint8_t i2c_address)
     return _i2cPort->endTransmission() == 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// writeRegisterByte()
-//
-// Write a byte to a register
-
-bool QwI2C::writeRegisterByte(uint8_t i2c_address, uint8_t offset, uint8_t dataToWrite)
-{
-
-    if (!_i2cPort)
-        return false;
-
-    _i2cPort->beginTransmission(i2c_address);
-    _i2cPort->write(offset);
-    _i2cPort->write(dataToWrite);
-    return _i2cPort->endTransmission() == 0;
-}
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // writeRegisterRegion()
@@ -118,18 +100,11 @@ int QwI2C::readRegisterRegion(uint8_t addr, uint8_t reg, uint8_t *data, uint16_t
         return -1;
 
     int i;                   // counter in loop
-    bool bFirstInter = true; // Flag for first iteration - used to send register
 
     while (numBytes > 0)
     {
         _i2cPort->beginTransmission(addr);
-
-        if (bFirstInter)
-        {
-            _i2cPort->write(reg);
-            bFirstInter = false;
-        }
-
+				_i2cPort->write(reg);
         if (_i2cPort->endTransmission() != 0)
             return -1; // error with the end transmission
 
@@ -149,6 +124,9 @@ int QwI2C::readRegisterRegion(uint8_t addr, uint8_t reg, uint8_t *data, uint16_t
 
         // Decrement the amount of data recieved from the overall data request amount
         numBytes = numBytes - nReturned;
+
+				// Move the register to the number of registers read. 
+				reg += nReturned; 
 
     } // end while
 
@@ -172,7 +150,7 @@ SfeSPI::SfeSPI(void) : _spiPort{nullptr}
 // will use the default
 
 
-bool SfeSPI::init(SPIClass &spiPort, SPISettings& ismSPISettings, uint8_t cs,  bool bInit)
+bool SfeSPI::init(SPIClass &spiPort, SPISettings& lsmSPISettings, uint8_t cs,  bool bInit)
 {
 
     // if we don't have a SPI port already
@@ -186,7 +164,7 @@ bool SfeSPI::init(SPIClass &spiPort, SPISettings& ismSPISettings, uint8_t cs,  b
 
 
 		// SPI settings are needed for every transaction
-		_sfeSPISettings = ismSPISettings; 
+		_sfeSPISettings = lsmSPISettings; 
 
 		// The chip select pin can vary from platform to platform and project to project
 		// and so it must be given by the user. 
@@ -226,32 +204,6 @@ bool SfeSPI::init(uint8_t cs,  bool bInit)
 bool SfeSPI::ping(uint8_t i2c_address)
 {
 	return true;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// writeRegisterByte()
-//
-// Write a byte to a register
-
-bool SfeSPI::writeRegisterByte(uint8_t i2c_address, uint8_t offset, uint8_t dataToWrite)
-{
-
-    if( !_spiPort )
-        return false;
-
-		// Apply settings
-    _spiPort->beginTransaction(_sfeSPISettings);
-		// Signal communication start
-		digitalWrite(_cs, LOW);
-
-    _spiPort->transfer(offset);
-    _spiPort->transfer(dataToWrite);
-
-		// End communcation
-		digitalWrite(_cs, HIGH);
-    _spiPort->endTransaction();
-
-		return true;
 }
 
 

@@ -196,22 +196,24 @@ bool QwDevLSM6DSV16X::getRawGyro(sfe_lsm_raw_data_t* gyroData)
 
 }
 
-
-//////////////////////////////////////////////////////////////////////////////
-// getAccel()
-//
-// Retrieves raw register values and converts them according to the full scale settings
-//
-//  Parameter    Description
-//  ---------   -----------------------------
-//  accelData    Accel data type pointer at which data will be stored. 
-//
-
+/// @brief Takes raw register values and converts them according to the 
+/// accelerometer's scale setting.
+/// @param accelData   
+/// @return True on successful execution.
 bool QwDevLSM6DSV16X::getAccel(sfe_lsm_data_t* accelData)
 {
 	
 	int16_t tempVal[3] = {0};	
-	int32_t retVal = lsm6dsv16x_acceleration_raw_get(&sfe_dev, tempVal);
+	uint8_t tempScale = 0;
+	int32_t retVal; 
+
+	retVal = lsm6dsv16x_acceleration_raw_get(&sfe_dev, tempVal);
+
+	if( fullScaleAccel == -1 )
+	{
+		tempScale = getAccelFullScale();		
+		fullScaleAccel = (int8_t)tempScale;
+	}
 
 	if( retVal != 0 )
 		return false;
@@ -246,17 +248,10 @@ bool QwDevLSM6DSV16X::getAccel(sfe_lsm_data_t* accelData)
 	return true;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// getGyro()
-//
-// Retrieves raw register values and converts them according to the full scale settings
-//
-//  Parameter    Description
-//  ---------   -----------------------------
-//  gyroData    Gyroscope data type pointer at which data will be stored. 
-//
-
-
+/// @brief Takes raw register values and converts them according to the 
+/// gyroscope's scale setting.
+/// @param gyroData   
+/// @return True on successful execution.
 bool QwDevLSM6DSV16X::getGyro(sfe_lsm_data_t* gyroData)
 {
 	
@@ -307,62 +302,89 @@ bool QwDevLSM6DSV16X::getGyro(sfe_lsm_data_t* gyroData)
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// Conversions Methods
-// 
-//
-
+/// @brief Converts 2g scale to milli-g's
+/// @param data
+/// @return Data converted to milli-g's
 float QwDevLSM6DSV16X::convert2gToMg(int16_t data)
 {
 	return(lsm6dsv16x_from_fs2_to_mg(data));
 }
 
+/// @brief Converts 4g scale to milli-g's
+/// @param data
+/// @return Data converted to milli-g's
 float QwDevLSM6DSV16X::convert4gToMg(int16_t data)
 {
 	return(lsm6dsv16x_from_fs4_to_mg(data));
 }
 
+/// @brief Converts 8g scale to milli-g's
+/// @param data
+/// @return Data converted to milli-g's
 float QwDevLSM6DSV16X::convert8gToMg(int16_t data)
 {
 	return(lsm6dsv16x_from_fs8_to_mg(data));
 }
 
+/// @brief Converts 16g scale to milli-g's
+/// @param data
+/// @return Data converted to milli-g's
 float QwDevLSM6DSV16X::convert16gToMg(int16_t data)
 {
 	return(lsm6dsv16x_from_fs16_to_mg(data));
 }
 
+/// @brief Converts 125 degrees per second scale to milli-degrees-per-second
+/// @param data
+/// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert125dpsToMdps(int16_t data)
 {
 	return(lsm6dsv16x_from_fs125_to_mdps(data));
 }
 
+/// @brief Converts 250 degrees per second scale to milli-degrees-per-second
+/// @param data
+/// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert250dpsToMdps(int16_t data)
 {
 	return(lsm6dsv16x_from_fs250_to_mdps(data));
 }
 
+/// @brief Converts 500 degrees per second scale to milli-degrees-per-second
+/// @param data
+/// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert500dpsToMdps(int16_t data)
 {
 	return(lsm6dsv16x_from_fs500_to_mdps(data));
 }
 
+/// @brief Converts 1000 degrees per second scale to milli-degrees-per-second
+/// @param data
+/// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert1000dpsToMdps(int16_t data)
 {
 	return(lsm6dsv16x_from_fs1000_to_mdps(data));
 }
 
+/// @brief Converts 2000 degrees per second scale to milli-degrees-per-second
+/// @param data
+/// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert2000dpsToMdps(int16_t data)
 {
 	return(lsm6dsv16x_from_fs2000_to_mdps(data));
 }
 
+/// @brief Converts 4000 degrees per second scale to milli-degrees-per-second
+/// @param data
+/// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert4000dpsToMdps(int16_t data)
 {
 	return(lsm6dsv16x_from_fs4000_to_mdps(data));
 }
 
+/// @brief Converts temperature to celsius. 
+/// @param data
+/// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convertToCelsius(int16_t data)
 {
 	return(lsm6dsv16x_from_lsb_to_celsius(data));
@@ -403,15 +425,7 @@ float QwDevLSM6DSV16X::convertToCelsius(int16_t data)
 //	return true;
 //}
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// deviceReset()
-// 
-// Resets the deivice to default settings
-// 
-
 /// @brief Resets all registers. 
-/// @param dataRate 
 /// @return true on successful execution.
 bool QwDevLSM6DSV16X::deviceReset()
 {
@@ -425,12 +439,8 @@ bool QwDevLSM6DSV16X::deviceReset()
 	return true;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// getDeviceReset()
-// 
-// Checks to see that the reset bit has been set
-// 
-
+/// @brief Checks the bit indicating that the device has finished reseting.
+/// @return true on successful execution.
 bool QwDevLSM6DSV16X::getDeviceReset()
 {
 
@@ -448,24 +458,12 @@ bool QwDevLSM6DSV16X::getDeviceReset()
 	
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// enableAccelHPSlopeFilter()
-// 
-//Sets the accelerometer's slope filter
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  enable         This parameter selects the high/low pass filter
-//
-// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
-
-bool QwDevLSM6DSV16X::setFilter(uint8_t lowHigh)
+/// @brief Sets the accelerometer's slope filter
+/// @param enable
+/// @return True on successful operation. 
+bool QwDevLSM6DSV16X::enableAccelHpFilter(bool enable)
 {
 	int32_t retVal;
-
-	if( lowHigh > 1 )
-		return false; 
 
 	retVal = lsm6dsv16x_filt_xl_hp_set(&sfe_dev, (uint8_t)enable);
 
@@ -475,26 +473,15 @@ bool QwDevLSM6DSV16X::setFilter(uint8_t lowHigh)
 	return true;
 }
 
-
-
-//////////////////////////////////////////////////////////////////////////////////
-// enableAccelFilterLP2()
-// 
-// Enables the accelerometer's high resolution slope filter
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  enable      Enables/Disables the high resolution slope filter
-//
-
-bool QwDevLSM6DSV16X::setXLHighRes(uint8_t val)
+/// @brief Selects the accelerometer's high resolution between first stage
+/// (zero) digital filtering or (one) LPF2 second filtering stage
+/// @param second
+/// @return True on successful operation
+bool QwDevLSM6DSV16X::enableAccelLPS2(bool second)
 {
 	int32_t retVal;
 
-	if( val > 1)
-		return false; 
-
-	retVal = lsm6dsv16x_xl_filter_lp2_set(&sfe_dev, val);
+	retVal = lsm6dsv16x_filt_xl_lp2_set(&sfe_dev, uint8_t(second));
 
 	if( retVal != 0 )
 		return false;
@@ -502,71 +489,31 @@ bool QwDevLSM6DSV16X::setXLHighRes(uint8_t val)
 	return true;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setGyroFilterLP1()
-// 
-// Enables the gyroscope's slope filter
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  enable      Enables/Disables the high resolution slope filter
-//
-
-bool QwDevLSM6DSV16X::setGyroFilterLP1(bool enable)
+/// @brief Enables fast settling mode for the acclerometer. Set only during 
+/// device exit from power down mode.
+/// @param enable
+/// @return True on successful operation
+bool QwDevLSM6DSV16X::enableFastSetMode(bool enable)
 {
 	int32_t retVal;
 
-	retVal = lsm6dsv16x_gy_filter_lp1_set(&sfe_dev, (uint8_t)enable);
+	retVal = lsm6dsv16x_filt_xl_fast_settling_set(&sfe_dev, (uint8_t)enable);
 
-	if( retVal != 0 )
+	if ( retVal != 0 )
 		return false;
 
 	return true;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// setGyroLP1Bandwidth()
-// 
-// Sets the low pass filter's bandwidth for the gyroscope
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  val					Sets the bandwidth's value
-//
-// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
-//
-
-bool QwDevLSM6DSV16X::setGyroLP1Bandwidth(uint8_t val)
-{
-	int32_t retVal;
-	if( val > 7 )
-		return false;
-
-	retVal = lsm6dsv16x_gy_lp1_bandwidth_set(&sfe_dev, 
-																				  (lsm6dsv16x_ftype_t)val);
-
-	if( retVal != 0 )
-		return false;
-
-	return true;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////
-// setBlockDataUpdate()
-// 
-// Data is not updated until both MSB and LSB have been read from output registers
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  enable			Enable/disables block data update.
-//
-
+/// @brief Data is not updated until both MSB and LSB have been read from output registers
+/// @param enable			
+/// @return True on successful operation
 bool QwDevLSM6DSV16X::setBlockDataUpdate(bool enable)
 {
 
-	int32_t retVal = lsm6dsv16x_block_data_update_set(&sfe_dev, (uint8_t)enable);
+	int32_t retVal;
+
+	retVal = lsm6dsv16x_block_data_update_set(&sfe_dev, (uint8_t)enable);
 
 	if( retVal != 0 )
 		return false;
@@ -575,41 +522,31 @@ bool QwDevLSM6DSV16X::setBlockDataUpdate(bool enable)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// getBlockDataUpdate()
-// 
-// Retrieves the bit indicating whether block data update is enabled. 
-// 
-//
-
+/// @brief Retrieves the bit indicating whether the block data update mode is set. 
+/// @return True on successful operation
 uint8_t QwDevLSM6DSV16X::getBlockDataUpdate()
 {
 
 	uint8_t tempVal;
-	int32_t retVal = lsm6dsv16x_block_data_update_get(&sfe_dev, &tempVal);
+	int32_t retVal; 
 
-	(void)retVal;
+	retVal = lsm6dsv16x_block_data_update_get(&sfe_dev, &tempVal);
+
 	return tempVal; 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// setAccelDataRate()
-// 
-// This sets the data output rate for the accelerometer.
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  rate        Sets the output data rate, expects some value < 11. 
-//
-// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
-
+/// @brief Sets the acceleromter's output data rate (ODR)
+/// @param rate 
+/// @return True on successful operation
 bool QwDevLSM6DSV16X::setAccelDataRate(uint8_t rate)
 {
-	if( rate > 11 )
+	if( rate > 12 )
 		return false; 
 
-	int32_t retVal = lsm6dsv16x_xl_data_rate_set(&sfe_dev, (lsm6dsv16x_odr_xl_t)rate);
+	int32_t retVal; 
+
+	retVal = lsm6dsv16x_xl_data_rate_set(&sfe_dev, (lsm6dsv16x_odr_xl_t)rate);
 
 	if( retVal != 0)
 		return false;
@@ -617,25 +554,17 @@ bool QwDevLSM6DSV16X::setAccelDataRate(uint8_t rate)
 	return true; 
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setGyroDataRate()
-// 
-// This sets the data output rate for the gyroscope.
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  rate        Sets the output data rate, expects some value < 10. 
-//
-// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
-//
-
+/// @brief Sets the gyro's output data rate (ODR)
+/// @param rate 
+/// @return True on successful operation
 bool QwDevLSM6DSV16X::setGyroDataRate(uint8_t rate)
 {
-	if( rate > 10 )
+	if( rate > 12 )
 		return false;
 
-	int32_t retVal = lsm6dsv16x_gy_data_rate_set(&sfe_dev,(lsm6dsv16x_odr_g_t)rate);
+	int32_t retVal;
+
+	retVal = lsm6dsv16x_gy_data_rate_set(&sfe_dev,(lsm6dsv16x_odr_g_t)rate);
 
 	if( retVal != 0 )
 		return false;
@@ -645,16 +574,9 @@ bool QwDevLSM6DSV16X::setGyroDataRate(uint8_t rate)
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// enableTimestamp()
-// 
-// Enables time stamp counter
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  enable      Enables/disables time stamp counter
-//
-
+/// @brief Enables the timestamp counter
+/// @param enable 
+/// @return True on successful operation
 bool QwDevLSM6DSV16X::enableTimestamp(bool enable)
 {
 	int32_t retVal;
@@ -667,27 +589,6 @@ bool QwDevLSM6DSV16X::enableTimestamp(bool enable)
 	return true;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// resetTimestamp()
-// 
-// Resets time stamp counter
-// 
-//
-
-bool QwDevLSM6DSV16X::resetTimestamp()
-{
-	int32_t retVal; 
-
-	retVal = lsm6dsv16x_timestamp_rst(&sfe_dev);
-
-	if( retVal != 0 )
-		return false;
-
-	return true;
-}
-//
-//
 //////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -699,21 +600,14 @@ bool QwDevLSM6DSV16X::resetTimestamp()
 //  
 // 
 
-//////////////////////////////////////////////////////////////////////////////////
-// setFifoWatermark()
-// 
-// Sets the FIFO's watermark 
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  val					Sets the watermark, must be some value less than 511 (9 bit value)
-//
-
+// @brief Sets the FIFO's watermark threshold.
+// @param val
+// @return True on successful operation
 bool QwDevLSM6DSV16X::setFifoWatermark(uint16_t val)
 {
 	int32_t retVal;
 
-	if( val > 511 ) 
+	if( val > 255 ) 
 		return false; 
 
 	retVal = lsm6dsv16x_fifo_watermark_set(&sfe_dev, val);
@@ -724,19 +618,9 @@ bool QwDevLSM6DSV16X::setFifoWatermark(uint16_t val)
 	return true;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setFifoMode()
-// 
-// Sets the FIFO's mode. 
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  val					Selects the FIFO's mode
-//
-// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
-//
-
+// @brief Fifo mode selection
+// @param val
+// @return True on successful operation
 bool QwDevLSM6DSV16X::setFifoMode(uint8_t val)
 {
 	int32_t retVal;

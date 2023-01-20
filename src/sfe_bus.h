@@ -59,8 +59,6 @@ class QwIDeviceBus
 
 		virtual bool ping(uint8_t address) = 0;
 
-		virtual	bool writeRegisterByte(uint8_t address, uint8_t offset, uint8_t data) = 0;
-
 		virtual int writeRegisterRegion(uint8_t address, uint8_t offset, const uint8_t* data, uint16_t length) = 0;
 
 		virtual int readRegisterRegion(uint8_t addr, uint8_t reg, uint8_t* data, uint16_t numBytes) = 0;
@@ -80,8 +78,6 @@ class QwI2C : public QwIDeviceBus
 		bool init(TwoWire& wirePort, bool bInit=false);
 
 		bool ping(uint8_t address);
-
-		bool writeRegisterByte(uint8_t address, uint8_t offset, uint8_t data);
 
 		int writeRegisterRegion(uint8_t address, uint8_t offset, const uint8_t* data, uint16_t length);
 
@@ -107,8 +103,6 @@ class SfeSPI : public QwIDeviceBus
 		bool init(SPIClass& spiPort, SPISettings& lsmSPISettings, uint8_t cs,  bool bInit=false);
 
 		bool ping(uint8_t address);
-
-		bool writeRegisterByte(uint8_t address, uint8_t offset, uint8_t data);
 
 		int writeRegisterRegion(uint8_t address, uint8_t offset, const uint8_t* data, uint16_t length);
 
