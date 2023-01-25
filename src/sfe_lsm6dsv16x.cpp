@@ -707,22 +707,15 @@ bool QwDevLSM6DSV16X::setFifoTimestampDec(uint8_t val)
 //  
 // 
 
-//////////////////////////////////////////////////////////////////////////////////
-// setPinMode
-//
-// Sets the active state of the interrupt pin - high or low.  
-//
-//  Parameter   Description
-//  ---------   -----------------------------
-//  openDrain   Set true for active low and false for active high
-//
-
-bool QwDevLSM6DSV16X::setPinMode(bool activeLow )
+/// @brief Sets the active state of the interrupt pin - high or low.  
+/// @param openDrain 
+/// @return True on successful execution
+bool QwDevLSM6DSV16X::setInt2DENPolarity(bool activeLow )
 {
 	int32_t retVal;
 
 	//0 = active high :  active low, 1  
-	retVal = lsm6dsv16x_pin_polarity_set(&sfe_dev, (lsm6dsv16x_h_lactive_t)activeLow);
+	retVal = lsm6dsv16x_den_polarity_set(&sfe_dev, (lsm6dsv16x_den_polarity_t)activeLow);
 
 	if( retVal != 0 )
 		return false;
@@ -738,26 +731,15 @@ bool QwDevLSM6DSV16X::setPinMode(bool activeLow )
 	return true; 
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setIntNotification
-//
-// Sets what the triggers an interrupt
-//
-//  Parameter   Description
-//  ---------   -----------------------------
-//  val         Sets which event triggers an interrupt.   
-//
-// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
-
-bool QwDevLSM6DSV16X::setIntNotification(uint8_t val)
+/// @brief Selects the signal that will be routed to int 1
+/// @param val
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::setInt1Route(uint8_t val)
 {
 	int32_t retVal;
-	if( val > 4)
-		return false;
 
-	retVal = lsm6dsv16x_int_notification_set(&sfe_dev,
-                                        (lsm6dsv16x_lir_t)val);
+	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev,
+                                        (lsm6dsv16x_int1_ctrl_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -765,26 +747,56 @@ bool QwDevLSM6DSV16X::setIntNotification(uint8_t val)
 	return true;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setAccelStatustoInt1
-//
-// Sends the accelerometer's data ready signal to interrupt one.
-//
-
-bool QwDevLSM6DSV16X::setAccelStatustoInt1(bool enable)
+/// @brief Routes the data ready signal for the accelerometer to interrupt one.
+/// @param enable
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::setInt1AccelDataReady(bool enable)
 {
 
 	int32_t retVal;
+	lsm6dsv16x_pin_int_route_t int1_route;
 
-	lsm6dsv16x_pin_int1_route_t int1_route;
-
-	retVal = lsm6dsv16x_pin_int1_route_get(&sfe_dev, &int1_route);
+	int1_ctrl.int1_drdy_xl = (uint8_t)enable; 
+	
+	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int1_ctrl);
 
 	if( retVal != 0 )
 		return false;
 
-	int1_route.int1_ctrl.int1_drdy_xl = (uint8_t)enable;
+	return true; 
+}
+
+/// @brief Routes the data ready signal for the accelerometer to interrupt two.
+/// @param enable
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::setInt2AccelDataReady(bool enable)
+{
+
+	int32_t retVal;
+
+	lsm6dsv16x_pin_int_route_t int2_route; 
+
+	int2_route.int2_drdy_xl	= (uint8_t)enable;
+
+	retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int2_route);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
+/// @brief Routes the data ready signal for the gyroscope to interrupt one. 
+/// @param enable
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::setInt1GyroDataReady(bool enable)
+{
+
+	int32_t retVal;
+
+	lsm6dsv16x_pin_int_route_t int1_route; 
+
+	int1_route.int1_drdy_g = (uint8_t)enable;
 	
 	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int1_route);
 
@@ -795,106 +807,38 @@ bool QwDevLSM6DSV16X::setAccelStatustoInt1(bool enable)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// setAccelStatustoInt2
-//
-// Sends the accelerometer's data ready signal to interrupt two.
-//
-
-bool QwDevLSM6DSV16X::setAccelStatustoInt2(bool enable)
+/// @brief Routes the data ready signal for the gyroscope to interrupt two. 
+/// @param enable
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::setint2GyroDataReady(bool enable)
 {
 
-	int32_t retVal;
+int32_t retVal;
 
-	lsm6dsv16x_pin_int2_route_t int2_route; 
+lsm6dsv16x_pin_int_route_t int2_route; 
 
-	retVal = lsm6dsv16x_pin_int2_route_get(&sfe_dev, &int2_route);
+int2_route.int2_drdy_g = (uint8_t)enable;
 
-	if( retVal != 0 )
-		return false;
+retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int2_route);
 
-	int2_route.int2_ctrl.int2_drdy_xl = (uint8_t)enable;
-	
-	retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int2_route);
+if( retVal != 0 )
+	return false;
 
-	if( retVal != 0 )
-		return false;
-
-	return true; 
+return true; 
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setGyroStatustoInt1
-//
-// Sends the gyroscopes's data ready signal to interrupt one.
-//
-bool QwDevLSM6DSV16X::setGyroStatustoInt1(bool enable)
-{
-
-	int32_t retVal;
-
-	lsm6dsv16x_pin_int1_route_t int1_route; 
-
-	retVal = lsm6dsv16x_pin_int1_route_get(&sfe_dev, &int1_route);
-
-	if( retVal != 0 )
-		return false;
-
-	int1_route.int1_ctrl.int1_drdy_g = (uint8_t)enable;
-	
-	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int1_route);
-
-	if( retVal != 0 )
-		return false;
-
-	return true; 
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////
-// setGyroStatustoInt2
-//
-// Sends the gyroscopes's data ready signal to interrupt two.
-//
-bool QwDevLSM6DSV16X::setGyroStatustoInt2(bool enable)
-{
-
-	int32_t retVal;
-
-	lsm6dsv16x_pin_int2_route_t int2_route; 
-
-	retVal = lsm6dsv16x_pin_int2_route_get(&sfe_dev, &int2_route);
-
-	if( retVal != 0 )
-		return false;
-
-	int2_route.int2_ctrl.int2_drdy_g = (uint8_t)enable;
-	
-	retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int2_route);
-
-	if( retVal != 0 )
-		return false;
-
-	return true; 
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-// setDataReadyMode
-//
-// Sets how the data ready signal is latched i.e. only return zero after interface reading
-// OR is pulsed. 
-//
-bool QwDevLSM6DSV16X::setDataReadyMode(uint8_t val)
+/// @brief Enables pulsed data ready mode as oppsed to latch - 65us pulse.
+/// @param enable
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::setDataReadyMode(bool enable)
 {
 	int32_t retVal;
 
-	//0 = Latched, 1 = Pulsed
-	if( val > 1 )
-		return false;
+	lsm6dsv16x_ctrl4_t ctrl4;
+	 
+	ctrl4.drdy_pulsed = (uint8_t)enable;
 
-	retVal = lsm6dsv16x_data_ready_mode_set(&sfe_dev,
-                                       (lsm6dsv16x_dataready_pulsed_t)val);
+	retVal = lsm6dsv16x_data_ready_mode_set(&sfe_dev, ctrl4);
 
 	if( retVal != 0 )
 		return false;
@@ -915,25 +859,16 @@ bool QwDevLSM6DSV16X::setDataReadyMode(uint8_t val)
 // 
 // 
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setHubODR
-//
-// Sets the output data rate for the Sensor Hub.
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  rate				Selects the rate
-//
-// See sfe_lsm6dsv16x_defs.h for a list of valid arguments
-
+/// @brief Sets the Sensor Hub Output Data Rate
+/// @param rate
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setHubODR(uint8_t rate)
 {
-	//0 = 104Hz, 1 = 52Hz, 2 = 26Hz, 3 = 13Hz
-	if( rate > 3 )
+	//15Hz - 480Hz
+	if( rate > 6 )
 		return false;
 
-	int32_t retVal = lsm6dsv16x_sh_data_rate_set(&sfe_dev, (lsm6dsv16x_shub_odr_t)rate);
+	int32_t retVal = lsm6dsv16x_sh_data_rate_set(&sfe_dev, (lsm6dsv16x_sh_data_rate_t)rate);
 
 	if( retVal != 0 )
 		return false;
@@ -941,20 +876,9 @@ bool QwDevLSM6DSV16X::setHubODR(uint8_t rate)
 	return true; 
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setHubSensorRead
-//
-// Sets the general sensor hub settings, which sensor and their I2C address and register 
-// to read.
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  sensor      Selects the external sensor (1-4)
-//  settings		The I2C address, register address, and number of reads for the external sensor
-//							that is connected in sensor hub mode.
-//
-//
+/// @brief Sets the parameters with which to read from a downstream sensor 
+/// @param settings
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setHubSensorRead(uint8_t sensor, sfe_hub_sensor_settings_t* settings)
 {
 	int32_t retVal;
@@ -993,18 +917,9 @@ bool QwDevLSM6DSV16X::setHubSensorRead(uint8_t sensor, sfe_hub_sensor_settings_t
 	return true; 
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setHubSensorWrite
-//
-// Gives settings to the 6DoF with regards to the address, register, and data to write to an external
-// sensor. 
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  settings    Struct containing the address, register, and data to write to the external sensor
-//
-
+/// @brief Sets the parameters with which to write to the downstream sensor.
+/// @param settings
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setHubSensorWrite(sfe_hub_sensor_settings_t* settings)
 {
 	int32_t retVal;
@@ -1022,16 +937,9 @@ bool QwDevLSM6DSV16X::setHubSensorWrite(sfe_hub_sensor_settings_t* settings)
 	return true; 
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// setNumberHubSensors
-//
-// Sets the number of external sensor connected to the LSM6DSV16X
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  numSensor   The number of sensors 0 - 3 = 4
-//
-
+/// @brief Sets the number of sensors connected to the sensor hub.
+/// @param numSensor
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setNumberHubSensors(uint8_t numSensors)
 {
 
@@ -1040,7 +948,7 @@ bool QwDevLSM6DSV16X::setNumberHubSensors(uint8_t numSensors)
 		return false; 
 
 	retVal = lsm6dsv16x_sh_slave_connected_set(&sfe_dev, 
-																					 (lsm6dsv16x_aux_sens_on_t)numSensors);
+																					 (lsm6dsv16x_sh_slave_connected_t)numSensors);
 
 	if( retVal != 0 )
 		return false;
@@ -1049,13 +957,9 @@ bool QwDevLSM6DSV16X::setNumberHubSensors(uint8_t numSensors)
 
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// enableSensorI2C
-//
-// Enables the 6DoF as an I2C sensor controller
-// 
-
+/// @brief Enables sensor hub I2C
+/// @param enable
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::enableSensorI2C(bool enable)
 {
 	int32_t retVal;
@@ -1068,17 +972,10 @@ bool QwDevLSM6DSV16X::enableSensorI2C(bool enable)
 	return true;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// readPeripheralSensor
-//
-// Read external sensor hub data.  
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  shReg       Pointer to store the data to be read. 
-//  len					Number of reads to be executed.
-
+/// @brief Reads froms sensor hub output registers
+/// @param shReg
+/// @param len
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::readPeripheralSensor(uint8_t* shReg, uint8_t len)
 {
 	int32_t retVal;
@@ -1092,65 +989,35 @@ bool QwDevLSM6DSV16X::readPeripheralSensor(uint8_t* shReg, uint8_t len)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// getHubStatus
-//
-// Checks whether communication with the external sensor has concluded. 
-//	
-
-bool QwDevLSM6DSV16X::getHubStatus()
-{
-
-	int32_t retVal;
-	lsm6dsv16x_status_master_t tempVal;
-
-	retVal = lsm6dsv16x_sh_status_get(&sfe_dev, &tempVal);
-
-	if( retVal != 0 )
-		return false;
-
-	if( tempVal.sens_hub_endop == 1 )
-		return true;
-
-	return false; 
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-// getExternalSensorNack
-//
-// Retrieves communication status when communicating with external sensor
-//	
-//  Parameter   Description
-//  ---------   -----------------------------
-//  sensor			The sensor to check, (0-3)
-
-
+/// @brief Checks the bit indicating a NACK for the given sensor
+/// @param sensor
+/// @return Returns true if a NACK on the sensor hub has occurred.
 bool QwDevLSM6DSV16X::getExternalSensorNack(uint8_t sensor)
 {
 
 	int32_t retVal;
-	lsm6dsv16x_status_master_t tempVal;
+	lsm6dsv16x_all_sources_t tempVal;
 
-	retVal = lsm6dsv16x_sh_status_get(&sfe_dev, &tempVal);
+	retVal = lsm6dsv16x_all_sources_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0 )
 		return false;
 
 	switch( sensor ){
 		case 0:
-			if( tempVal.slave0_nack == 1 )
+			if( tempVal.sh_slave0_nack == 1 )
 				return true;
 			break;
 		case 1:
-			if( tempVal.slave1_nack == 1 )
+			if( tempVal.sh_slave1_nack == 1 )
 				return true;
 			break;
 		case 2:
-			if( tempVal.slave2_nack == 1 )
+			if( tempVal.sh_slave2_nack == 1 )
 				return true;
 			break;
 		case 3:
-			if( tempVal.slave3_nack == 1 )
+			if( tempVal.sh_slave3_nack == 1 )
 				return true;
 			break;
 		default:
@@ -1160,33 +1027,17 @@ bool QwDevLSM6DSV16X::getExternalSensorNack(uint8_t sensor)
 	return false; 
 }
 
-bool QwDevLSM6DSV16X::readMMCMagnetometer(uint8_t* magData, uint8_t len)
-{
-	return(readPeripheralSensor(magData, len));
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////
-// setHubWriteMode
-//
-// Sets how often the 6DoF should write to the external sensor: once per cycle i.e. output 
-// data rate, or just once. 
-// 
-//  Parameter   Description
-//  ---------   -----------------------------
-//  config       How often to be written
-
-bool QwDevLSM6DSV16X::setHubWriteMode(uint8_t config)
+/// @brief Configures the sensor hub to write only at the FIRST sensor hub cycle. 
+/// @param enable
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::enableHubWriteOnceMode(bool enable)
 {
 	int32_t retVal;
-
-	if( config > 1)
-		return false;
 
 	// 0 = Write each cycle 
 	// 1 = Write once
 	retVal = lsm6dsv16x_sh_write_mode_set(&sfe_dev,
-																			 (lsm6dsv16x_write_once_t)config);
+																			 (lsm6dsv16x_sh_write_mode_t)enable);
 
 	if( retVal != 0 )
 		return false;
@@ -1194,18 +1045,11 @@ bool QwDevLSM6DSV16X::setHubWriteMode(uint8_t config)
 	return true;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setHubPassThrough
-//
-//	Allows the primary I2C data lines to communicate through the auxiliary I2C lines.
-//	
-//  Parameter   Description
-//  ---------   -----------------------------
-//  set					Enables/disables pass through
-//
-
-bool QwDevLSM6DSV16X::setHubPassThrough(bool enable)
+/// @brief Enables the main I2C data lines to communicated directly with a sensor
+/// connected to the sensor hub I2C lines. 
+/// @param enable
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::enableHubPassThrough(bool enable)
 {
 
 	int32_t retVal = lsm6dsv16x_sh_pass_through_set(&sfe_dev, (uint8_t)enable);
@@ -1216,16 +1060,10 @@ bool QwDevLSM6DSV16X::setHubPassThrough(bool enable)
 	return true; 
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// setHubFifoBatching
-//
-// Sets sensor hub FIFO batching
-//	
-//  Parameter   Description
-//  ---------   -----------------------------
-//  enable			Enable/disables fifo batching
-
-bool QwDevLSM6DSV16X::setHubFifoBatching(bool enable)
+/// @brief Enables data from downstream sensors to be stored in the FIFO.
+/// @param eanble
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::enableHubFifoBatching(bool enable)
 {
 	int32_t retVal;
 
@@ -1237,22 +1075,15 @@ bool QwDevLSM6DSV16X::setHubFifoBatching(bool enable)
 	return true;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// setHubPullUps
-//
-// Enables/Disables internal pullups on SDX/SCX lines
-//	
-//  Parameter   Description
-//  ---------   -----------------------------
-//  enable			Enable/disables internal pullups on SDX/SCX lines 
-
-bool QwDevLSM6DSV16X::setHubPullUps(bool enable)
+/// @brief Enables pull up resistors on the sensor hub I2C lines.
+/// @param
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::enableHubPullUps(bool enable)
 {
 
 	int32_t retVal;
 
-	retVal = lsm6dsv16x_sh_pin_mode_set(&sfe_dev, (lsm6dsv16x_shub_pu_en_t)enable);
+	retVal = lsm6dsv16x_sh_master_interface_pull_up_set(&sfe_dev, (uint8_t)&enable);
 
 	if( retVal != 0 )
 		return false;
@@ -1260,19 +1091,19 @@ bool QwDevLSM6DSV16X::setHubPullUps(bool enable)
 	return true; 
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// resetSensorHub
-//
-// Resets all settings in the "Master Config" register
-//	
-
+/// @brief Resets sensor hub registers. 
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::resetSensorHub()
 {
 
 	int32_t retVal;  
 
-	retVal = lsm6dsv16x_sh_reset_set(&sfe_dev);
+	// Must be set to one, then zero
+	retVal = lsm6dsv16x_sh_reset_set(&sfe_dev, 1);
+
+	delay(1);
+
+	retVal = lsm6dsv16x_sh_reset_set(&sfe_dev, 0);
 
 	if( retVal != 0 )
 		return false;
@@ -1293,6 +1124,9 @@ bool QwDevLSM6DSV16X::resetSensorHub()
 // 
 // 
 
+/// @brief Accelerometer self-test selection 
+/// @param val
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setAccelSelfTest(uint8_t val)
 {
 	int32_t retVal;
@@ -1301,7 +1135,7 @@ bool QwDevLSM6DSV16X::setAccelSelfTest(uint8_t val)
 		return false;
 
 	retVal = lsm6dsv16x_xl_self_test_set(&sfe_dev,
-                                    (lsm6dsv16x_st_xl_t)val);
+                                    (lsm6dsv16x_xl_self_test_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -1309,6 +1143,9 @@ bool QwDevLSM6DSV16X::setAccelSelfTest(uint8_t val)
 	return true;
 }
 
+/// @brief Gyroscope self-test selection 
+/// @param val
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setGyroSelfTest(uint8_t val)
 {
 	int32_t retVal;
@@ -1318,7 +1155,7 @@ bool QwDevLSM6DSV16X::setGyroSelfTest(uint8_t val)
 		return false;
 
 	retVal = lsm6dsv16x_gy_self_test_set(&sfe_dev,
-                                    (lsm6dsv16x_st_g_t)val);
+                                    (lsm6dsv16x_gy_self_test_t)val);
 
 	if( retVal != 0 )
 		return false;
@@ -1329,56 +1166,48 @@ bool QwDevLSM6DSV16X::setGyroSelfTest(uint8_t val)
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////////
-// checkStatus
-//
-// Checks if data is ready for both the acclerometer and the gyroscope
-//
-
+/// @brief Retrieves the data ready bits for both the accelerometer and gyroscope.
+/// @return Returns true on if both bits indicate data. 
 bool QwDevLSM6DSV16X::checkStatus()
 {
-	lsm6dsv16x_status_reg_t tempVal;
-	int32_t retVal = lsm6dsv16x_status_reg_get(&sfe_dev, &tempVal);
+	lsm6dsv16x_data_ready_t tempVal;
+	int32_t retVal = lsm6dsv16x_flag_data_ready_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0)
 		return false;
 
-	if( (tempVal.xlda == 1) && (tempVal.gda == 1) )
+	if( (tempVal.drdy_xl == 1) && (tempVal.drdy_gl == 1) )
 		return true; 
 
 	return false; 
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// checkAccelStatus
-//
-// Checks if data is ready for the acclerometer 
-
+/// @brief Retrieves the data ready bit for the accelerometer
+/// @return Returns true if the bit indicates there is data.
 bool QwDevLSM6DSV16X::checkAccelStatus()
 {
-	lsm6dsv16x_status_reg_t tempVal;
-	int32_t retVal = lsm6dsv16x_status_reg_get(&sfe_dev, &tempVal);
+	lsm6dsv16x_data_ready_t tempVal;
+
+	int32_t retVal = lsm6dsv16x_flag_data_ready_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0)
 		return false;
 
-	if( tempVal.xlda == 1 )
+	if( tempVal.drdy_xl == 1 )
 		return true; 
 
 	return false; 
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// checkAccelStatus
-//
-// Checks if data is ready for the gyroscope 
-
+/// @brief Retrieves the data ready bit for the gyroscope
+/// @return Returns true if the bit indicates there is data.
 bool QwDevLSM6DSV16X::checkGyroStatus()
 {
-	lsm6dsv16x_status_reg_t tempVal;
-	int32_t retVal = lsm6dsv16x_status_reg_get(&sfe_dev, &tempVal);
+	lsm6dsv16x_data_ready_t tempVal;
+
+	int32_t retVal = lsm6dsv16x_flag_data_ready_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0)
 		return false;
@@ -1390,15 +1219,14 @@ bool QwDevLSM6DSV16X::checkGyroStatus()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// checkAccelStatus
-//
-// Checks if data is ready for the temperature sensor 
 
+/// @brief Retrieves the data ready bit for the temperature
+/// @return Returns true if the bit indicates there is data.
 bool QwDevLSM6DSV16X::checkTempStatus()
 {
-	lsm6dsv16x_status_reg_t tempVal;
-	int32_t retVal = lsm6dsv16x_status_reg_get(&sfe_dev, &tempVal);
+	lsm6dsv16x_data_ready_t tempVal;
+
+	int32_t retVal = lsm6dsv16x_flag_data_ready_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0)
 		return false;
