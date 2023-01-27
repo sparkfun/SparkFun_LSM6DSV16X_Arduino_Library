@@ -15,8 +15,8 @@ Repository Contents
 
 Documentation
 --------------
-* **[Hardware](GitHub library URL)** - Hardware files for the <PRODUCT NAME>.
-* **[Hookup Guide](Learn.SparkFun URL)** - Basic hookup guide for the <PRODUCT NAME>.
+* **[Hardware](https://github.com/sparkfun/SparkFun_6DoF_LSM6DSV16X)** - Hardware files for the  SparkFun 6DoF - LSM6DSV16X (Qwiic) and the SparkFun Micro 6DoF - LSM6DSV16X (Qwiic). 
+* **[Hookup Guide](https://learn.sparkfun.com/tutorials/sparkfun-6dof-lsm6dsv16x-qwiic-hookup-guide)** - Basic hookup guide for the  SparkFun 6DoF - LSM6DSV16X (Qwiic) and the SparkFun Micro 6DoF - LSM6DSV16X (Qwiic). 
 
 License Information
 -------------------
