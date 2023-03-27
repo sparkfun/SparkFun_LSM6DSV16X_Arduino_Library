@@ -1,4 +1,5 @@
 #pragma once
+#include "st_src/lsm6dsv16x_reg.h"
 
 #ifdef __cpluplus
 extern "C"{

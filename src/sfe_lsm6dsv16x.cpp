@@ -445,8 +445,9 @@ bool QwDevLSM6DSV16X::getDeviceReset()
 {
 
 	int32_t retVal;
-	uint8_t tempVal;
-	retVal = lsm6dsv16x_reset_get(&sfe_dev, (lsm6dsv16x_reset_t)&tempVal);
+	lsm6dsv16x_reset_t tempVal;
+
+	retVal = lsm6dsv16x_reset_get(&sfe_dev, &tempVal);
 
 	if( retVal != 0 )
 		return false;
@@ -473,6 +474,26 @@ bool QwDevLSM6DSV16X::enableAccelHpFilter(bool enable)
 	return true;
 }
 
+
+/// @brief Sets the accelerometer's slope filter
+/// @param enable
+/// @return True on successful operation. 
+bool QwDevLSM6DSV16X::enableFilterSettling(bool enable)
+{
+	int32_t retVal;
+	lsm6dsv16x_filt_settling_mask_t sfe_filt_mask; 
+
+	sfe_filt_mask.drdy = enable;
+	sfe_filt_mask.irq_xl = enable;
+	sfe_filt_mask.irq_g = enable;
+
+	retVal = lsm6dsv16x_filt_settling_mask_set(&sfe_dev, sfe_filt_mask);
+
+	if( retVal != 0 )
+		return false;
+
+	return true;
+}
 /// @brief Selects the accelerometer's high resolution between first stage
 /// (zero) digital filtering or (one) LPF2 second filtering stage
 /// @param second
@@ -498,6 +519,76 @@ bool QwDevLSM6DSV16X::enableFastSetMode(bool enable)
 	int32_t retVal;
 
 	retVal = lsm6dsv16x_filt_xl_fast_settling_set(&sfe_dev, (uint8_t)enable);
+
+	if ( retVal != 0 )
+		return false;
+
+	return true;
+}
+
+/// @brief Enables filtering using low pass filter 1. 
+/// @param enable
+/// @return True on successful operation
+bool QwDevLSM6DSV16X::enableGyroLP1Filter(bool enable)
+{
+	int32_t retVal;
+
+	retVal = lsm6dsv16x_filt_gy_lp1_set(&sfe_dev, (uint8_t)enable);
+
+	if ( retVal != 0 )
+		return false;
+
+	return true;
+}
+
+
+/// @brief Sets the bandwidth for low pass filter 1. Bandwidth is dependent on the
+/// selected output data rate, check LSM6DSV16X datasheet for more information.. 
+/// @param val
+/// @return True on successful operation
+bool QwDevLSM6DSV16X::setGyroLP1Bandwidth(uint8_t val)
+{
+	if( val > 0x07 ) 
+		return false; 
+
+	int32_t retVal;
+
+	retVal = lsm6dsv16x_filt_gy_lp1_bandwidth_set(&sfe_dev, (lsm6dsv16x_filt_gy_lp1_bandwidth_t)val);
+
+	if ( retVal != 0 )
+		return false;
+
+	return true;
+}
+
+/// @brief Enables filtering using low pass filter 1.
+/// @param enable
+/// @return True on successful operation
+bool QwDevLSM6DSV16X::enableAccelLP2Filter(bool enable)
+{
+	int32_t retVal;
+
+	retVal = lsm6dsv16x_filt_xl_lp2_set(&sfe_dev, (uint8_t)enable);
+
+	if ( retVal != 0 )
+		return false;
+
+	return true;
+}
+
+
+/// @brief Sets the bandwitdth for low pass filter 2. The bandwith is dependent on the 
+/// selected output data rate, check LSM6DSV16X datasheet for more information.. 
+/// @param val
+/// @return True on successful operation
+bool QwDevLSM6DSV16X::setAccelLP2Bandwidth(uint8_t val)
+{
+	if( val > 0x07 ) 
+		return false; 
+
+	int32_t retVal;
+
+	retVal = lsm6dsv16x_filt_xl_lp2_set(&sfe_dev, (lsm6dsv16x_filt_xl_lp2_bandwidth_t)val);
 
 	if ( retVal != 0 )
 		return false;
@@ -546,7 +637,7 @@ bool QwDevLSM6DSV16X::setAccelDataRate(uint8_t rate)
 
 	int32_t retVal; 
 
-	retVal = lsm6dsv16x_xl_data_rate_set(&sfe_dev, (lsm6dsv16x_odr_xl_t)rate);
+	retVal = lsm6dsv16x_xl_data_rate_set(&sfe_dev, (lsm6dsv16x_data_rate_t)rate);
 
 	if( retVal != 0)
 		return false;
@@ -564,7 +655,7 @@ bool QwDevLSM6DSV16X::setGyroDataRate(uint8_t rate)
 
 	int32_t retVal;
 
-	retVal = lsm6dsv16x_gy_data_rate_set(&sfe_dev,(lsm6dsv16x_odr_g_t)rate);
+	retVal = lsm6dsv16x_gy_data_rate_set(&sfe_dev,(lsm6dsv16x_data_rate_t)rate);
 
 	if( retVal != 0 )
 		return false;
@@ -685,7 +776,7 @@ bool QwDevLSM6DSV16X::setFifoTimestampDec(uint8_t val)
 	if( val > 3 )
 		return false;
 
-	retVal = lsm6dsv16x_fifo_timestamp_decimation_batch_set(&sfe_dev,
+	retVal = lsm6dsv16x_fifo_timestamp_batch_set(&sfe_dev,
                                                    (lsm6dsv16x_fifo_timestamp_batch_t)val);
 
 	if( retVal != 0 )
@@ -720,14 +811,6 @@ bool QwDevLSM6DSV16X::setInt2DENPolarity(bool activeLow )
 	if( retVal != 0 )
 		return false;
 	
-	if( activeLow )
-		// pinmode must be set to push-pull when active low is set.
-		// See section 9.14 on pg 51 of datasheet for more information
-		retVal = lsm6dsv16x_pin_mode_set(&sfe_dev, (lsm6dsv16x_pp_od_t)0);
-
-	if( retVal != 0 )
-		return false;
-
 	return true; 
 }
 
@@ -737,9 +820,34 @@ bool QwDevLSM6DSV16X::setInt2DENPolarity(bool activeLow )
 bool QwDevLSM6DSV16X::setInt1Route(uint8_t val)
 {
 	int32_t retVal;
+	lsm6dsv16x_pin_int_route_t int1_route;
 
-	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev,
-                                        (lsm6dsv16x_int1_ctrl_t)val);
+	switch (val)
+	{
+		case 0x01:
+			int1_route.drdy_xl = 1; 
+			break;
+		case 0x02: 
+			int1_route.drdy_g = 1; 
+			break;
+		case 0x08: 
+			int1_route.fifo_th = 1; 
+			break;
+		case 0x10: 
+			int1_route.fifo_ovr = 1; 
+			break;
+		case 0x20: 
+			int1_route.fifo_full = 1; 
+			break;
+		case 0x40: 
+			int1_route.cnt_bdr = 1; 
+			break;
+		default:
+			return false;
+	}
+
+
+	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int1_route);
 
 	if( retVal != 0 )
 		return false;
@@ -756,9 +864,9 @@ bool QwDevLSM6DSV16X::setInt1AccelDataReady(bool enable)
 	int32_t retVal;
 	lsm6dsv16x_pin_int_route_t int1_route;
 
-	int1_ctrl.int1_drdy_xl = (uint8_t)enable; 
+	int1_route.drdy_xl = (uint8_t)enable; 
 	
-	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int1_ctrl);
+	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int1_route);
 
 	if( retVal != 0 )
 		return false;
@@ -776,7 +884,7 @@ bool QwDevLSM6DSV16X::setInt2AccelDataReady(bool enable)
 
 	lsm6dsv16x_pin_int_route_t int2_route; 
 
-	int2_route.int2_drdy_xl	= (uint8_t)enable;
+	int2_route.drdy_xl	= (uint8_t)enable;
 
 	retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int2_route);
 
@@ -796,7 +904,7 @@ bool QwDevLSM6DSV16X::setInt1GyroDataReady(bool enable)
 
 	lsm6dsv16x_pin_int_route_t int1_route; 
 
-	int1_route.int1_drdy_g = (uint8_t)enable;
+	int1_route.drdy_g = (uint8_t)enable;
 	
 	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int1_route);
 
@@ -810,14 +918,14 @@ bool QwDevLSM6DSV16X::setInt1GyroDataReady(bool enable)
 /// @brief Routes the data ready signal for the gyroscope to interrupt two. 
 /// @param enable
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setint2GyroDataReady(bool enable)
+bool QwDevLSM6DSV16X::setInt2GyroDataReady(bool enable)
 {
 
 int32_t retVal;
 
 lsm6dsv16x_pin_int_route_t int2_route; 
 
-int2_route.int2_drdy_g = (uint8_t)enable;
+int2_route.drdy_g = (uint8_t)enable;
 
 retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int2_route);
 
@@ -834,11 +942,11 @@ bool QwDevLSM6DSV16X::setDataReadyMode(bool enable)
 {
 	int32_t retVal;
 
-	lsm6dsv16x_ctrl4_t ctrl4;
+	lsm6dsv16x_data_ready_mode_t dr;
 	 
-	ctrl4.drdy_pulsed = (uint8_t)enable;
+	dr = (lsm6dsv16x_data_ready_mode_t)enable;
 
-	retVal = lsm6dsv16x_data_ready_mode_set(&sfe_dev, ctrl4);
+	retVal = lsm6dsv16x_data_ready_mode_set(&sfe_dev, dr);
 
 	if( retVal != 0 )
 		return false;
@@ -1060,21 +1168,6 @@ bool QwDevLSM6DSV16X::enableHubPassThrough(bool enable)
 	return true; 
 }
 
-/// @brief Enables data from downstream sensors to be stored in the FIFO.
-/// @param eanble
-/// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::enableHubFifoBatching(bool enable)
-{
-	int32_t retVal;
-
-	retVal = lsm6dsv16x_sh_batch_slave_0_set(&sfe_dev, (uint8_t)enable);
-
-	if( retVal != 0 )
-		return false;
-
-	return true;
-}
-
 /// @brief Enables pull up resistors on the sensor hub I2C lines.
 /// @param
 /// @return Returns true on successful execution
@@ -1083,7 +1176,10 @@ bool QwDevLSM6DSV16X::enableHubPullUps(bool enable)
 
 	int32_t retVal;
 
-	retVal = lsm6dsv16x_sh_master_interface_pull_up_set(&sfe_dev, (uint8_t)&enable);
+	if( enable )
+		retVal = lsm6dsv16x_sh_master_interface_pull_up_set(&sfe_dev, 1);
+	else	
+		retVal = lsm6dsv16x_sh_master_interface_pull_up_set(&sfe_dev, 0);
 
 	if( retVal != 0 )
 		return false;
@@ -1176,7 +1272,7 @@ bool QwDevLSM6DSV16X::checkStatus()
 	if( retVal != 0)
 		return false;
 
-	if( (tempVal.drdy_xl == 1) && (tempVal.drdy_gl == 1) )
+	if( (tempVal.drdy_xl == 1) && (tempVal.drdy_gy == 1) )
 		return true; 
 
 	return false; 
@@ -1212,7 +1308,7 @@ bool QwDevLSM6DSV16X::checkGyroStatus()
 	if( retVal != 0)
 		return false;
 
-	if( tempVal.gda == 1 )
+	if( tempVal.drdy_gy == 1 )
 		return true; 
 
 	return false; 
@@ -1231,7 +1327,7 @@ bool QwDevLSM6DSV16X::checkTempStatus()
 	if( retVal != 0)
 		return false;
 
-	if( tempVal.tda == 1 )
+	if( tempVal.drdy_temp == 1 )
 		return true; 
 
 	return false; 

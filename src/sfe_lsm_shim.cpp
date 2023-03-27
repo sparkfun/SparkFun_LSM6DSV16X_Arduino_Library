@@ -1,4 +1,4 @@
-#include "sfe_ism_shim.h"
+#include "sfe_lsm_shim.h"
 #include "sfe_lsm6dsv16x.h"
 
 

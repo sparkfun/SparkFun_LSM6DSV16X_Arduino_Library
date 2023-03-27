@@ -7,7 +7,7 @@
  * https://github.com/STMicroelectronics/STMems_Standard_C_drivers/tree/master/lsm6dsv16x_STdC/examples
  */
 
-#define LSM6DSV16X_ADDRESS_LOW 0x6A
+#define LSM6DSV16X_ADDRESS_LOW 0x6A //Default
 #define LSM6DSV16X_ADDRESS_HIGH 0x6B
 
 struct sfe_lsm_raw_data_t
@@ -64,36 +64,33 @@ class QwDevLSM6DSV16X
 		bool getGyro(sfe_lsm_data_t* gyroData);
 
 		// General Settings
-		bool setDeviceConfig(bool enable = true);
+		//bool setDeviceConfig(bool enable = true);
 		bool deviceReset();
 		bool getDeviceReset();
-		bool enableAccelHPSlopeFilter(bool enable = true);
-		bool enableAccelFilterLP2(bool enable = true);
-		bool setGyroFilterLP1(bool enable = true);
+		bool enableAccelHpFilter(bool enable = true);
+		bool enableAccelLPS2(bool enable = true);
+		bool enableFastSetMode(bool enable = true);
+		bool enableGyroLP1Filter(bool enable = true);
 		bool setGyroLP1Bandwidth(uint8_t val);
+		bool enableAccelLP2Filter(bool enable = true);
+		bool setAccelLP2Bandwidth(uint8_t val);
 		bool setBlockDataUpdate(bool enable = true);
 		uint8_t getBlockDataUpdate();
 		bool setAccelDataRate(uint8_t rate);
 		bool setGyroDataRate(uint8_t rate);
 		bool enableTimestamp(bool enable = true);
-		bool resetTimestamp();
+		bool enableFilterSettling(bool enable = true);
+		//bool resetTimestamp();
 
 		// Interrupt Settings
-		bool setAccelStatustoInt1(bool enable = true);
-		bool setAccelStatustoInt2(bool enable = true);
-		bool setGyroStatustoInt1(bool enable = true);
-		bool setGyroStatustoInt2(bool enable = true);
-		bool setIntNotification(uint8_t val);
-		bool setDataReadyMode(uint8_t val);
-		bool setPinMode(bool activeLow = true);
+		bool setInt2DENPolarity(bool activeLow = true);
+		bool setInt1Route(uint8_t val);
+		bool setInt1AccelDataReady(bool enable = true);
+		bool setInt2AccelDataReady(bool enable = true);
+		bool setInt1GyroDataReady(bool enable = true);
+		bool setInt2GyroDataReady(bool enable = true);
+		bool setDataReadyMode(bool enable = true);
 		
-		// FIFO Settings
-		bool setFifoWatermark(uint16_t val);
-		bool setFifoMode(uint8_t val);
-		bool setAccelFifoBatchSet(uint8_t val);
-		bool setGyroFifoBatchSet(uint8_t val);
-		bool setFifoTimestampDec(uint8_t val);
-			
 		// Sensor Hub Settings
 		bool setHubODR(uint8_t rate);
 		bool setHubSensorRead(uint8_t sensor, sfe_hub_sensor_settings_t* settings);
@@ -101,20 +98,23 @@ class QwDevLSM6DSV16X
 		bool setNumberHubSensors(uint8_t numSensors);
 		bool enableSensorI2C(bool enable);
 		bool readPeripheralSensor(uint8_t* shReg, uint8_t len);
-		bool setHubWriteMode(uint8_t config);
-		bool readMMCMagnetometer(uint8_t* magData, uint8_t len);
-		bool setHubPassThrough(bool enable = true);
-		bool setHubFifoBatching(bool enable = true);
-		bool setHubPullUps(bool enable = true);
-		bool getHubStatus();
 		bool getExternalSensorNack(uint8_t sensor);
+		bool enableHubWriteOnceMode(bool enable = true);
+		bool enableHubPassThrough(bool enable = true);
+		bool enableHubPullUps(bool enable = true);
 		bool resetSensorHub();
 
 		// Self Test
 		bool setAccelSelfTest(uint8_t val);
 		bool setGyroSelfTest(uint8_t val);
 
-
+		// FIFO Settings
+		bool setFifoWatermark(uint16_t val);
+		bool setFifoMode(uint8_t val);
+		bool setAccelFifoBatchSet(uint8_t val);
+		bool setGyroFifoBatchSet(uint8_t val);
+		bool setFifoTimestampDec(uint8_t val);
+			
 		// Status
 		bool checkStatus();
 		bool checkAccelStatus();
@@ -135,7 +135,6 @@ class QwDevLSM6DSV16X
 		float convertToCelsius(int16_t data);
 
 	private: 
-
 		
 		sfe_LSM6DSV16X::QwIDeviceBus *_sfeBus; 
 		uint8_t _i2cAddress;
