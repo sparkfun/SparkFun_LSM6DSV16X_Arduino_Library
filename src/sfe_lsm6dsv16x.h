@@ -60,6 +60,7 @@ class QwDevLSM6DSV16X
 		int16_t getTemp();
 		bool getRawAccel(sfe_lsm_raw_data_t* accelData);
 		bool getRawGyro(sfe_lsm_raw_data_t* gyroData);
+		bool getRawQvar(int16_t* qvarData);
 		bool getAccel(sfe_lsm_data_t* accelData);
 		bool getGyro(sfe_lsm_data_t* gyroData);
 
@@ -67,6 +68,8 @@ class QwDevLSM6DSV16X
 		//bool setDeviceConfig(bool enable = true);
 		bool deviceReset();
 		bool getDeviceReset();
+		bool setAccelMode(uint8_t mode); 
+		bool setGyroMode(uint8_t mode); 
 		bool enableAccelHpFilter(bool enable = true);
 		bool enableAccelLPS2(bool enable = true);
 		bool enableFastSetMode(bool enable = true);
@@ -74,7 +77,7 @@ class QwDevLSM6DSV16X
 		bool setGyroLP1Bandwidth(uint8_t val);
 		bool enableAccelLP2Filter(bool enable = true);
 		bool setAccelLP2Bandwidth(uint8_t val);
-		bool setBlockDataUpdate(bool enable = true);
+		bool enableBlockDataUpdate(bool enable = true);
 		uint8_t getBlockDataUpdate();
 		bool setAccelDataRate(uint8_t rate);
 		bool setGyroDataRate(uint8_t rate);
@@ -90,6 +93,11 @@ class QwDevLSM6DSV16X
 		bool setInt1GyroDataReady(bool enable = true);
 		bool setInt2GyroDataReady(bool enable = true);
 		bool setDataReadyMode(bool enable = true);
+
+		// Qvar Settings
+
+		bool enableAhQvar(bool enable = true);
+		uint8_t getQvarMode();
 		
 		// Sensor Hub Settings
 		bool setHubODR(uint8_t rate);
@@ -120,6 +128,7 @@ class QwDevLSM6DSV16X
 		bool checkAccelStatus();
 		bool checkGyroStatus();
 		bool checkTempStatus();
+		bool checkQvar();
 
 		// Conversions
 		float convert2gToMg(int16_t data);

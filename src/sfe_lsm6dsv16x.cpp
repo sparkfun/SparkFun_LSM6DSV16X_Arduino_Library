@@ -196,6 +196,21 @@ bool QwDevLSM6DSV16X::getRawGyro(sfe_lsm_raw_data_t* gyroData)
 
 }
 
+/// @brief Retrieves raw register values for gyroscope data 
+/// @param gyroData    
+/// @return True on successful execution.
+bool QwDevLSM6DSV16X::getRawQvar(int16_t* qvarData)
+{
+	
+	int32_t retVal = lsm6dsv16x_ah_qvar_raw_get(&sfe_dev, qvarData);
+
+	if( retVal != 0 )
+		return false;
+
+	return true;
+
+}
+
 /// @brief Takes raw register values and converts them according to the 
 /// accelerometer's scale setting.
 /// @param accelData   
@@ -459,6 +474,44 @@ bool QwDevLSM6DSV16X::getDeviceReset()
 	
 }
 
+/// @brief Sets the mode of the accelerometer: high performance(default), 
+/// lower power, normal. 
+/// @param mode
+/// @return True on successful operation. 
+bool QwDevLSM6DSV16X::setAccelMode(uint8_t mode)
+{
+	int32_t retVal;
+
+	if( mode > 6 ) 
+		return false;
+
+	retVal = lsm6dsv16x_xl_mode_set(&sfe_dev, (lsm6dsv16x_xl_mode_t)mode );
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
+/// @brief Sets the mode of the gyroscope: high performance(default), 
+/// lower power, normal. 
+/// @param mode
+/// @return True on successful operation. 
+bool QwDevLSM6DSV16X::setGyroMode(uint8_t mode)
+{
+	int32_t retVal;
+
+	if( mode > 6 ) 
+		return false;
+
+	retVal = lsm6dsv16x_gy_mode_set(&sfe_dev, (lsm6dsv16x_gy_mode_t)mode );
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
 /// @brief Sets the accelerometer's slope filter
 /// @param enable
 /// @return True on successful operation. 
@@ -599,7 +652,7 @@ bool QwDevLSM6DSV16X::setAccelLP2Bandwidth(uint8_t val)
 /// @brief Data is not updated until both MSB and LSB have been read from output registers
 /// @param enable			
 /// @return True on successful operation
-bool QwDevLSM6DSV16X::setBlockDataUpdate(bool enable)
+bool QwDevLSM6DSV16X::enableBlockDataUpdate(bool enable)
 {
 
 	int32_t retVal;
@@ -956,6 +1009,75 @@ bool QwDevLSM6DSV16X::setDataReadyMode(bool enable)
 //
 //
 //////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////
+// QVar Settings
+//
+// 
+//
+//
+//  
+// 
+// 
+
+bool QwDevLSM6DSV16X::enableAhQvar(bool enable)
+{
+	int32_t retVal;
+	lsm6dsv16x_ah_qvar_mode_t qvar;	
+
+	if( enable )
+		qvar.ah_qvar_en = 1; 
+	else
+		qvar.ah_qvar_en = 0; 
+
+	retVal = lsm6dsv16x_ah_qvar_mode_set(&sfe_dev, qvar);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
+
+uint8_t QwDevLSM6DSV16X::getQvarMode()
+{
+	int32_t retVal;
+	lsm6dsv16x_ah_qvar_mode_t mode; 
+
+	retVal = lsm6dsv16x_ah_qvar_mode_get(&sfe_dev, &mode);
+
+	if( retVal != 0 )
+		return 0;
+
+	if( mode.ah_qvar_en == 1 )
+		return 1;
+	
+	return 0; 
+}
+
+/// @brief Retrieves the data ready bit for the Qvar channel.
+/// @return Returns true on if the bit is one.
+bool QwDevLSM6DSV16X::checkQvar()
+{
+	lsm6dsv16x_all_sources_t tempVal;
+
+	int32_t retVal = lsm6dsv16x_all_sources_get(&sfe_dev, &tempVal);
+
+	if( retVal != 0)
+		return false;
+
+	if( tempVal.drdy_ah_qvar == 1)
+		return true; 
+
+	return false; 
+
+}
+
+
+//
+//
+//////////////////////////////////////////////////////////////////////////////////
+
 
 //////////////////////////////////////////////////////////////////////////////////
 // Sensor Hub Settings
