@@ -1,10 +1,12 @@
 /*
-  example1-basic
+  example2-interrupt
 
   This example shows the basic settings and functions for retrieving accelerometer
-	and gyroscopic data. 
+	data. In addition we're setting the data ready signal to interrupt pin one in an
+	active high configuration and show additional ways in which the interrupts
+	can be configured. 
 
-  Written by Elias Santistevan @ SparkFun Electronics, May, 2022
+  Written by Elias Santistevan @ SparkFun Electronics, May 2022
 
 	Products:
 
@@ -24,24 +26,30 @@
 #include <Wire.h>
 #include "SparkFun_LSM6DSV16X.h"
 
+// Structs for X,Y,Z data
 SparkFun_LSM6DSV16X myLSM; 
 
 // Structs for X,Y,Z data
 sfe_lsm_data_t accelData; 
-sfe_lsm_data_t gyroData; 
+
+
+// Interrupt pin
+byte interrupt_pin = D1; 
 
 void setup(){
 
-	Wire.begin();
-
+	// Set the interrupt to INPUT
+	pinMode(interrupt_pin, INPUT);
 	Serial.begin(115200);
+
+	Wire.begin();
 
 	if( !myLSM.begin() ){
 		Serial.println("Did not begin.");
 		while(1);
 	}
 
-	// Reset the device to default settings. This if helpful is you're doing multiple
+	// Reset the device to default settings. This is helpful if you're doing multiple
 	// uploads testing different settings. 
 	myLSM.deviceReset();
 
@@ -62,31 +70,43 @@ void setup(){
 	myLSM.setAccelDataRate(LSM6DSV16X_ODR_AT_7Hz5);
 	myLSM.setAccelFullScale(LSM6DSV16X_16g); 
 
-	// Set the output data rate and precision of the gyroscope
-	myLSM.setGyroDataRate(LSM6DSV16X_ODR_AT_15Hz);
-	myLSM.setGyroFullScale(LSM6DSV16X_2000dps); 
-
-	// Enable filter settling.
-	myLSM.enableFilterSettling();
-
 	// Turn on the accelerometer's filter and apply settings. 
 	myLSM.enableAccelLP2Filter();
 	myLSM.setAccelLP2Bandwidth(LSM6DSV16X_XL_STRONG);
 
-	// Turn on the gyroscope's filter and apply settings. 
-	myLSM.enableGyroLP1Filter();
-	myLSM.setGyroLP1Bandwidth(LSM6DSV16X_GY_ULTRA_LIGHT);
+	// Set the accelerometer's status i.e. the data ready to interrupt one. 
+	// Commented out just below is the function to send the data ready
+	// to interrupt two. 
+
+	myLSM.setInt1AccelDataReady();
+	//myLSM.setInt2AccelDataReady();
 
 
+	// We can just as easily set the gyroscope's data read signal to either interrupt
+
+	//myLSM.setInt1GyroDataReady();
+	//myLSM.setInt2GyroDataReady();
+
+
+	// Uncommenting the function call below will change interrupt TWO
+	// active LOW instead of HIGH.
+
+	//myLSM.setInt2DENPolarity();
+
+	// This function call will modify which "events" trigger an interrupt. No 
+	// argument has been given, please refer to the datasheet for more 
+	// information.
+
+	// myLSM.setInt1Route(uint8_t val);
+
+	// This function changes the latching behaviour of the interrupts to pulsed.
+	// myLSM.setDataReadyMode();
 }
 
 void loop(){
 
-	// Check if both gyroscope and accelerometer data is available.
-	if( myLSM.checkStatus() )
-	{
+	if( digitalRead(interrupt_pin) == HIGH ){
 		myLSM.getAccel(&accelData);
-		myLSM.getGyro(&gyroData);
 		Serial.print("Accelerometer: ");
 		Serial.print("X: ");
 		Serial.print(accelData.xData);
@@ -96,16 +116,6 @@ void loop(){
 		Serial.print(" ");
 		Serial.print("Z: ");
 		Serial.print(accelData.zData);
-		Serial.println(" ");
-		Serial.print("Gyroscope: ");
-		Serial.print("X: ");
-		Serial.print(gyroData.xData);
-		Serial.print(" ");
-		Serial.print("Y: ");
-		Serial.print(gyroData.yData);
-		Serial.print(" ");
-		Serial.print("Z: ");
-		Serial.print(gyroData.zData);
 		Serial.println(" ");
 	}
 

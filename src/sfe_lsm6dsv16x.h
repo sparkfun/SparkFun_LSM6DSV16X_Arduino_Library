@@ -95,7 +95,6 @@ class QwDevLSM6DSV16X
 		bool setDataReadyMode(bool enable = true);
 
 		// Qvar Settings
-
 		bool enableAhQvar(bool enable = true);
 		uint8_t getQvarMode();
 		bool setQvarImpedance(uint8_t val);

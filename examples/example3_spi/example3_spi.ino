@@ -1,10 +1,11 @@
 /*
-  example1-basic
+  example3-spi
 
   This example shows the basic settings and functions for retrieving accelerometer
-	and gyroscopic data. 
+	and gyroscopic data but using the SPI interface. Everything other than that is 
+	identical to the "basic" example.
 
-  Written by Elias Santistevan @ SparkFun Electronics, May, 2022
+  Written by Elias Santistevan @ SparkFun Electronics, May 2022
 
 	Products:
 
@@ -21,24 +22,31 @@
 	License	(http://opensource.org/licenses/MIT).
 */
 
-#include <Wire.h>
+#include <SPI.h>
 #include "SparkFun_LSM6DSV16X.h"
 
-SparkFun_LSM6DSV16X myLSM; 
+// SPI instance class call
+SparkFun_LSM6DSV16X_SPI myLSM; 
 
 // Structs for X,Y,Z data
 sfe_lsm_data_t accelData; 
 sfe_lsm_data_t gyroData; 
 
+// Set your chip select pin according to your setup. 
+byte chipSelect = 1;
+
 void setup(){
 
-	Wire.begin();
+	SPI.begin();
 
 	Serial.begin(115200);
+	pinMode(chipSelect, OUTPUT);
+	digitalWrite(chipSelect, HIGH);
 
-	if( !myLSM.begin() ){
+
+	if( !myLSM.begin(chipSelect) ){
 		Serial.println("Did not begin.");
-		while(1);
+	  while(1);
 	}
 
 	// Reset the device to default settings. This if helpful is you're doing multiple
@@ -78,13 +86,13 @@ void setup(){
 	myLSM.setGyroLP1Bandwidth(LSM6DSV16X_GY_ULTRA_LIGHT);
 
 
+
 }
 
 void loop(){
 
 	// Check if both gyroscope and accelerometer data is available.
-	if( myLSM.checkStatus() )
-	{
+	if( myLSM.checkStatus() ){
 		myLSM.getAccel(&accelData);
 		myLSM.getGyro(&gyroData);
 		Serial.print("Accelerometer: ");
