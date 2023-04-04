@@ -98,6 +98,7 @@ class QwDevLSM6DSV16X
 
 		bool enableAhQvar(bool enable = true);
 		uint8_t getQvarMode();
+		bool setQvarImpedance(uint8_t val);
 		
 		// Sensor Hub Settings
 		bool setHubODR(uint8_t rate);

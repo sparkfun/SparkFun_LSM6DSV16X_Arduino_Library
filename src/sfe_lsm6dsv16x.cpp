@@ -1020,6 +1020,9 @@ bool QwDevLSM6DSV16X::setDataReadyMode(bool enable)
 // 
 // 
 
+/// @brief Enables Qvar inputs. 
+/// @param enable
+/// @return Returns true on successful write to register.
 bool QwDevLSM6DSV16X::enableAhQvar(bool enable)
 {
 	int32_t retVal;
@@ -1039,6 +1042,9 @@ bool QwDevLSM6DSV16X::enableAhQvar(bool enable)
 }
 
 
+
+/// @brief Checks if QVar bit is set. 
+/// @return Returns true if bit is set. 
 uint8_t QwDevLSM6DSV16X::getQvarMode()
 {
 	int32_t retVal;
@@ -1053,6 +1059,25 @@ uint8_t QwDevLSM6DSV16X::getQvarMode()
 		return 1;
 	
 	return 0; 
+}
+
+/// @brief Sets the impedance (four possible preset values) for the Analog and QVar
+/// channels.
+/// @param val 
+/// @return Returns true on successful write to register.
+bool QwDevLSM6DSV16X::setQvarImpedance(uint8_t val)
+{
+	int32_t retVal;
+
+	if( val > 3 )
+		return false;
+
+	retVal = lsm6dsv16x_ah_qvar_zin_set(&sfe_dev, (lsm6dsv16x_ah_qvar_zin_t)val);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
 }
 
 /// @brief Retrieves the data ready bit for the Qvar channel.
