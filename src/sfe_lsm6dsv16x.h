@@ -87,11 +87,16 @@ class QwDevLSM6DSV16X
 
 		// Interrupt Settings
 		bool setInt2DENPolarity(bool activeLow = true);
-		bool setInt1Route(uint8_t val);
-		bool setInt1AccelDataReady(bool enable = true);
-		bool setInt2AccelDataReady(bool enable = true);
-		bool setInt1GyroDataReady(bool enable = true);
-		bool setInt2GyroDataReady(bool enable = true);
+		bool setIntRoute(lsm6dsv16x_pin_int_route_t val, uint8_t pin = 1);
+
+		bool setIntAccelDataReady(bool enable = true, uint8_t pin = 1);
+		bool setIntGyroDataReady(bool enable = true, uint8_t pin = 1);
+		bool setIntSingleTap(bool enable = true, uint8_t pin = 1);
+		bool setIntDoubleTap(bool enable = true, uint8_t pin = 1);
+		bool setIntWakeup(bool enable = true, uint8_t pin = 1);
+		bool setIntFreeFall(bool enable = true, uint8_t pin = 1);
+		bool setIntSleepChange(bool enable = true, uint8_t pin = 1);
+
 		bool setDataReadyMode(bool enable = true);
 
 		// Qvar Settings

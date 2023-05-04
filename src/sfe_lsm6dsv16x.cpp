@@ -672,9 +672,12 @@ uint8_t QwDevLSM6DSV16X::getBlockDataUpdate()
 {
 
 	uint8_t tempVal;
-	int32_t retVal; 
+	int32_t retVal = 0; 
 
 	retVal = lsm6dsv16x_block_data_update_get(&sfe_dev, &tempVal);
+
+	if( retVal != 0 )
+		return 0x02; //not a bit that can be returned
 
 	return tempVal; 
 }
@@ -856,7 +859,7 @@ bool QwDevLSM6DSV16X::setFifoTimestampDec(uint8_t val)
 /// @return True on successful execution
 bool QwDevLSM6DSV16X::setInt2DENPolarity(bool activeLow )
 {
-	int32_t retVal;
+	int32_t retVal = 0;
 
 	//0 = active high :  active low, 1  
 	retVal = lsm6dsv16x_den_polarity_set(&sfe_dev, (lsm6dsv16x_den_polarity_t)activeLow);
@@ -867,40 +870,20 @@ bool QwDevLSM6DSV16X::setInt2DENPolarity(bool activeLow )
 	return true; 
 }
 
-/// @brief Selects the signal that will be routed to int 1
+/// @brief Selects the signal that will be routed to the selected interrupt.
 /// @param val
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setInt1Route(uint8_t val)
+bool QwDevLSM6DSV16X::setIntRoute(lsm6dsv16x_pin_int_route_t val, uint8_t pin)
 {
-	int32_t retVal;
-	lsm6dsv16x_pin_int_route_t int1_route;
+	int32_t retVal = 0;
 
-	switch (val)
-	{
-		case 0x01:
-			int1_route.drdy_xl = 1; 
-			break;
-		case 0x02: 
-			int1_route.drdy_g = 1; 
-			break;
-		case 0x08: 
-			int1_route.fifo_th = 1; 
-			break;
-		case 0x10: 
-			int1_route.fifo_ovr = 1; 
-			break;
-		case 0x20: 
-			int1_route.fifo_full = 1; 
-			break;
-		case 0x40: 
-			int1_route.cnt_bdr = 1; 
-			break;
-		default:
-			return false;
-	}
+	if( pin > 2 ) 
+		return false;
 
-
-	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int1_route);
+	if( pin == 1 )
+		retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &val);
+	if( pin == 2 )
+		retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &val);
 
 	if( retVal != 0 )
 		return false;
@@ -908,58 +891,29 @@ bool QwDevLSM6DSV16X::setInt1Route(uint8_t val)
 	return true;
 }
 
-/// @brief Routes the data ready signal for the accelerometer to interrupt one.
+/// @brief Routes the data ready signal for the accelerometer to the selected pin.
 /// @param enable
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setInt1AccelDataReady(bool enable)
+bool QwDevLSM6DSV16X::setIntAccelDataReady(bool enable, uint8_t pin)
 {
 
-	int32_t retVal;
-	lsm6dsv16x_pin_int_route_t int1_route;
-
-	int1_route.drdy_xl = (uint8_t)enable; 
-	
-	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int1_route);
-
-	if( retVal != 0 )
+	if( pin > 2 ) 
 		return false;
 
-	return true; 
-}
+	int32_t retVal = 0;
+	lsm6dsv16x_pin_int_route_t int_route;
 
-/// @brief Routes the data ready signal for the accelerometer to interrupt two.
-/// @param enable
-/// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setInt2AccelDataReady(bool enable)
-{
+	if( pin == 1 )
+	{
+		int_route.drdy_xl = (uint8_t)enable; 
+		retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int_route);
+	}
 
-	int32_t retVal;
-
-	lsm6dsv16x_pin_int_route_t int2_route; 
-
-	int2_route.drdy_xl	= (uint8_t)enable;
-
-	retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int2_route);
-
-	if( retVal != 0 )
-		return false;
-
-	return true; 
-}
-
-/// @brief Routes the data ready signal for the gyroscope to interrupt one. 
-/// @param enable
-/// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setInt1GyroDataReady(bool enable)
-{
-
-	int32_t retVal;
-
-	lsm6dsv16x_pin_int_route_t int1_route; 
-
-	int1_route.drdy_g = (uint8_t)enable;
-	
-	retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int1_route);
+	if( pin == 2 )
+	{
+		int_route.drdy_xl = (uint8_t)enable; 
+		retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int_route);
+	}
 
 	if( retVal != 0 )
 		return false;
@@ -968,24 +922,159 @@ bool QwDevLSM6DSV16X::setInt1GyroDataReady(bool enable)
 }
 
 
-/// @brief Routes the data ready signal for the gyroscope to interrupt two. 
-/// @param enable
+/// @brief Routes the data ready signal for the Gyroscope to the selected pin.
+/// @param enable, pin
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setInt2GyroDataReady(bool enable)
+bool QwDevLSM6DSV16X::setIntGyroDataReady(bool enable, uint8_t pin)
 {
 
-int32_t retVal;
+	if( pin > 2 )
+		return false;
 
-lsm6dsv16x_pin_int_route_t int2_route; 
+	int32_t retVal = 0;
 
-int2_route.drdy_g = (uint8_t)enable;
+	lsm6dsv16x_pin_int_route_t int_route; 
+	int_route.drdy_g = (uint8_t)enable;
 
-retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int2_route);
+	if( pin == 1 )
+		retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int_route);
+	if( pin == 2 )
+		retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int_route);
 
-if( retVal != 0 )
-	return false;
+	if( retVal != 0 )
+		return false;
 
-return true; 
+	return true; 
+}
+
+
+/// @brief Enables the single tap interrupt on the selected interrupt pin.
+/// @param enable, pin
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::setIntSingleTap(bool enable, uint8_t pin)
+{
+
+	if( pin > 2 )
+		return false;
+
+	int32_t retVal = 0;
+
+	lsm6dsv16x_pin_int_route_t int_route; 
+	int_route.single_tap = (uint8_t)enable;
+
+	if( pin == 1 )
+		retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int_route);
+	if( pin == 2 )
+		retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int_route);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
+/// @brief Enables the double tap interrupt on the selected interrupt pin.
+/// @param enable, pin
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::setIntDoubleTap(bool enable, uint8_t pin)
+{
+
+	if( pin > 2 )
+		return false;
+
+	int32_t retVal = 0;
+
+	lsm6dsv16x_pin_int_route_t int_route; 
+	int_route.double_tap = (uint8_t)enable;
+
+	if( pin == 1 )
+		retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int_route);
+	if( pin == 2 )
+		retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int_route);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
+
+/// @brief Enables the wake up interrupt on the selected interrupt pin.
+/// @param enable, pin
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::setIntWakeup(bool enable, uint8_t pin)
+{
+
+	if( pin > 2 )
+		return false;
+
+	int32_t retVal = 0;
+
+	lsm6dsv16x_pin_int_route_t int_route; 
+	int_route.wakeup = (uint8_t)enable;
+
+	if( pin == 1 )
+		retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int_route);
+	if( pin == 2 )
+		retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int_route);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
+
+/// @brief Enables the free fall interrupt on one of the interrupt pins.
+/// @param enable, pin
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::setIntFreeFall(bool enable, uint8_t pin)
+{
+
+	if( pin > 2 )
+		return false;
+
+	int32_t retVal = 0;
+
+	lsm6dsv16x_pin_int_route_t int_route; 
+	int_route.freefall = (uint8_t)enable;
+
+	if( pin == 1 )
+		retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int_route);
+	if( pin == 2 )
+		retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int_route);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
+
+
+/// @brief Enables the sleep change interrupt on one of the interrupt pins.
+/// @param enable, pin
+/// @return Returns true on successful execution
+bool QwDevLSM6DSV16X::setIntSleepChange(bool enable, uint8_t pin)
+{
+
+	if( pin > 2 )
+		return false;
+
+	int32_t retVal = 0;
+
+	lsm6dsv16x_pin_int_route_t int_route; 
+	int_route.sleep_change = (uint8_t)enable;
+
+	if( pin == 1 )
+		retVal = lsm6dsv16x_pin_int1_route_set(&sfe_dev, &int_route);
+	if( pin == 2 )
+		retVal = lsm6dsv16x_pin_int2_route_set(&sfe_dev, &int_route);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
 }
 
 /// @brief Enables pulsed data ready mode as oppsed to latch - 65us pulse.
