@@ -17,6 +17,10 @@
         <td>SparkFun 6DoF Micro- LSM6DSV16X (Qwiic)</td>
     </tr>
 </table>
+
+The SparkFun 6DoF - LSM6DSV16X (Qwiic) and the SparkFun 6DoF Micro- LSM6DSV16X (Qwiic) are Qwiic enabled boards based on the LSM6DSV16X from STMicroelectronics. This little chip is a high-performance, low-power 6-axis IMU, featuring a 3-axis digital accelerometer and a 3-axis digital gyroscope, with a triple core for processing acceleration and angular rate data on three separate channels (user interface, OIS, and EIS) with dedicated configuration, processing, and filtering.
+
+
 Repository Contents
 -------------------
 
