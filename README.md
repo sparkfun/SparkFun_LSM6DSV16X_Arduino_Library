@@ -1,12 +1,22 @@
 # SparkFun LSM6DSV16X Arduino Library
 ========================================
 
-[![SparkFun Part Name](URL for picture of part)](URL for product on Sparkfun.com)
-
-[*SparkFun Part Name (SKU)*](URL for product on Sparkfun.com)
-
-<Basic description of the part.>
-
+<table class="table table-hover table-striped table-bordered">
+    <tr>
+        <th class="text-center"> 
+        </th>
+        <th class="text-center">
+        </th>
+    </tr>
+    <tr align="center">
+        <td><a href="https://www.sparkfun.com/products/21325"><img src="https://cdn.sparkfun.com/assets/parts/2/1/1/1/8/21325_6DOF_3.jpg" alt=""></a></td>
+        <td><a href="https://www.sparkfun.com/products/21336"><img src="https://cdn.sparkfun.com/assets/parts/2/1/1/4/4/21336_Micro6DOF_3.jpg" alt=""></a></td>
+    </tr>
+    <tr align="center">
+        <td>SparkFun 6DoF - LSM6DSV16X (Qwiic)</td>
+        <td>SparkFun 6DoF Micro- LSM6DSV16X (Qwiic)</td>
+    </tr>
+</table>
 Repository Contents
 -------------------
 
@@ -16,7 +26,7 @@ Repository Contents
 Documentation
 --------------
 * **[Hardware](https://github.com/sparkfun/SparkFun_6DoF_LSM6DSV16X)** - Hardware files for the  SparkFun 6DoF - LSM6DSV16X (Qwiic) and the SparkFun Micro 6DoF - LSM6DSV16X (Qwiic). 
-* **[Hookup Guide](https://learn.sparkfun.com/tutorials/sparkfun-6dof-lsm6dsv16x-qwiic-hookup-guide)** - Basic hookup guide for the  SparkFun 6DoF - LSM6DSV16X (Qwiic) and the SparkFun Micro 6DoF - LSM6DSV16X (Qwiic). 
+* **[Hookup Guide](https://docs.sparkfun.com/SparkFun_6DoF_LSM6DSV16X/)** - Basic hookup guide for the  SparkFun 6DoF - LSM6DSV16X (Qwiic) and the SparkFun Micro 6DoF - LSM6DSV16X (Qwiic). 
 
 License Information
 -------------------
