@@ -99,6 +99,12 @@ class QwDevLSM6DSV16X
 
 		bool setDataReadyMode(bool enable = true);
 
+		// Tap Settings
+		bool setTapMode(uint8_t mode);
+		bool setTapDirection(bool xDirection, bool yDirection, bool zDirection);
+		bool setTapThresholds(uint8_t xThreshold, uint8_t yThreshold, uint8_t zThreshold);
+		bool setTapTimeWindows(uint8_t xWindow, uint8_t yWindow, uint8_t zWindow);
+
 		// Qvar Settings
 		bool enableAhQvar(bool enable = true);
 		uint8_t getQvarMode();

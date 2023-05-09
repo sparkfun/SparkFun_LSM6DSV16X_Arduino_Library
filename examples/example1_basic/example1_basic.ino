@@ -35,6 +35,7 @@ void setup(){
 	Wire.begin();
 
 	Serial.begin(115200);
+	while(!Serial){}
 
 	if( !myLSM.begin() ){
 		Serial.println("Did not begin.");

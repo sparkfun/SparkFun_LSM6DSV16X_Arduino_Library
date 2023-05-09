@@ -35,6 +35,8 @@ sfe_lsm_data_t accelData;
 
 // Interrupt pin
 byte interrupt_pin = D1; 
+byte pin_one = 1; 
+byte pin_two = 1; 
 
 void setup(){
 
@@ -78,14 +80,14 @@ void setup(){
 	// Commented out just below is the function to send the data ready
 	// to interrupt two. 
 
-	myLSM.setInt1AccelDataReady();
-	//myLSM.setInt2AccelDataReady();
+	myLSM.setIntAccelDataReady();
+	//myLSM.setIntAccelDataReady(pin_two);
 
 
 	// We can just as easily set the gyroscope's data read signal to either interrupt
 
-	//myLSM.setInt1GyroDataReady();
-	//myLSM.setInt2GyroDataReady();
+	//myLSM.setIntGyroDataReady();
+	//myLSM.setIntGyroDataReady(pin_two);
 
 
 	// Uncommenting the function call below will change interrupt TWO
@@ -97,7 +99,7 @@ void setup(){
 	// argument has been given, please refer to the datasheet for more 
 	// information.
 
-	// myLSM.setInt1Route(uint8_t val);
+	// myLSM.setIntRoute(lsm6dsv16x_pin_int_route_t val);
 
 	// This function changes the latching behaviour of the interrupts to pulsed.
 	// myLSM.setDataReadyMode();

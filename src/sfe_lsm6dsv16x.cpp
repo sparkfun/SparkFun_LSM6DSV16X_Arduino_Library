@@ -1095,6 +1095,85 @@ bool QwDevLSM6DSV16X::setDataReadyMode(bool enable)
 
 	return true;
 }
+
+bool QwDevLSM6DSV16X::setTapMode(uint8_t mode)
+{
+	if( mode > 1 )
+		return false;
+
+	int32_t retVal; 
+	lsm6dsv16x_tap_mode_t tapMode;
+
+	tapMode = (lsm6dsv16x_tap_mode_t)mode; 
+	
+	retVal = lsm6dsv16x_tap_mode_set(&sfe_dev, tapMode);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
+bool QwDevLSM6DSV16X::setTapDirection(bool xDirection, bool yDirection, bool zDirection)
+{
+
+	int32_t retVal; 
+	lsm6dsv16x_tap_detection_t directionDetect;
+
+	directionDetect.tap_x_en = (uint8_t)xDirection;	
+	directionDetect.tap_y_en = (uint8_t)yDirection;	
+	directionDetect.tap_z_en = (uint8_t)zDirection;	
+
+	retVal = lsm6dsv16x_tap_detection_set(&sfe_dev, directionDetect);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
+bool QwDevLSM6DSV16X::setTapThresholds(uint8_t xThreshold, uint8_t yThreshold, uint8_t zThreshold)
+{
+
+	if( xThreshold > 31 | yThreshold > 31 | zThreshold > 31 )
+		return false; 
+
+	int32_t retVal; 
+	lsm6dsv16x_tap_thresholds_t tapThresh;
+
+	tapThresh.x = xThreshold;	
+	tapThresh.y = yThreshold;	
+	tapThresh.z = zThreshold;	
+
+	retVal = lsm6dsv16x_tap_thresholds_set(&sfe_dev, tapThresh);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
+bool QwDevLSM6DSV16X::setTapTimeWindows(uint8_t shock, uint8_t quiet, uint8_t tapGap)
+{
+
+	if( shock > 3 | quiet > 3 | tapGap > 15 )
+		return false; 
+
+	int32_t retVal; 
+	lsm6dsv16x_tap_time_windows_t window;
+
+	window.shock = shock;	
+	window.quiet = quiet;	
+	window.tap_gap = tapGap;	
+
+	retVal = lsm6dsv16x_tap_time_windows_set(&sfe_dev, window);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
 //
 //
 //////////////////////////////////////////////////////////////////////////////////

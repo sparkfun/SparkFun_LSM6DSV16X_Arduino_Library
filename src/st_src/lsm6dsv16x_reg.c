@@ -109,69 +109,69 @@ static void bytecpy(uint8_t *target, uint8_t *source)
   * @{
   *
   */
-float_t lsm6dsv16x_from_sflp_to_mg(int16_t lsb)
+float lsm6dsv16x_from_sflp_to_mg(int16_t lsb)
 {
-  return ((float_t)lsb) * 0.061f;
+  return ((float)lsb) * 0.061f;
 }
 
-float_t lsm6dsv16x_from_fs2_to_mg(int16_t lsb)
+float lsm6dsv16x_from_fs2_to_mg(int16_t lsb)
 {
-  return ((float_t)lsb) * 0.061f;
+  return ((float)lsb) * 0.061f;
 }
 
-float_t lsm6dsv16x_from_fs4_to_mg(int16_t lsb)
+float lsm6dsv16x_from_fs4_to_mg(int16_t lsb)
 {
-  return ((float_t)lsb) * 0.122f;
+  return ((float)lsb) * 0.122f;
 }
 
-float_t lsm6dsv16x_from_fs8_to_mg(int16_t lsb)
+float lsm6dsv16x_from_fs8_to_mg(int16_t lsb)
 {
-  return ((float_t)lsb) * 0.244f;
+  return ((float)lsb) * 0.244f;
 }
 
-float_t lsm6dsv16x_from_fs16_to_mg(int16_t lsb)
+float lsm6dsv16x_from_fs16_to_mg(int16_t lsb)
 {
-  return ((float_t)lsb) * 0.488f;
+  return ((float)lsb) * 0.488f;
 }
 
-float_t lsm6dsv16x_from_fs125_to_mdps(int16_t lsb)
+float lsm6dsv16x_from_fs125_to_mdps(int16_t lsb)
 {
-  return ((float_t)lsb) * 4.375f;
+  return ((float)lsb) * 4.375f;
 }
 
-float_t lsm6dsv16x_from_fs250_to_mdps(int16_t lsb)
+float lsm6dsv16x_from_fs250_to_mdps(int16_t lsb)
 {
-  return ((float_t)lsb) * 8.750f;
+  return ((float)lsb) * 8.750f;
 }
 
-float_t lsm6dsv16x_from_fs500_to_mdps(int16_t lsb)
+float lsm6dsv16x_from_fs500_to_mdps(int16_t lsb)
 {
-  return ((float_t)lsb) * 17.50f;
+  return ((float)lsb) * 17.50f;
 }
 
-float_t lsm6dsv16x_from_fs1000_to_mdps(int16_t lsb)
+float lsm6dsv16x_from_fs1000_to_mdps(int16_t lsb)
 {
-  return ((float_t)lsb) * 35.0f;
+  return ((float)lsb) * 35.0f;
 }
 
-float_t lsm6dsv16x_from_fs2000_to_mdps(int16_t lsb)
+float lsm6dsv16x_from_fs2000_to_mdps(int16_t lsb)
 {
-  return ((float_t)lsb) * 70.0f;
+  return ((float)lsb) * 70.0f;
 }
 
-float_t lsm6dsv16x_from_fs4000_to_mdps(int16_t lsb)
+float lsm6dsv16x_from_fs4000_to_mdps(int16_t lsb)
 {
-  return ((float_t)lsb) * 140.0f;
+  return ((float)lsb) * 140.0f;
 }
 
-float_t lsm6dsv16x_from_lsb_to_celsius(int16_t lsb)
+float lsm6dsv16x_from_lsb_to_celsius(int16_t lsb)
 {
-  return (((float_t)lsb / 256.0f) + 25.0f);
+  return (((float)lsb / 256.0f) + 25.0f);
 }
 
-float_t lsm6dsv16x_from_lsb_to_nsec(uint32_t lsb)
+float lsm6dsv16x_from_lsb_to_nsec(uint32_t lsb)
 {
-  return ((float_t)lsb * 21750.0f);
+  return ((float)lsb * 21750.0f);
 }
 
 /**
@@ -245,7 +245,7 @@ int32_t lsm6dsv16x_xl_offset_mg_set(stmdev_ctx_t *ctx,
   lsm6dsv16x_x_ofs_usr_t x_ofs_usr;
   lsm6dsv16x_ctrl9_t ctrl9;
   int32_t ret;
-  float_t tmp;
+  float tmp;
 
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_Z_OFS_USR, (uint8_t *)&z_ofs_usr, 1);
   if (ret == 0)
@@ -348,15 +348,15 @@ int32_t lsm6dsv16x_xl_offset_mg_get(stmdev_ctx_t *ctx,
 
   if (ctrl9.usr_off_w == PROPERTY_DISABLE)
   {
-    val->z_mg = ((float_t)z_ofs_usr.z_ofs_usr * 0.0078125f);
-    val->y_mg = ((float_t)y_ofs_usr.y_ofs_usr * 0.0078125f);
-    val->x_mg = ((float_t)x_ofs_usr.x_ofs_usr * 0.0078125f);
+    val->z_mg = ((float)z_ofs_usr.z_ofs_usr * 0.0078125f);
+    val->y_mg = ((float)y_ofs_usr.y_ofs_usr * 0.0078125f);
+    val->x_mg = ((float)x_ofs_usr.x_ofs_usr * 0.0078125f);
   }
   else
   {
-    val->z_mg = ((float_t)z_ofs_usr.z_ofs_usr * 0.125f);
-    val->y_mg = ((float_t)y_ofs_usr.y_ofs_usr * 0.125f);
-    val->x_mg = ((float_t)x_ofs_usr.x_ofs_usr * 0.125f);
+    val->z_mg = ((float)z_ofs_usr.z_ofs_usr * 0.125f);
+    val->y_mg = ((float)y_ofs_usr.y_ofs_usr * 0.125f);
+    val->x_mg = ((float)x_ofs_usr.x_ofs_usr * 0.125f);
   }
 
   return ret;
@@ -5737,7 +5737,7 @@ int32_t lsm6dsv16x_fsm_data_rate_get(stmdev_ctx_t *ctx,
  * Original conversion routines taken from: https://github.com/numpy/numpy
  *
  * uint16_t npy_floatbits_to_halfbits(uint32_t f);
- * uint16_t npy_float_to_half(float_t f);
+ * uint16_t npy_float_to_half(float f);
  *
  * Released under BSD-3-Clause License
  */
@@ -5879,11 +5879,11 @@ static uint16_t npy_floatbits_to_halfbits(uint32_t f)
 #endif
 }
 
-static uint16_t npy_float_to_half(float_t f)
+static uint16_t npy_float_to_half(float f)
 {
   union
   {
-    float_t f;
+    float f;
     uint32_t fbits;
   } conv;
   conv.f = f;
@@ -5913,7 +5913,7 @@ int32_t lsm6dsv16x_sflp_game_gbias_set(stmdev_ctx_t *ctx,
   uint8_t conf_saved[2];
   uint8_t reg_zero[2] = {0x0, 0x0};
   uint16_t gbias_hf[3];
-  float_t k = 0.005f;
+  float k = 0.005f;
   int16_t xl_data[3];
   int32_t data_tmp;
   uint8_t *data_ptr = (uint8_t *)&data_tmp;
