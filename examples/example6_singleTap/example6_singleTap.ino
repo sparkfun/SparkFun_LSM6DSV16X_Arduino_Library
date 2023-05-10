@@ -1,8 +1,7 @@
 /*
-  example1-basic
+  example6-single/Double Tap
 
-  This example shows the basic settings and functions for retrieving accelerometer
-	and gyroscopic data. 
+  This example shows the how to setup the device for tap detection. 
 
   Written by Elias Santistevan @ SparkFun Electronics, May, 2022
 
@@ -67,54 +66,41 @@ void setup(){
 	myLSM.setTapDirection(false, false, true); 
 	// Check 
 	myLSM.getTapDirection(&myAxis);
-	Serial.print("---- Enabled Axes -----"
+	Serial.println("---- Enabled Axes -----");
 	Serial.print("X-axis: ");
 	Serial.println(myAxis.x);
-	Serial.print("Y: ");
+	Serial.print("Y-axis: ");
 	Serial.println(myAxis.y);
-	Serial.print("Z: ");
+	Serial.print("Z-axis: ");
 	Serial.println(myAxis.z);
 
-	myLSM.setTapThresholds(1, 1, 1); 
+	myLSM.setTapThresholds(0, 0, 2); 
 	myLSM.getTapThresholds(&myAxis);
-	Serial.print("X: ");
+	Serial.println("---- Thresholds for each Axis -----");
+	Serial.print("X-axis: ");
 	Serial.println(myAxis.x);
-	Serial.print("Y: ");
+	Serial.print("Y-axis: ");
 	Serial.println(myAxis.y);
-	Serial.print("Z: ");
+	Serial.print("Z-axis: ");
 	Serial.println(myAxis.z);
 
 	myLSM.setTapTimeWindows(1, 1, 7); 
 	myLSM.getTapTimeWindows(&myAxis);
-	Serial.print("X: ");
+	Serial.println("---- Settings for Tap Detection-----");
+	Serial.print("Shock: ");
 	Serial.println(myAxis.x);
-	Serial.print("Y: ");
+	Serial.print("Quiet: ");
 	Serial.println(myAxis.y);
-	Serial.print("Z: ");
+	Serial.print("Tap Gap: ");
 	Serial.println(myAxis.z);
 
 	myLSM.setTapMode(0x01); 
-	Serial.print("Tap Mode: "); 
+	Serial.print("Tap Mode (0 = Single, 1 = Single/Double): "); 
 	Serial.println(myLSM.getTapMode()); 
 	
 	// Set the output data rate and precision of the accelerometer
-	myLSM.setAccelDataRate(LSM6DSV16X_ODR_AT_7680Hz);
-	myLSM.setAccelFullScale(LSM6DSV16X_16g); 
-//
-//	// Set the output data rate and precision of the gyroscope
-//	myLSM.setGyroDataRate(LSM6DSV16X_ODR_AT_15Hz);
-//	myLSM.setGyroFullScale(LSM6DSV16X_2000dps); 
-//
-//	// Enable filter settling.
-//	myLSM.enableFilterSettling();
-//
-//	// Turn on the accelerometer's filter and apply settings. 
-//	myLSM.enableAccelLP2Filter();
-//	myLSM.setAccelLP2Bandwidth(LSM6DSV16X_XL_STRONG);
-//
-//	// Turn on the gyroscope's filter and apply settings. 
-//	myLSM.enableGyroLP1Filter();
-//	myLSM.setGyroLP1Bandwidth(LSM6DSV16X_GY_ULTRA_LIGHT);
+	myLSM.setAccelDataRate(LSM6DSV16X_ODR_AT_480Hz);
+	myLSM.setAccelFullScale(LSM6DSV16X_8g); 
 
 	Serial.println("Ready.");
 
@@ -122,14 +108,14 @@ void setup(){
 
 void loop(){
 
-	//if( digitalRead(interrupt_pin) == HIGH )
+	// Polling for interrupt bits
 	myLSM.getAllInterrupts( &lsmSource );
 	if( lsmSource.single_tap || lsmSource.double_tap)
 	{
 		Serial.println("Tap Detected");
 	}
 
-	delay(100);
+	delay(10);
 
 }
 
