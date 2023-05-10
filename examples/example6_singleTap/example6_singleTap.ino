@@ -26,7 +26,9 @@
 
 SparkFun_LSM6DSV16X myLSM; 
 
-int interrupt_pin = 1;
+int interrupt_pin = A0;
+lsm6dsv16x_all_sources_t  lsmSource;
+sfe_axis_data_t myAxis; 
 
 void setup(){
 
@@ -34,6 +36,8 @@ void setup(){
 
 	Serial.begin(115200);
 	while(!Serial){}
+
+	pinMode(interrupt_pin, INPUT);
 
 	if( !myLSM.begin() ){
 		Serial.println("Did not begin.");
@@ -56,17 +60,44 @@ void setup(){
 	// Accelerometer and Gyroscope registers will not be updated
 	// until read. 
 	myLSM.enableBlockDataUpdate();
+	myLSM.enableTapInterrupt();
 
-	myLSM.setIntSingleTap();
+	//myLSM.setIntSingleTap();
 
-	myLSM.setTapDirection(false, false, true); 
-	myLSM.setTapThresholds(0, 0, 3); 
-	myLSM.setTapTimeWindows(3, 3, 7); 
-	myLSM.setTapMode(0x00); 
+	myLSM.setTapDirection(true, true, true); 
+	myLSM.getTapDirection(&myAxis);
+	Serial.print("X: ");
+	Serial.println(myAxis.x);
+	Serial.print("Y: ");
+	Serial.println(myAxis.y);
+	Serial.print("Z: ");
+	Serial.println(myAxis.z);
+
+	myLSM.setTapThresholds(1, 1, 1); 
+	myLSM.getTapThresholds(&myAxis);
+	Serial.print("X: ");
+	Serial.println(myAxis.x);
+	Serial.print("Y: ");
+	Serial.println(myAxis.y);
+	Serial.print("Z: ");
+	Serial.println(myAxis.z);
+
+	myLSM.setTapTimeWindows(1, 1, 7); 
+	myLSM.getTapTimeWindows(&myAxis);
+	Serial.print("X: ");
+	Serial.println(myAxis.x);
+	Serial.print("Y: ");
+	Serial.println(myAxis.y);
+	Serial.print("Z: ");
+	Serial.println(myAxis.z);
+
+	myLSM.setTapMode(0x01); 
+	Serial.print("Tap Mode: "); 
+	Serial.println(myLSM.getTapMode()); 
 	
 	// Set the output data rate and precision of the accelerometer
-	myLSM.setAccelDataRate(LSM6DSV16X_ODR_AT_480Hz);
-	myLSM.setAccelFullScale(LSM6DSV16X_8g); 
+	myLSM.setAccelDataRate(LSM6DSV16X_ODR_AT_7680Hz);
+	myLSM.setAccelFullScale(LSM6DSV16X_16g); 
 //
 //	// Set the output data rate and precision of the gyroscope
 //	myLSM.setGyroDataRate(LSM6DSV16X_ODR_AT_15Hz);
@@ -83,12 +114,15 @@ void setup(){
 //	myLSM.enableGyroLP1Filter();
 //	myLSM.setGyroLP1Bandwidth(LSM6DSV16X_GY_ULTRA_LIGHT);
 
+	Serial.println("Ready.");
 
 }
 
 void loop(){
 
-	if( digitalRead(interrupt_pin) == HIGH )
+	//if( digitalRead(interrupt_pin) == HIGH )
+	myLSM.getAllInterrupts( &lsmSource );
+	if( lsmSource.single_tap || lsmSource.double_tap)
 	{
 		Serial.println("Tap Detected");
 	}

@@ -33,6 +33,13 @@ struct sfe_hub_sensor_settings_t
 };
 
 
+struct sfe_axis_data_t
+{
+	uint8_t x;
+	uint8_t y;
+	uint8_t z;
+};
+
 class QwDevLSM6DSV16X
 {
 	public: 
@@ -86,6 +93,7 @@ class QwDevLSM6DSV16X
 		//bool resetTimestamp();
 
 		// Interrupt Settings
+		bool getAllInterrupts(lsm6dsv16x_all_sources_t* source);
 		bool setInt2DENPolarity(bool activeLow = true);
 		bool setIntRoute(lsm6dsv16x_pin_int_route_t val, uint8_t pin = 1);
 
@@ -100,10 +108,15 @@ class QwDevLSM6DSV16X
 		bool setDataReadyMode(bool enable = true);
 
 		// Tap Settings
+		bool enableTapInterrupt(bool enable = true);
 		bool setTapMode(uint8_t mode);
+		int8_t getTapMode();
 		bool setTapDirection(bool xDirection, bool yDirection, bool zDirection);
+		bool getTapDirection(sfe_axis_data_t* axisEnabled);
 		bool setTapThresholds(uint8_t xThreshold, uint8_t yThreshold, uint8_t zThreshold);
+		bool getTapThresholds(sfe_axis_data_t* axisThreshold);
 		bool setTapTimeWindows(uint8_t xWindow, uint8_t yWindow, uint8_t zWindow);
+		bool getTapTimeWindows(sfe_axis_data_t* tapWindow);
 
 		// Qvar Settings
 		bool enableAhQvar(bool enable = true);

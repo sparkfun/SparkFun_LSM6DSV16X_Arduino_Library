@@ -854,6 +854,19 @@ bool QwDevLSM6DSV16X::setFifoTimestampDec(uint8_t val)
 //  
 // 
 
+bool QwDevLSM6DSV16X::getAllInterrupts(lsm6dsv16x_all_sources_t* source)
+{
+	int32_t retVal = 0;
+
+	//0 = active high :  active low, 1  
+	retVal = lsm6dsv16x_all_sources_get(&sfe_dev, source);
+
+	if( retVal != 0 )
+		return false;
+	
+	return true; 
+}
+
 /// @brief Sets the active state of the interrupt pin - high or low.  
 /// @param openDrain 
 /// @return True on successful execution
@@ -1096,6 +1109,22 @@ bool QwDevLSM6DSV16X::setDataReadyMode(bool enable)
 	return true;
 }
 
+bool QwDevLSM6DSV16X::enableTapInterrupt(bool enable)
+{
+
+	int32_t retVal; 
+	lsm6dsv16x_interrupt_mode_t intEnable;
+
+	intEnable.enable = (uint8_t)enable; 
+	
+	retVal = lsm6dsv16x_interrupt_enable_set(&sfe_dev, intEnable);
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
 bool QwDevLSM6DSV16X::setTapMode(uint8_t mode)
 {
 	if( mode > 1 )
@@ -1112,6 +1141,21 @@ bool QwDevLSM6DSV16X::setTapMode(uint8_t mode)
 		return false;
 
 	return true; 
+}
+
+int8_t QwDevLSM6DSV16X::getTapMode()
+{
+
+	int32_t retVal; 
+	lsm6dsv16x_tap_mode_t tapMode;
+	
+	retVal = lsm6dsv16x_tap_mode_get(&sfe_dev, &tapMode);
+
+
+	if( retVal != 0 )
+		return -1;
+
+	return (uint8_t)tapMode; 
 }
 
 bool QwDevLSM6DSV16X::setTapDirection(bool xDirection, bool yDirection, bool zDirection)
@@ -1132,10 +1176,29 @@ bool QwDevLSM6DSV16X::setTapDirection(bool xDirection, bool yDirection, bool zDi
 	return true; 
 }
 
+bool QwDevLSM6DSV16X::getTapDirection(sfe_axis_data_t* axisEnabled)
+{
+
+	int32_t retVal; 
+	lsm6dsv16x_tap_detection_t directionDetect;
+
+	retVal = lsm6dsv16x_tap_detection_get(&sfe_dev, &directionDetect);
+
+	if( retVal != 0 )
+		return false; 
+
+	axisEnabled->x = directionDetect.tap_x_en; 
+	axisEnabled->y = directionDetect.tap_y_en; 
+	axisEnabled->z = directionDetect.tap_z_en; 
+
+	return true; 
+
+}
+
 bool QwDevLSM6DSV16X::setTapThresholds(uint8_t xThreshold, uint8_t yThreshold, uint8_t zThreshold)
 {
 
-	if( xThreshold > 31 | yThreshold > 31 | zThreshold > 31 )
+	if( (xThreshold > 31) | (yThreshold > 31) | (zThreshold > 31) )
 		return false; 
 
 	int32_t retVal; 
@@ -1153,10 +1216,29 @@ bool QwDevLSM6DSV16X::setTapThresholds(uint8_t xThreshold, uint8_t yThreshold, u
 	return true; 
 }
 
+bool QwDevLSM6DSV16X::getTapThresholds(sfe_axis_data_t* axisThreshold)
+{
+
+	int32_t retVal; 
+	lsm6dsv16x_tap_thresholds_t tapThresh;
+
+
+	retVal = lsm6dsv16x_tap_thresholds_get(&sfe_dev, &tapThresh);
+
+	axisThreshold->x =tapThresh.x; 	
+	axisThreshold->y =tapThresh.y; 	
+	axisThreshold->z =tapThresh.z; 	
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
 bool QwDevLSM6DSV16X::setTapTimeWindows(uint8_t shock, uint8_t quiet, uint8_t tapGap)
 {
 
-	if( shock > 3 | quiet > 3 | tapGap > 15 )
+	if( (shock > 3) | (quiet > 3) | (tapGap > 15) )
 		return false; 
 
 	int32_t retVal; 
@@ -1173,6 +1255,25 @@ bool QwDevLSM6DSV16X::setTapTimeWindows(uint8_t shock, uint8_t quiet, uint8_t ta
 
 	return true; 
 }
+
+bool QwDevLSM6DSV16X::getTapTimeWindows(sfe_axis_data_t* tapWindow)
+{
+
+	int32_t retVal; 
+	lsm6dsv16x_tap_time_windows_t window;
+
+	retVal = lsm6dsv16x_tap_time_windows_get(&sfe_dev, &window);
+
+	tapWindow->x = window.shock;	
+	tapWindow->y = window.quiet;	
+	tapWindow->z = window.tap_gap;	
+
+	if( retVal != 0 )
+		return false;
+
+	return true; 
+}
+
 
 //
 //
