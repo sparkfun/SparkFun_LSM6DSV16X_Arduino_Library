@@ -26,7 +26,6 @@
 
 SparkFun_LSM6DSV16X myLSM; 
 
-int interrupt_pin = A0;
 lsm6dsv16x_all_sources_t  lsmSource;
 sfe_axis_data_t myAxis; 
 
@@ -36,8 +35,6 @@ void setup(){
 
 	Serial.begin(115200);
 	while(!Serial){}
-
-	pinMode(interrupt_pin, INPUT);
 
 	if( !myLSM.begin() ){
 		Serial.println("Did not begin.");
@@ -60,13 +57,18 @@ void setup(){
 	// Accelerometer and Gyroscope registers will not be updated
 	// until read. 
 	myLSM.enableBlockDataUpdate();
+
 	myLSM.enableTapInterrupt();
 
+	// If routing to a pin you can clear the follow commented function.
 	//myLSM.setIntSingleTap();
 
-	myLSM.setTapDirection(true, true, true); 
+	// Direction to detect, the parameters are as follows: X-axis enabled, Y-axis enabled, Z-axis enabled
+	myLSM.setTapDirection(false, false, true); 
+	// Check 
 	myLSM.getTapDirection(&myAxis);
-	Serial.print("X: ");
+	Serial.print("---- Enabled Axes -----"
+	Serial.print("X-axis: ");
 	Serial.println(myAxis.x);
 	Serial.print("Y: ");
 	Serial.println(myAxis.y);

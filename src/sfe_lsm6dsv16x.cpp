@@ -854,6 +854,9 @@ bool QwDevLSM6DSV16X::setFifoTimestampDec(uint8_t val)
 //  
 // 
 
+/// @brief Retrieves all interrupt source bits 
+/// @param source 
+/// @return True on successful execution
 bool QwDevLSM6DSV16X::getAllInterrupts(lsm6dsv16x_all_sources_t* source)
 {
 	int32_t retVal = 0;
@@ -1109,6 +1112,10 @@ bool QwDevLSM6DSV16X::setDataReadyMode(bool enable)
 	return true;
 }
 
+
+/// @brief Enables the tap interrupt
+/// @param enable
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::enableTapInterrupt(bool enable)
 {
 
@@ -1125,6 +1132,9 @@ bool QwDevLSM6DSV16X::enableTapInterrupt(bool enable)
 	return true; 
 }
 
+/// @brief Enables the selected tap mode: single, double, or single and double
+/// @param mode
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setTapMode(uint8_t mode)
 {
 	if( mode > 1 )
@@ -1143,6 +1153,8 @@ bool QwDevLSM6DSV16X::setTapMode(uint8_t mode)
 	return true; 
 }
 
+/// @brief Retrieves the tap mode
+/// @return Returns -1 on error, otherwise the selected tap mode. 
 int8_t QwDevLSM6DSV16X::getTapMode()
 {
 
@@ -1158,6 +1170,9 @@ int8_t QwDevLSM6DSV16X::getTapMode()
 	return (uint8_t)tapMode; 
 }
 
+/// @brief Sets the axis with which to detect taps: x, y, or z. 
+/// @param xDirection, yDirection, zDirection
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setTapDirection(bool xDirection, bool yDirection, bool zDirection)
 {
 
@@ -1176,6 +1191,9 @@ bool QwDevLSM6DSV16X::setTapDirection(bool xDirection, bool yDirection, bool zDi
 	return true; 
 }
 
+/// @brief Retrieves the active tap axes.
+/// @param axisEnabled
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::getTapDirection(sfe_axis_data_t* axisEnabled)
 {
 
@@ -1195,6 +1213,9 @@ bool QwDevLSM6DSV16X::getTapDirection(sfe_axis_data_t* axisEnabled)
 
 }
 
+/// @brief Sets the tap thresholds for each of the axes. 
+/// @param xThreshold, yThreshold, zThreshold
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setTapThresholds(uint8_t xThreshold, uint8_t yThreshold, uint8_t zThreshold)
 {
 
@@ -1216,6 +1237,9 @@ bool QwDevLSM6DSV16X::setTapThresholds(uint8_t xThreshold, uint8_t yThreshold, u
 	return true; 
 }
 
+/// @brief Retrieves the thresholds for each of the axes. 
+/// @param axisThreshold
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::getTapThresholds(sfe_axis_data_t* axisThreshold)
 {
 
@@ -1235,6 +1259,9 @@ bool QwDevLSM6DSV16X::getTapThresholds(sfe_axis_data_t* axisThreshold)
 	return true; 
 }
 
+/// @brief Sets the three options for tap "windows": shock, quiet, and tap_gap.
+/// @param shock, quiet, tapGap
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setTapTimeWindows(uint8_t shock, uint8_t quiet, uint8_t tapGap)
 {
 
@@ -1256,6 +1283,9 @@ bool QwDevLSM6DSV16X::setTapTimeWindows(uint8_t shock, uint8_t quiet, uint8_t ta
 	return true; 
 }
 
+/// @brief Retrieves the three tap window settings. 
+/// @param tapWindow
+/// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::getTapTimeWindows(sfe_axis_data_t* tapWindow)
 {
 
