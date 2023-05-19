@@ -33,7 +33,7 @@ sfe_lsm_data_t accelData;
 sfe_lsm_data_t gyroData; 
 
 // Set your chip select pin according to your setup. 
-byte chipSelect = 1;
+int chipSelect = 10;
 
 void setup(){
 
@@ -72,7 +72,7 @@ void setup(){
 
 	// Set the output data rate and precision of the gyroscope
 	myLSM.setGyroDataRate(LSM6DSV16X_ODR_AT_15Hz);
-	myLSM.setGyroFullScale(LSM6DSV16X_2000dps); 
+	myLSM.setGyroFullScale(LSM6DSV16X_2000dps);
 
 	// Enable filter settling.
 	myLSM.enableFilterSettling();
@@ -84,8 +84,8 @@ void setup(){
 	// Turn on the gyroscope's filter and apply settings. 
 	myLSM.enableGyroLP1Filter();
 	myLSM.setGyroLP1Bandwidth(LSM6DSV16X_GY_ULTRA_LIGHT);
-
-
+	
+	Serial.print("Ready.");
 
 }
 

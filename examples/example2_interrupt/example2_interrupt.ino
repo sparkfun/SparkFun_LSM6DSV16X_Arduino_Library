@@ -36,7 +36,15 @@ sfe_lsm_data_t accelData;
 // Interrupt pin
 byte interrupt_pin = D1; 
 byte pin_one = 1; 
-byte pin_two = 1; 
+byte pin_two = 2; 
+
+// Possible values for routing your interrupt include: 
+// routeInt.drdy_xl
+// routeInt.drdy_g
+// routeInt.drdy_g
+// routeInt.single_tap
+// routeInt.double_tap
+lsm6dsv16x_pin_int_route_t routeInt; 
 
 void setup(){
 
@@ -99,10 +107,15 @@ void setup(){
 	// argument has been given, please refer to the datasheet for more 
 	// information.
 
-	// myLSM.setIntRoute(lsm6dsv16x_pin_int_route_t val);
+	// Make sure to pass the variable "routeInt" as it is a struct. 
+	// More values for this particular variable can be found in the st_src folder: 
+	// ...src/st_src line 4163. 	
+	// myLSM.setIntRoute(routeInt);
 
 	// This function changes the latching behaviour of the interrupts to pulsed.
 	// myLSM.setDataReadyMode();
+
+	Serial.println("Ready.");
 }
 
 void loop(){

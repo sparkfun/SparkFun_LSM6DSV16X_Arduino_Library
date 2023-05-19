@@ -17,8 +17,7 @@ bool QwDevLSM6DSV16X::init(void)
 		// I2C ready, now check that we're using the correct sensor before moving on. 
 		if (getUniqueId() != LSM6DSV16X_ID)
 			return false; 
-
-
+	
     return true;
 }
 
@@ -471,6 +470,24 @@ bool QwDevLSM6DSV16X::getDeviceReset()
 		return true; 
 
 	return false; 
+	
+}
+
+bool QwDevLSM6DSV16X::getAutoIncrement()
+{
+
+	int32_t retVal;
+	uint8_t tempVal;
+
+	retVal = lsm6dsv16x_auto_increment_get(&sfe_dev, &tempVal);
+
+	if( retVal != 0 )
+		return false;
+
+	if( (tempVal) == 0x00 )
+		return false;
+
+	return true; 
 	
 }
 

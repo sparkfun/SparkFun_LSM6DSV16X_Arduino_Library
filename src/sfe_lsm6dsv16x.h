@@ -75,6 +75,7 @@ class QwDevLSM6DSV16X
 		//bool setDeviceConfig(bool enable = true);
 		bool deviceReset();
 		bool getDeviceReset();
+		bool getAutoIncrement();
 		bool setAccelMode(uint8_t mode); 
 		bool setGyroMode(uint8_t mode); 
 		bool enableAccelHpFilter(bool enable = true);
