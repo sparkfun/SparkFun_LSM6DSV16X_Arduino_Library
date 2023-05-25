@@ -18,10 +18,11 @@
     </tr>
 </table>
 
-Let's get moving! Introducing the [SparkFun 6DoF - LSM6DSV16X (Qwiic)](https://www.sparkfun.com/products/21325) and the [SparkFun Micro 6DoF - LSM6DSV16X (Qwiic)](https://www.sparkfun.com/products/21336) - two Qwiic enabled boards based on the LSM6DSV16X from STMicroelectronics. This little chip is a high-performance, low-power 6-axis IMU, featuring a 3-axis digital accelerometer and a 3-axis digital gyroscope, with a triple core for processing acceleration and angular rate data on three separate channels (user interface, OIS, and EIS) with dedicated configuration, processing, and filtering. 
+Looking for an extremely accurate way to detect motion utilizing AI? We've got you covered with the Qwiic-enabled, SparkFun LSM6DSV16X 6DoF IMU Breakout and the SparkFun Micro 6DoF - LSM6DSV16X (Qwiic). The LSM6DSV16X Breakout is a high-performance, low-power 6-axis IMU, featuring a 3-axis digital accelerometer, and a 3-axis digital gyroscope, with a triple core for processing acceleration and angular rate data on three separate channels (user interface, OIS, and EIS) with dedicated configuration, processing, and filtering. All this functionality comes in our standard 1in. x 1in. Qwiic form factor and will seamlessly integrate into your Qwiic-based projects. However, we still routed the I2C signals out to a set of 0.1in.-spaced pins for users who prefer a soldered connection.
 
-The triple core enables processes in edge computing, leveraging embedded advanced dedicated features such as a finite state machine for configurable motion tracking and a machine learning core for contextual awareness with exportable AI features for IoT applications. Qvar(electric charge variation detection) is embedded for user interface functions like tap, double tap, triple tap, long press, or L/R – R/L swipe.
+The triple core of the LSM6DSV16X enables processes in edge computing, leveraging embedded advanced dedicated features such as a finite state machine (FSM) for configurable motion tracking and a machine learning core (MLC) for contextual awareness with exportable AI features for IoT applications.
 
+Additionally, Qvar (electric charge variation detection) is embedded in the LSM6DSV16X for user interface functions like tap, double tap, triple tap, long press, or L/R – R/L swipe.
 
 Repository Contents
 -------------------
