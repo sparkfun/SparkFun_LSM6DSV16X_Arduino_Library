@@ -1033,15 +1033,11 @@ bool QwDevLSM6DSV16X::setIntSleepChange(bool enable, sfe_lsm_pin_t pin)
 /// @brief Enables pulsed data ready mode as oppsed to latch - 65us pulse.
 /// @param enable
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setDataReadyMode(bool enable)
+bool QwDevLSM6DSV16X::setDataReadyMode(lsm6dsv16x_data_ready_mode_t mode)
 {
 	int32_t retVal;
 
-	lsm6dsv16x_data_ready_mode_t dr;
-	 
-	dr = (lsm6dsv16x_data_ready_mode_t)enable;
-
-	retVal = lsm6dsv16x_data_ready_mode_set(&sfe_dev, dr);
+	retVal = lsm6dsv16x_data_ready_mode_set(&sfe_dev, mode);
 
 	if( retVal != 0 )
 		return false;
@@ -1301,14 +1297,10 @@ uint8_t QwDevLSM6DSV16X::getQvarMode()
 /// channels.
 /// @param val 
 /// @return Returns true on successful write to register.
-bool QwDevLSM6DSV16X::setQvarImpedance(uint8_t val)
+bool QwDevLSM6DSV16X::setQvarImpedance(lsm6dsv16x_ah_qvar_zin_t val)
 {
 	int32_t retVal;
-
-	if( val > 3 )
-		return false;
-
-	retVal = lsm6dsv16x_ah_qvar_zin_set(&sfe_dev, (lsm6dsv16x_ah_qvar_zin_t)val);
+	retVal = lsm6dsv16x_ah_qvar_zin_set(&sfe_dev, val);
 
 	if( retVal != 0 )
 		return false;

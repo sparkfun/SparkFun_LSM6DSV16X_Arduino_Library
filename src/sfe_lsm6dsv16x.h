@@ -102,17 +102,17 @@ class QwDevLSM6DSV16X
 		// Interrupt Settings
 		bool getAllInterrupts(lsm6dsv16x_all_sources_t* source);
 		bool setInt2DENPolarity(bool activeLow = true);
-		bool setIntRoute(lsm6dsv16x_pin_int_route_t val, uint8_t pin = 1);
+		bool setIntRoute(lsm6dsv16x_pin_int_route_t val, sfe_lsm_pin_t pin = LSM_PIN_ONE);
 
-		bool setIntAccelDataReady(bool enable = true, uint8_t pin = 1);
-		bool setIntGyroDataReady(bool enable = true, uint8_t pin = 1);
-		bool setIntSingleTap(bool enable = true, uint8_t pin = 1);
-		bool setIntDoubleTap(bool enable = true, uint8_t pin = 1);
-		bool setIntWakeup(bool enable = true, uint8_t pin = 1);
-		bool setIntFreeFall(bool enable = true, uint8_t pin = 1);
-		bool setIntSleepChange(bool enable = true, uint8_t pin = 1);
+		bool setIntAccelDataReady(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
+		bool setIntGyroDataReady(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
+		bool setIntSingleTap(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
+		bool setIntDoubleTap(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
+		bool setIntWakeup(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
+		bool setIntFreeFall(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
+		bool setIntSleepChange(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
 
-		bool setDataReadyMode(bool enable = true);
+		bool setDataReadyMode(lsm6dsv16x_data_ready_mode_t mode = 1);
 
 		// Tap Settings
 		bool enableTapInterrupt(bool enable = true);
