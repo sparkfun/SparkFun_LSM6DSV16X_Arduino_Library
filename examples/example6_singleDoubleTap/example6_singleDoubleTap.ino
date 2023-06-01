@@ -34,6 +34,7 @@ void setup(){
 
 	Serial.begin(115200);
 	while(!Serial){}
+	Serial.println("LSM6DSV16X Example 6 - Single and Double Tap Interrupts")
 
 	if( !myLSM.begin() ){
 		Serial.println("Did not begin.");

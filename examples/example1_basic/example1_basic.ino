@@ -37,6 +37,8 @@ void setup(){
 	Serial.begin(115200);
 	while(!Serial){}
 
+	Serial.println("LSM6DSV16X Example 1 - Basic Readings I2C")
+
 	if( !myLSM.begin() ){
 		Serial.println("Did not begin.");
 		while(1);
@@ -78,6 +80,7 @@ void setup(){
 	myLSM.enableGyroLP1Filter();
 	myLSM.setGyroLP1Bandwidth(LSM6DSV16X_GY_ULTRA_LIGHT);
 
+	Serial.println("Ready.")
 
 }
 

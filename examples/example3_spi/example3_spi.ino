@@ -40,6 +40,8 @@ void setup(){
 	SPI.begin();
 
 	Serial.begin(115200);
+	Serial.println("LSM6DSV16X Example 3 - Basic Readings SPI");
+
 	pinMode(chipSelect, OUTPUT);
 	digitalWrite(chipSelect, HIGH);
 

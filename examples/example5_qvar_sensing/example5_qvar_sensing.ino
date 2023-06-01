@@ -42,6 +42,9 @@ void setup(){
 
 
 	Serial.begin(115200);
+	while(!Serial) {}
+
+	Serial.println("LSM6DSV16X Example 5 - Qvar Sensing");
 
 	if( !myLSM.begin() ){
 		Serial.println("Did not begin.");
@@ -86,6 +89,8 @@ void setup(){
 	// Check datasheet for the four possible values. 
 	//uint8_t impedance = 0x02;
 	//myLSM.setQvarImpedance(impedance);
+
+	Serial.println("Ready.")
 
 }
 

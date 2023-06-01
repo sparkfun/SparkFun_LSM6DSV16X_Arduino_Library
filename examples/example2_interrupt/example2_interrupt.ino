@@ -34,7 +34,7 @@ sfe_lsm_data_t accelData;
 
 
 // Interrupt pin
-byte interrupt_pin = D1; 
+byte interrupt_pin = 10; 
 byte pin_one = 1; 
 byte pin_two = 2; 
 
@@ -50,7 +50,10 @@ void setup(){
 
 	// Set the interrupt to INPUT
 	pinMode(interrupt_pin, INPUT);
+
 	Serial.begin(115200);
+	while(!Serial) {}
+	Serial.println("LSM6DSV16X Example 2 - Interrupts");
 
 	Wire.begin();
 

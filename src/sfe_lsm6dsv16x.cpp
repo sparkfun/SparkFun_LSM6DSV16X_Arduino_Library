@@ -1449,6 +1449,7 @@ bool QwDevLSM6DSV16X::setHubODR(uint8_t rate)
 
 /// @brief Sets the parameters with which to read from a downstream sensor 
 /// @param settings
+/// @param sensor
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setHubSensorRead(uint8_t sensor, sfe_hub_sensor_settings_t* settings)
 {
@@ -1518,8 +1519,7 @@ bool QwDevLSM6DSV16X::setNumberHubSensors(uint8_t numSensors)
 	if( numSensors > 3 ) 
 		return false; 
 
-	retVal = lsm6dsv16x_sh_slave_connected_set(&sfe_dev, 
-																					 (lsm6dsv16x_sh_slave_connected_t)numSensors);
+	retVal = lsm6dsv16x_sh_slave_connected_set(&sfe_dev, (lsm6dsv16x_sh_slave_connected_t)numSensors);
 
 	if( retVal != 0 )
 		return false;

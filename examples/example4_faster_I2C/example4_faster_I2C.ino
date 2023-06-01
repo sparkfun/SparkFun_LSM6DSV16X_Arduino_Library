@@ -49,6 +49,7 @@ void setup()
 	//Wire.setClock(400000);
 
 	Serial.begin(115200);
+	Serial.println("LSM6DSV16X Example 4 - Faster I2C Example");
 
 	while (!myLSM.begin())
 	{
@@ -92,6 +93,8 @@ void setup()
 	// Turn on the gyroscope's filter and apply settings. 
 	myLSM.enableGyroLP1Filter();
 	myLSM.setGyroLP1Bandwidth(LSM6DSV16X_GY_ULTRA_LIGHT);
+
+  Serial.println("Ready.")
 }
 
 void loop()
