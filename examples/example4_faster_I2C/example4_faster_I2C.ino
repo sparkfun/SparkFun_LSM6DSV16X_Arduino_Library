@@ -49,6 +49,7 @@ void setup()
 	//Wire.setClock(400000);
 
 	Serial.begin(115200);
+	while(!Serial) {}
 	Serial.println("LSM6DSV16X Example 4 - Faster I2C Example");
 
 	while (!myLSM.begin())

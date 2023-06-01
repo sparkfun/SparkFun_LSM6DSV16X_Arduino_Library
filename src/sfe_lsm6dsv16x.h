@@ -10,6 +10,12 @@
 #define LSM6DSV16X_ADDRESS_LOW 0x6A //Default
 #define LSM6DSV16X_ADDRESS_HIGH 0x6B
 
+typedef enum 
+{
+	LSM_PIN_ONE = 0x01,
+	LSM_PIN_TWO
+} sfe_lsm_pin_t
+
 struct sfe_lsm_raw_data_t
 {
 	int16_t xData;	
