@@ -47,7 +47,7 @@ void setup(){
 	Serial.println("LSM6DSV16X Example 5 - Qvar Sensing");
 
 	if( !myLSM.begin() ){
-		Serial.println("Did not begin.");
+		Serial.println("Did not begin, check your wiring and/or I2C address!");
 		while(1);
 	}
 
@@ -60,7 +60,7 @@ void setup(){
 		delay(1);
 	} 
 
-	Serial.println("Reset.");
+	Serial.println("Board has been Reset.");
 	Serial.println("Applying settings.");
 	delay(100);
 	
@@ -90,7 +90,7 @@ void setup(){
 	//uint8_t impedance = 0x02;
 	//myLSM.setQvarImpedance(impedance);
 
-	Serial.println("Ready.")
+	Serial.println("Ready.");
 
 }
 

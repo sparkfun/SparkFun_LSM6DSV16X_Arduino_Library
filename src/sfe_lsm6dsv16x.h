@@ -8,13 +8,15 @@
  */
 
 #define LSM6DSV16X_ADDRESS_LOW 0x6A //Default
+#define LSM6DSV16X_ADDRESS_PRIMARY 0x6A //Default
 #define LSM6DSV16X_ADDRESS_HIGH 0x6B
+#define LSM6DSV16X_ADDRESS_SECONDARY 0x6B 
 
 typedef enum 
 {
 	LSM_PIN_ONE = 0x01,
 	LSM_PIN_TWO
-} sfe_lsm_pin_t
+} sfe_lsm_pin_t;
 
 struct sfe_lsm_raw_data_t
 {
@@ -39,33 +41,27 @@ struct sfe_hub_sensor_settings_t
 };
 
 
-struct sfe_axis_data_t
-{
-	uint8_t x;
-	uint8_t y;
-	uint8_t z;
-};
-
 class QwDevLSM6DSV16X
 {
 	public: 
 
 		QwDevLSM6DSV16X() : _i2cAddress{0}, _cs{0} {};
 			
-    bool init();
+		bool init();
 
 
-    bool isConnected(); // Checks if sensor ack's the I2C request
+		bool isConnected(); // Checks if sensor ack's the I2C request
 
-    int32_t writeRegisterRegion(uint8_t reg, uint8_t *data, uint16_t length = 1);
-    int32_t readRegisterRegion(uint8_t reg, uint8_t *data, uint16_t length = 1);
+		int32_t writeRegisterRegion(uint8_t reg, uint8_t *data, uint16_t length = 1);
+		int32_t readRegisterRegion(uint8_t reg, uint8_t *data, uint16_t length = 1);
 
 		void setCommunicationBus(sfe_LSM6DSV16X::QwIDeviceBus &theBus, uint8_t i2cAddress);
 		void setCommunicationBus(sfe_LSM6DSV16X::QwIDeviceBus &theBus);
 
-		bool setAccelFullScale(uint8_t val);
-		bool setGyroFullScale(uint8_t val);
-		uint8_t getAccelFullScale();
+		bool setAccelFullScale(lsm6dsv16x_xl_full_scale_t scale);
+		bool getAccelFullScale(lsm6dsv16x_xl_full_scale_t* scale);
+		bool setGyroFullScale(lsm6dsv16x_gy_full_scale_t scale);
+		bool getGyroFullScale(lsm6dsv16x_gy_full_scale_t* scale);
 
 		uint8_t getUniqueId();
 
@@ -101,34 +97,33 @@ class QwDevLSM6DSV16X
 
 		// Interrupt Settings
 		bool getAllInterrupts(lsm6dsv16x_all_sources_t* source);
-		bool setInt2DENPolarity(bool activeLow = true);
-		bool setIntRoute(lsm6dsv16x_pin_int_route_t val, sfe_lsm_pin_t pin = LSM_PIN_ONE);
+		bool setInt2DENActiveLow(bool activeLow = true);
+		bool setIntRoute(lsm6dsv16x_pin_int_route_t val, sfe_lsm_pin_t pin);
+		bool setIntAccelDataReady(sfe_lsm_pin_t pin, bool enable = true);
+		bool setIntGyroDataReady(sfe_lsm_pin_t pin, bool enable = true);
+		bool setIntSingleTap(sfe_lsm_pin_t pin, bool enable = true);
+		bool setIntDoubleTap(sfe_lsm_pin_t pin, bool enable = true);
+		bool setIntWakeup(sfe_lsm_pin_t pin, bool enable = true);
+		bool setIntFreeFall(sfe_lsm_pin_t pin, bool enable = true);
+		bool setIntSleepChange(sfe_lsm_pin_t pin, bool enable = true);
 
-		bool setIntAccelDataReady(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
-		bool setIntGyroDataReady(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
-		bool setIntSingleTap(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
-		bool setIntDoubleTap(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
-		bool setIntWakeup(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
-		bool setIntFreeFall(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
-		bool setIntSleepChange(bool enable = true, sfe_lsm_pin_t pin = LSM_PIN_ONE);
-
-		bool setDataReadyMode(lsm6dsv16x_data_ready_mode_t mode = 1);
+		bool setDataReadyMode(lsm6dsv16x_data_ready_mode_t mode);
 
 		// Tap Settings
 		bool enableTapInterrupt(bool enable = true);
-		bool setTapMode(uint8_t mode);
-		int8_t getTapMode();
-		bool setTapDirection(bool xDirection, bool yDirection, bool zDirection);
-		bool getTapDirection(sfe_axis_data_t* axisEnabled);
-		bool setTapThresholds(uint8_t xThreshold, uint8_t yThreshold, uint8_t zThreshold);
-		bool getTapThresholds(sfe_axis_data_t* axisThreshold);
-		bool setTapTimeWindows(uint8_t xWindow, uint8_t yWindow, uint8_t zWindow);
-		bool getTapTimeWindows(sfe_axis_data_t* tapWindow);
+		bool setTapMode(lsm6dsv16x_tap_mode_t mode);
+		bool getTapMode(lsm6dsv16x_tap_mode_t* mode);
+		bool setTapDirection(lsm6dsv16x_tap_detection_t directionDetect);
+		bool getTapDirection(lsm6dsv16x_tap_detection_t* directionDetect);
+		bool setTapThresholds(lsm6dsv16x_tap_thresholds_t thresholds);
+		bool getTapThresholds(lsm6dsv16x_tap_thresholds_t* thresholds);
+		bool setTapTimeWindows(lsm6dsv16x_tap_time_windows_t window);
+		bool getTapTimeWindows(lsm6dsv16x_tap_time_windows_t* window);
 
 		// Qvar Settings
 		bool enableAhQvar(bool enable = true);
-		uint8_t getQvarMode();
-		bool setQvarImpedance(uint8_t val);
+		bool getQvarMode(lsm6dsv16x_ah_qvar_mode_t* mode);
+		bool setQvarImpedance(lsm6dsv16x_ah_qvar_zin_t val);
 		
 		// Sensor Hub Settings
 		bool setHubODR(uint8_t rate);
@@ -148,11 +143,11 @@ class QwDevLSM6DSV16X
 		bool setGyroSelfTest(uint8_t val);
 
 		// FIFO Settings
-		bool setFifoWatermark(uint16_t val);
-		bool setFifoMode(uint8_t val);
-		bool setAccelFifoBatchSet(uint8_t val);
-		bool setGyroFifoBatchSet(uint8_t val);
-		bool setFifoTimestampDec(uint8_t val);
+		bool setFifoWatermark(uint8_t val);
+		bool setFifoMode(lsm6dsv16x_fifo_mode_t mode);
+		bool setAccelFifoBatchSet(lsm6dsv16x_fifo_xl_batch_t odr);
+		bool setGyroFifoBatchSet(lsm6dsv16x_fifo_gy_batch_t odr);
+		bool setFifoTimestampDec(lsm6dsv16x_fifo_timestamp_batch_t decimation);
 			
 		// Status
 		bool checkStatus();
@@ -180,7 +175,9 @@ class QwDevLSM6DSV16X
 		uint8_t _i2cAddress;
 		uint8_t _cs;
 		stmdev_ctx_t sfe_dev; 
-		int8_t fullScaleAccel = -1; //Powered down by default
-		uint8_t fullScaleGyro = 0;  //Powered down by default
+		bool accelScaleSet = false;
+		bool gyroScaleSet = false;
+		lsm6dsv16x_xl_full_scale_t fullScaleAccel; //Powered down by default
+		lsm6dsv16x_gy_full_scale_t fullScaleGyro;  //Powered down by default
 };
 

@@ -37,10 +37,11 @@ void setup(){
 	Serial.begin(115200);
 	while(!Serial){}
 
-	Serial.println("LSM6DSV16X Example 1 - Basic Readings I2C")
+	Serial.println("LSM6DSV16X Example 1 - Basic Readings I2C");
 
-	if( !myLSM.begin() ){
-		Serial.println("Did not begin.");
+	if( !myLSM.begin() )
+	{
+		Serial.println("Did not begin, check your wiring and/or I2C address!");
 		while(1);
 	}
 
@@ -53,9 +54,8 @@ void setup(){
 		delay(1);
 	} 
 
-	Serial.println("Reset.");
+	Serial.println("Board has been Reset.");
 	Serial.println("Applying settings.");
-	delay(100);
 	
 	// Accelerometer and Gyroscope registers will not be updated
 	// until read. 
@@ -80,7 +80,7 @@ void setup(){
 	myLSM.enableGyroLP1Filter();
 	myLSM.setGyroLP1Bandwidth(LSM6DSV16X_GY_ULTRA_LIGHT);
 
-	Serial.println("Ready.")
+	Serial.println("Ready.");
 
 }
 

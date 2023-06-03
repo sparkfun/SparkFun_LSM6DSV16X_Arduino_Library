@@ -48,7 +48,7 @@ void setup(){
 
 
 	if( !myLSM.begin(chipSelect) ){
-		Serial.println("Did not begin.");
+		Serial.println("Did not begin, check your wiring and/or I2C address!");
 	  while(1);
 	}
 
@@ -61,9 +61,8 @@ void setup(){
 		delay(1);
 	} 
 
-	Serial.println("Reset.");
+	Serial.println("Board has been Reset.");
 	Serial.println("Applying settings.");
-	delay(100);
 	
 	// Accelerometer and Gyroscope registers will not be updated
 	// until read. 

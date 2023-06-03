@@ -26,7 +26,6 @@
 SparkFun_LSM6DSV16X myLSM; 
 
 lsm6dsv16x_all_sources_t  lsmSource;
-sfe_axis_data_t myAxis; 
 
 void setup(){
 
@@ -34,7 +33,7 @@ void setup(){
 
 	Serial.begin(115200);
 	while(!Serial){}
-	Serial.println("LSM6DSV16X Example 6 - Single and Double Tap Interrupts")
+	Serial.println("LSM6DSV16X Example 6 - Single and Double Tap Interrupts");
 
 	if( !myLSM.begin() ){
 		Serial.println("Did not begin.");
@@ -63,41 +62,61 @@ void setup(){
 	// If routing to a pin you can clear the follow commented function.
 	//myLSM.setIntSingleTap();
 
-	// Direction to detect, the parameters are as follows: X-axis enabled, Y-axis enabled, Z-axis enabled
-	myLSM.setTapDirection(false, false, true); 
-	// Check 
-	myLSM.getTapDirection(&myAxis);
+	// Direction to detect, we'll do just the z direction which 
+	lsm6dsv16x_tap_detection_t directionEnable; 
+	lsm6dsv16x_tap_detection_t getDirectionEnable; 
+	directionEnable.tap_x_en = 0;
+	directionEnable.tap_y_en = 0;
+	directionEnable.tap_z_en = 1; 
+	myLSM.setTapDirection(directionEnable); 
+
+	myLSM.getTapDirection(&getDirectionEnable);
 	Serial.println("---- Enabled Axes -----");
 	Serial.print("X-axis: ");
-	Serial.println(myAxis.x);
+	Serial.println(getDirectionEnable.tap_x_en);
 	Serial.print("Y-axis: ");
-	Serial.println(myAxis.y);
+	Serial.println(getDirectionEnable.tap_y_en);
 	Serial.print("Z-axis: ");
-	Serial.println(myAxis.z);
+	Serial.println(getDirectionEnable.tap_z_en);
 
-	myLSM.setTapThresholds(0, 0, 2); 
-	myLSM.getTapThresholds(&myAxis);
+	lsm6dsv16x_tap_thresholds_t tapThreshold;
+	lsm6dsv16x_tap_thresholds_t getTapThreshold;
+	tapThreshold.x = 0;
+	tapThreshold.y = 0;
+	tapThreshold.z = 2; 
+
+	myLSM.setTapThresholds(tapThreshold); 
+	myLSM.getTapThresholds(&getTapThreshold);
 	Serial.println("---- Thresholds for each Axis -----");
 	Serial.print("X-axis: ");
-	Serial.println(myAxis.x);
+	Serial.println(getTapThreshold.x);
 	Serial.print("Y-axis: ");
-	Serial.println(myAxis.y);
+	Serial.println(getTapThreshold.y);
 	Serial.print("Z-axis: ");
-	Serial.println(myAxis.z);
+	Serial.println(getTapThreshold.z);
 
-	myLSM.setTapTimeWindows(1, 1, 7); 
-	myLSM.getTapTimeWindows(&myAxis);
+	lsm6dsv16x_tap_time_windows_t tapWindows; 
+	lsm6dsv16x_tap_time_windows_t getTapWindows; 
+	tapWindows.shock = 1;
+	tapWindows.quiet = 1;
+	tapWindows.tap_gap = 7;
+
+	myLSM.setTapTimeWindows(tapWindows); 
+	myLSM.getTapTimeWindows(&getTapWindows);
 	Serial.println("---- Settings for Tap Detection-----");
 	Serial.print("Shock: ");
-	Serial.println(myAxis.x);
+	Serial.println(getTapWindows.shock);
 	Serial.print("Quiet: ");
-	Serial.println(myAxis.y);
+	Serial.println(getTapWindows.quiet);
 	Serial.print("Tap Gap: ");
-	Serial.println(myAxis.z);
+	Serial.println(getTapWindows.tap_gap);
 
-	myLSM.setTapMode(0x01); 
+	// LSM6DSV16X_ONLY_SINGLE is the other argument for the following function.
+	lsm6dsv16x_tap_mode_t getTap;
+	myLSM.setTapMode(LSM6DSV16X_BOTH_SINGLE_DOUBLE); 
+	myLSM.getTapMode(&getTap);
 	Serial.print("Tap Mode (0 = Single, 1 = Single/Double): "); 
-	Serial.println(myLSM.getTapMode()); 
+	Serial.println((uint8_t)getTap); 
 	
 	// Set the output data rate and precision of the accelerometer
 	myLSM.setAccelDataRate(LSM6DSV16X_ODR_AT_480Hz);

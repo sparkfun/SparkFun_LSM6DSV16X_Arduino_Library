@@ -32,19 +32,8 @@ SparkFun_LSM6DSV16X myLSM;
 // Structs for X,Y,Z data
 sfe_lsm_data_t accelData; 
 
-
 // Interrupt pin
 byte interrupt_pin = 10; 
-byte pin_one = 1; 
-byte pin_two = 2; 
-
-// Possible values for routing your interrupt include: 
-// routeInt.drdy_xl
-// routeInt.drdy_g
-// routeInt.drdy_g
-// routeInt.single_tap
-// routeInt.double_tap
-lsm6dsv16x_pin_int_route_t routeInt; 
 
 void setup(){
 
@@ -57,8 +46,9 @@ void setup(){
 
 	Wire.begin();
 
-	if( !myLSM.begin() ){
-		Serial.println("Did not begin.");
+	if( !myLSM.begin() )
+	{
+		Serial.println("Did not begin, check your wiring and/or I2C address!");
 		while(1);
 	}
 
@@ -71,9 +61,8 @@ void setup(){
 		delay(1);
 	} 
 
-	Serial.println("Reset.");
+	Serial.println("Board has been Reset.");
 	Serial.println("Applying settings.");
-	delay(100);
 	
 	// Accelerometer and Gyroscope registers will not be updated
 	// until read. 
@@ -91,31 +80,36 @@ void setup(){
 	// Commented out just below is the function to send the data ready
 	// to interrupt two. 
 
-	myLSM.setIntAccelDataReady();
-	//myLSM.setIntAccelDataReady(pin_two);
+	myLSM.setIntAccelDataReady(LSM_PIN_ONE);
+	//myLSM.setIntAccelDataReady(LSM_PIN_TWO);
 
 
 	// We can just as easily set the gyroscope's data read signal to either interrupt
 
-	//myLSM.setIntGyroDataReady();
-	//myLSM.setIntGyroDataReady(pin_two);
+	//myLSM.setIntGyroDataReady(LSM_PIN_ONE);
+	//myLSM.setIntGyroDataReady(LSM_PIN_TWO);
 
 
 	// Uncommenting the function call below will change interrupt TWO
 	// active LOW instead of HIGH.
 
-	//myLSM.setInt2DENPolarity();
+	//myLSM.setInt2DENActiveLow();
 
 	// This function call will modify which "events" trigger an interrupt. No 
 	// argument has been given, please refer to the datasheet for more 
 	// information.
 
-	// Make sure to pass the variable "routeInt" as it is a struct. 
-	// More values for this particular variable can be found in the st_src folder: 
-	// ...src/st_src line 4163. 	
-	// myLSM.setIntRoute(routeInt);
+	// Possible values for routing your interrupt include: 
+	//lsm6dsv16x_pin_int_route_t routeInt; 
+	// routeInt.drdy_xl = 1;
+	// routeInt.drdy_g = 1; 
+	// routeInt.drdy_g = 1; 
+	// routeInt.single_tap = 1; 
+	// routeInt.double_tap = 1; 
+	// myLSM.setIntRoute(routeInt, LSM_PIN_ONE);
 
 	// This function changes the latching behaviour of the interrupts to pulsed.
+	//lsm6dsv16x_data_ready_mode_t mode = LSM6DSV16X_DRDY_PULSED; 
 	// myLSM.setDataReadyMode();
 
 	Serial.println("Ready.");
