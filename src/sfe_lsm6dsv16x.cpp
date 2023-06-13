@@ -1,8 +1,5 @@
 #include "sfe_lsm6dsv16x.h"
 
-/// @brief Resets all registers. 
-/// @param dataRate 
-/// @return true on successful execution.
 
 /// @brief Sets the struct that interfaces with STMicroelectronic's C Library.
 /// @return true on successful execution.
@@ -35,25 +32,25 @@ bool QwDevLSM6DSV16X::isConnected()
 
 
 /// @brief Sets the pointer to the data bus for read and writes.
-/// @param theBus
-/// @param i2cAddress
+/// @param theBus This parameter sets the the I2C hardware bus.
+/// @param i2cAddress The I2C address for the device. 
 void QwDevLSM6DSV16X::setCommunicationBus(sfe_LSM6DSV16X::QwIDeviceBus &theBus, uint8_t i2cAddress)
 {
     _sfeBus = &theBus;
 		_i2cAddress = i2cAddress; 
 }
 
-/// @brief Sets the pointer to the data bus for read and writes.
-/// @param theBus
+/// @brief Sets the pointer to the data bus for read and writes. 
+/// @param theBus This parameter sets the hardware bus.
 void QwDevLSM6DSV16X::setCommunicationBus(sfe_LSM6DSV16X::QwIDeviceBus &theBus)
 {
     _sfeBus = &theBus;
 }
 
-/// @brief Writes to the data to the given register using the set data bas. 
-/// @param  offset
-/// @param  data 
-/// @param  length
+/// @brief Writes to the data to the given register using the hardware data bus.
+/// @param  offset The register to write to. 
+/// @param  data The data to write to the register.
+/// @param  length The number of writes 
 /// @return The successful (0) or unsuccessful (-1) write to the given register.
 int32_t QwDevLSM6DSV16X::writeRegisterRegion(uint8_t offset, uint8_t *data, uint16_t length)
 {
@@ -62,9 +59,9 @@ int32_t QwDevLSM6DSV16X::writeRegisterRegion(uint8_t offset, uint8_t *data, uint
 
 
 /// @brief Reads data from the specified register using the set data bas. 
-/// @param  offset
-/// @param  data 
-/// @param  length
+/// @param  offset The register to read from.
+/// @param  data The pointer to the value to store the value.
+/// @param  length The number of reads 
 /// @return The successful (0) or unsuccessful (-1) read of the given register.
 int32_t QwDevLSM6DSV16X::readRegisterRegion(uint8_t offset, uint8_t *data, uint16_t length)
 {
@@ -72,7 +69,7 @@ int32_t QwDevLSM6DSV16X::readRegisterRegion(uint8_t offset, uint8_t *data, uint1
 }
 
 /// @brief Sets the scale of the acceleromter's readings 2g - 16g.
-/// @param val
+/// @param val The value of the 
 /// @return True upon successful write or false otherwise.
 bool QwDevLSM6DSV16X::setAccelFullScale(lsm6dsv16x_xl_full_scale_t scale)
 {
