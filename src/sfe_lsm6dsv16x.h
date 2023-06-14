@@ -77,8 +77,8 @@ class QwDevLSM6DSV16X
     bool setAccelLP2Bandwidth(uint8_t val);
     bool enableBlockDataUpdate(bool enable = true);
     uint8_t getBlockDataUpdate();
-    bool setAccelDataRate(uint8_t rate);
-    bool setGyroDataRate(uint8_t rate);
+    bool setAccelDataRate(lsm6dsv16x_data_rate_t rate);
+    bool setGyroDataRate(lsm6dsv16x_data_rate_t rate);
     bool enableTimestamp(bool enable = true);
     bool enableFilterSettling(bool enable = true);
     // bool resetTimestamp();

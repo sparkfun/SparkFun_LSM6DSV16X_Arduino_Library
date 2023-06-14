@@ -201,7 +201,7 @@ bool QwDevLSM6DSV16X::getRawGyro(sfe_lsm_raw_data_t *gyroData)
 }
 
 /// @brief Retrieves raw register values for gyroscope data
-/// @param Raw analog data from the register.
+/// @param qvarData Raw analog data from the register.
 /// @return True on successful execution.
 bool QwDevLSM6DSV16X::getRawQvar(int16_t *qvarData)
 {
@@ -333,7 +333,7 @@ bool QwDevLSM6DSV16X::getGyro(sfe_lsm_data_t *gyroData)
 }
 
 /// @brief Converts 2g scale to milli-g's
-/// @param Accelerometer data to convert
+/// @param data Accelerometer data to convert
 /// @return Data converted to milli-g's
 float QwDevLSM6DSV16X::convert2gToMg(int16_t data)
 {
@@ -341,7 +341,7 @@ float QwDevLSM6DSV16X::convert2gToMg(int16_t data)
 }
 
 /// @brief Converts 4g scale to milli-g's
-/// @param Accelerometer data to convert
+/// @param data Accelerometer data to convert
 /// @return Data converted to milli-g's
 float QwDevLSM6DSV16X::convert4gToMg(int16_t data)
 {
@@ -349,7 +349,7 @@ float QwDevLSM6DSV16X::convert4gToMg(int16_t data)
 }
 
 /// @brief Converts 8g scale to milli-g's
-/// @param Accelerometer data to convert
+/// @param data Accelerometer data to convert
 /// @return Data converted to milli-g's
 float QwDevLSM6DSV16X::convert8gToMg(int16_t data)
 {
@@ -357,7 +357,7 @@ float QwDevLSM6DSV16X::convert8gToMg(int16_t data)
 }
 
 /// @brief Converts 16g scale to milli-g's
-/// @param Accelerometer data to convert
+/// @param data Accelerometer data to convert
 /// @return Data converted to milli-g's
 float QwDevLSM6DSV16X::convert16gToMg(int16_t data)
 {
@@ -365,7 +365,7 @@ float QwDevLSM6DSV16X::convert16gToMg(int16_t data)
 }
 
 /// @brief Converts 125 degrees per second scale to milli-degrees-per-second
-/// @param Gyroscopic data to convert
+/// @param data Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert125dpsToMdps(int16_t data)
 {
@@ -373,7 +373,7 @@ float QwDevLSM6DSV16X::convert125dpsToMdps(int16_t data)
 }
 
 /// @brief Converts 250 degrees per second scale to milli-degrees-per-second
-/// @param Gyroscopic data to convert
+/// @param data Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert250dpsToMdps(int16_t data)
 {
@@ -381,7 +381,7 @@ float QwDevLSM6DSV16X::convert250dpsToMdps(int16_t data)
 }
 
 /// @brief Converts 500 degrees per second scale to milli-degrees-per-second
-/// @param Gyroscopic data to convert
+/// @param data Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert500dpsToMdps(int16_t data)
 {
@@ -389,7 +389,7 @@ float QwDevLSM6DSV16X::convert500dpsToMdps(int16_t data)
 }
 
 /// @brief Converts 1000 degrees per second scale to milli-degrees-per-second
-/// @param Gyroscopic data to convert
+/// @param data Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert1000dpsToMdps(int16_t data)
 {
@@ -397,7 +397,7 @@ float QwDevLSM6DSV16X::convert1000dpsToMdps(int16_t data)
 }
 
 /// @brief Converts 2000 degrees per second scale to milli-degrees-per-second
-/// @param Gyroscopic data to convert
+/// @param data Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert2000dpsToMdps(int16_t data)
 {
@@ -405,7 +405,7 @@ float QwDevLSM6DSV16X::convert2000dpsToMdps(int16_t data)
 }
 
 /// @brief Converts 4000 degrees per second scale to milli-degrees-per-second
-/// @param Gyroscopic data to convert
+/// @param data Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert4000dpsToMdps(int16_t data)
 {
@@ -413,7 +413,7 @@ float QwDevLSM6DSV16X::convert4000dpsToMdps(int16_t data)
 }
 
 /// @brief Converts temperature to celsius.
-/// @param Gyroscopic data to convert
+/// @param data Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convertToCelsius(int16_t data)
 {
@@ -573,7 +573,7 @@ bool QwDevLSM6DSV16X::enableAccelLPS2(bool enable)
 
 /// @brief Enables fast settling mode for the acclerometer. Set only during
 /// device exit from power down mode.
-/// @param enable
+/// @param enable Enable/disable fast mode
 /// @return True on successful operation
 bool QwDevLSM6DSV16X::enableFastSetMode(bool enable)
 {
@@ -588,7 +588,7 @@ bool QwDevLSM6DSV16X::enableFastSetMode(bool enable)
 }
 
 /// @brief Enables filtering using low pass filter 1.
-/// @param enable
+/// @param enable Enable/disable low pass filter 
 /// @return True on successful operation
 bool QwDevLSM6DSV16X::enableGyroLP1Filter(bool enable)
 {
@@ -604,7 +604,7 @@ bool QwDevLSM6DSV16X::enableGyroLP1Filter(bool enable)
 
 /// @brief Sets the bandwidth for low pass filter 1. Bandwidth is dependent on the
 /// selected output data rate, check LSM6DSV16X datasheet for more information..
-/// @param val
+/// @param val Low pass filter bandwidth
 /// @return True on successful operation
 bool QwDevLSM6DSV16X::setGyroLP1Bandwidth(uint8_t val)
 {
@@ -656,7 +656,7 @@ bool QwDevLSM6DSV16X::setAccelLP2Bandwidth(uint8_t val)
 }
 
 /// @brief Data is not updated until both MSB and LSB have been read from output registers
-/// @param enable
+/// @param enable Enable/disable block data update setting
 /// @return True on successful operation
 bool QwDevLSM6DSV16X::enableBlockDataUpdate(bool enable)
 {
@@ -688,16 +688,46 @@ uint8_t QwDevLSM6DSV16X::getBlockDataUpdate()
 }
 
 /// @brief Sets the acceleromter's output data rate (ODR)
-/// @param rate
+/// @param rate output data rate. Possible values: 
+///		LSM6DSV16X_ODR_OFF              
+///		LSM6DSV16X_ODR_AT_1Hz875        
+///		LSM6DSV16X_ODR_AT_7Hz5          
+///		LSM6DSV16X_ODR_AT_15Hz          
+///		LSM6DSV16X_ODR_AT_30Hz          
+///		LSM6DSV16X_ODR_AT_60Hz          
+///		LSM6DSV16X_ODR_AT_120Hz         
+///		LSM6DSV16X_ODR_AT_240Hz         
+///		LSM6DSV16X_ODR_AT_480Hz         
+///		LSM6DSV16X_ODR_AT_960Hz         
+///		LSM6DSV16X_ODR_AT_1920Hz        
+///		LSM6DSV16X_ODR_AT_3840Hz        
+///		LSM6DSV16X_ODR_AT_7680Hz        
+///		LSM6DSV16X_ODR_HA01_AT_15Hz625  
+///		LSM6DSV16X_ODR_HA01_AT_31Hz25   
+///		LSM6DSV16X_ODR_HA01_AT_62Hz5    
+///		LSM6DSV16X_ODR_HA01_AT_125Hz    
+///		LSM6DSV16X_ODR_HA01_AT_250Hz    
+///		LSM6DSV16X_ODR_HA01_AT_500Hz    
+///		LSM6DSV16X_ODR_HA01_AT_1000Hz   
+///		LSM6DSV16X_ODR_HA01_AT_2000Hz   
+///		LSM6DSV16X_ODR_HA01_AT_4000Hz   
+///		LSM6DSV16X_ODR_HA01_AT_8000Hz   
+///		LSM6DSV16X_ODR_HA02_AT_12Hz5    
+///		LSM6DSV16X_ODR_HA02_AT_25Hz     
+///		LSM6DSV16X_ODR_HA02_AT_50Hz     
+///		LSM6DSV16X_ODR_HA02_AT_100Hz    
+///		LSM6DSV16X_ODR_HA02_AT_200Hz    
+///		LSM6DSV16X_ODR_HA02_AT_400Hz    
+///		LSM6DSV16X_ODR_HA02_AT_800Hz    
+///		LSM6DSV16X_ODR_HA02_AT_1600Hz   
+///		LSM6DSV16X_ODR_HA02_AT_3200Hz   
+///		LSM6DSV16X_ODR_HA02_AT_6400Hz   
 /// @return True on successful operation
-bool QwDevLSM6DSV16X::setAccelDataRate(uint8_t rate)
+bool QwDevLSM6DSV16X::setAccelDataRate(lsm6dsv16x_data_rate_t rate)
 {
-    if (rate > 12)
-        return false;
-
     int32_t retVal;
 
-    retVal = lsm6dsv16x_xl_data_rate_set(&sfe_dev, (lsm6dsv16x_data_rate_t)rate);
+    retVal = lsm6dsv16x_xl_data_rate_set(&sfe_dev, rate);
 
     if (retVal != 0)
         return false;
@@ -706,16 +736,46 @@ bool QwDevLSM6DSV16X::setAccelDataRate(uint8_t rate)
 }
 
 /// @brief Sets the gyro's output data rate (ODR)
-/// @param rate
+/// @param Gyroscope output data rate. Possible values:
+///		LSM6DSV16X_ODR_OFF              
+///		LSM6DSV16X_ODR_AT_1Hz875        
+///		LSM6DSV16X_ODR_AT_7Hz5          
+///		LSM6DSV16X_ODR_AT_15Hz          
+///		LSM6DSV16X_ODR_AT_30Hz          
+///		LSM6DSV16X_ODR_AT_60Hz          
+///		LSM6DSV16X_ODR_AT_120Hz         
+///		LSM6DSV16X_ODR_AT_240Hz         
+///		LSM6DSV16X_ODR_AT_480Hz         
+///		LSM6DSV16X_ODR_AT_960Hz         
+///		LSM6DSV16X_ODR_AT_1920Hz        
+///		LSM6DSV16X_ODR_AT_3840Hz        
+///		LSM6DSV16X_ODR_AT_7680Hz        
+///		LSM6DSV16X_ODR_HA01_AT_15Hz625  
+///		LSM6DSV16X_ODR_HA01_AT_31Hz25   
+///		LSM6DSV16X_ODR_HA01_AT_62Hz5    
+///		LSM6DSV16X_ODR_HA01_AT_125Hz    
+///		LSM6DSV16X_ODR_HA01_AT_250Hz    
+///		LSM6DSV16X_ODR_HA01_AT_500Hz    
+///		LSM6DSV16X_ODR_HA01_AT_1000Hz   
+///		LSM6DSV16X_ODR_HA01_AT_2000Hz   
+///		LSM6DSV16X_ODR_HA01_AT_4000Hz   
+///		LSM6DSV16X_ODR_HA01_AT_8000Hz   
+///		LSM6DSV16X_ODR_HA02_AT_12Hz5    
+///		LSM6DSV16X_ODR_HA02_AT_25Hz     
+///		LSM6DSV16X_ODR_HA02_AT_50Hz     
+///		LSM6DSV16X_ODR_HA02_AT_100Hz    
+///		LSM6DSV16X_ODR_HA02_AT_200Hz    
+///		LSM6DSV16X_ODR_HA02_AT_400Hz    
+///		LSM6DSV16X_ODR_HA02_AT_800Hz    
+///		LSM6DSV16X_ODR_HA02_AT_1600Hz   
+///		LSM6DSV16X_ODR_HA02_AT_3200Hz   
+///		LSM6DSV16X_ODR_HA02_AT_6400Hz   
 /// @return True on successful operation
-bool QwDevLSM6DSV16X::setGyroDataRate(uint8_t rate)
+bool QwDevLSM6DSV16X::setGyroDataRate(lsm6dsv16x_data_rate_t rate)
 {
-    if (rate > 12)
-        return false;
-
     int32_t retVal;
 
-    retVal = lsm6dsv16x_gy_data_rate_set(&sfe_dev, (lsm6dsv16x_data_rate_t)rate);
+    retVal = lsm6dsv16x_gy_data_rate_set(&sfe_dev, rate);
 
     if (retVal != 0)
         return false;
@@ -724,7 +784,7 @@ bool QwDevLSM6DSV16X::setGyroDataRate(uint8_t rate)
 }
 
 /// @brief Enables the timestamp counter
-/// @param enable
+/// @param enable Enables/disables data timestamp
 /// @return True on successful operation
 bool QwDevLSM6DSV16X::enableTimestamp(bool enable)
 {
@@ -738,20 +798,11 @@ bool QwDevLSM6DSV16X::enableTimestamp(bool enable)
     return true;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
+///FIFO Settting//////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////////
-// FIFO Settings
-//
-//
-//
-//
-//
-//
-
-// @brief Sets the FIFO's watermark threshold.
-// @param val
-// @return True on successful operation
+/// @brief Sets the FIFO's watermark threshold.
+/// @param val number of bytes for the FIFO
+/// @return True on successful operation
 bool QwDevLSM6DSV16X::setFifoWatermark(uint8_t val)
 {
     int32_t retVal;
@@ -764,9 +815,16 @@ bool QwDevLSM6DSV16X::setFifoWatermark(uint8_t val)
     return true;
 }
 
-// @brief Fifo mode selection
-// @param val
-// @return True on successful operation
+/// @brief Fifo mode selection
+/// @param mode The FIFO operation mode. Possible values: 
+///		LSM6DSV16X_BYPASS_MODE            
+///		LSM6DSV16X_FIFO_MODE              
+///		LSM6DSV16X_STREAM_WTM_TO_FULL_MODE
+///		LSM6DSV16X_STREAM_TO_FIFO_MODE    
+///		LSM6DSV16X_BYPASS_TO_STREAM_MODE  
+///		LSM6DSV16X_STREAM_MODE            
+///		LSM6DSV16X_BYPASS_TO_FIFO_MODE    
+/// @return True on successful operation
 bool QwDevLSM6DSV16X::setFifoMode(lsm6dsv16x_fifo_mode_t mode)
 {
     int32_t retVal;
@@ -779,9 +837,22 @@ bool QwDevLSM6DSV16X::setFifoMode(lsm6dsv16x_fifo_mode_t mode)
     return true;
 }
 
-// @brief FIFO Batch data rate selection for the accelerometer
-// @param val
-// @return True on successful executuion
+/// @brief FIFO Batch data rate selection for the accelerometer
+/// @param odr FIFO output data rate.
+///		LSM6DSV16X_XL_NOT_BATCHED       
+///		LSM6DSV16X_XL_BATCHED_AT_1Hz875 
+///		LSM6DSV16X_XL_BATCHED_AT_7Hz5   
+///		LSM6DSV16X_XL_BATCHED_AT_15Hz   
+///		LSM6DSV16X_XL_BATCHED_AT_30Hz   
+///		LSM6DSV16X_XL_BATCHED_AT_60Hz   
+///		LSM6DSV16X_XL_BATCHED_AT_120Hz  
+///		LSM6DSV16X_XL_BATCHED_AT_240Hz  
+///		LSM6DSV16X_XL_BATCHED_AT_480Hz  
+///		LSM6DSV16X_XL_BATCHED_AT_960Hz  
+///		LSM6DSV16X_XL_BATCHED_AT_1920Hz 
+///		LSM6DSV16X_XL_BATCHED_AT_3840Hz 
+///		LSM6DSV16X_XL_BATCHED_AT_7680Hz 
+/// @return True on successful executuion
 bool QwDevLSM6DSV16X::setAccelFifoBatchSet(lsm6dsv16x_fifo_xl_batch_t odr)
 {
     int32_t retVal;
@@ -795,7 +866,20 @@ bool QwDevLSM6DSV16X::setAccelFifoBatchSet(lsm6dsv16x_fifo_xl_batch_t odr)
 }
 
 /// @brief FIFO Batch data rate selection for the gyroscope
-/// @param val
+/// @param odr FIFO output data rate 
+///		LSM6DSV16X_GY_NOT_BATCHED       
+///		LSM6DSV16X_GY_BATCHED_AT_1Hz875 
+///		LSM6DSV16X_GY_BATCHED_AT_7Hz5   
+///		LSM6DSV16X_GY_BATCHED_AT_15Hz   
+///		LSM6DSV16X_GY_BATCHED_AT_30Hz   
+///		LSM6DSV16X_GY_BATCHED_AT_60Hz   
+///		LSM6DSV16X_GY_BATCHED_AT_120Hz  
+///		LSM6DSV16X_GY_BATCHED_AT_240Hz  
+///		LSM6DSV16X_GY_BATCHED_AT_480Hz  
+///		LSM6DSV16X_GY_BATCHED_AT_960Hz  
+///		LSM6DSV16X_GY_BATCHED_AT_1920Hz 
+///		LSM6DSV16X_GY_BATCHED_AT_3840Hz 
+///		LSM6DSV16X_GY_BATCHED_AT_7680Hz 
 /// @return True on successful executuion
 bool QwDevLSM6DSV16X::setGyroFifoBatchSet(lsm6dsv16x_fifo_gy_batch_t odr)
 {
@@ -810,7 +894,11 @@ bool QwDevLSM6DSV16X::setGyroFifoBatchSet(lsm6dsv16x_fifo_gy_batch_t odr)
 }
 
 /// @brief Selects decimation for timestamp batching in FIFO
-/// @param val
+/// @param decimation timestamp decimation for FIFO
+///		LSM6DSV16X_TMSTMP_NOT_BATCHED 
+///		LSM6DSV16X_TMSTMP_DEC_1       
+///		LSM6DSV16X_TMSTMP_DEC_8       
+///		LSM6DSV16X_TMSTMP_DEC_32      
 /// @return True on successful executuion
 bool QwDevLSM6DSV16X::setFifoTimestampDec(lsm6dsv16x_fifo_timestamp_batch_t decimation)
 {
@@ -824,18 +912,7 @@ bool QwDevLSM6DSV16X::setFifoTimestampDec(lsm6dsv16x_fifo_timestamp_batch_t deci
     return true;
 }
 
-//
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////
-// Interrupt Settings
-//
-//
-//
-//
-//
-//
+////Interrupt Settings//////////////////////////////////////////////////////////////////////////////
 
 /// @brief Retrieves all interrupt source bits
 /// @param source interrupt bits
@@ -1000,7 +1077,7 @@ bool QwDevLSM6DSV16X::setIntSleepChange(sfe_lsm_pin_t pin, bool enable)
 }
 
 /// @brief Enables pulsed data ready mode as opposed to latch - 65us pulse.
-/// @param enable Enable/Disable pulsed interrupts
+/// @param pulse Enable/Disable pulsed interrupts
 ///		LSM6DSV16X_DRDY_LATCHED
 ///		LSM6DSV16X_DRDY_PULSED
 /// @return Returns true on successful execution
@@ -1053,6 +1130,7 @@ bool QwDevLSM6DSV16X::setTapMode(lsm6dsv16x_tap_mode_t mode)
 }
 
 /// @brief Retrieves the tap mode
+/// @param mode the tap mode
 /// @return Returns -1 on error, otherwise the selected tap mode.
 bool QwDevLSM6DSV16X::getTapMode(lsm6dsv16x_tap_mode_t *mode)
 {
@@ -1162,19 +1240,7 @@ bool QwDevLSM6DSV16X::getTapTimeWindows(lsm6dsv16x_tap_time_windows_t *window)
     return true;
 }
 
-//
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////
-// QVar Settings
-//
-//
-//
-//
-//
-//
-//
+////Qvar Settings//////////////////////////////////////////////////////////////////////////////
 
 /// @brief Enables Qvar inputs.
 /// @param enable Enable the analog pins.
@@ -1198,6 +1264,7 @@ bool QwDevLSM6DSV16X::enableAhQvar(bool enable)
 }
 
 /// @brief Checks if QVar bit is set.
+/// @param mode Mode enable bit
 /// @return Returns true if bit is set.
 bool QwDevLSM6DSV16X::getQvarMode(lsm6dsv16x_ah_qvar_mode_t *mode)
 {
@@ -1281,8 +1348,8 @@ bool QwDevLSM6DSV16X::setHubODR(lsm6dsv16x_sh_data_rate_t rate)
 }
 
 /// @brief Sets the parameters with which to read from a downstream sensor
-/// @param settings The parameters to read from the downstream sensor.
 /// @param sensor the sensor to address 0 - 4
+/// @param settings The parameters to read from the downstream sensor.
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setHubSensorRead(uint8_t sensor, lsm6dsv16x_sh_cfg_read_t *settings)
 {
