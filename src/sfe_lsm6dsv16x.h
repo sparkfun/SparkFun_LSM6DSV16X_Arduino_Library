@@ -66,8 +66,8 @@ class QwDevLSM6DSV16X
     bool deviceReset();
     bool getDeviceReset();
     bool getAutoIncrement();
-    bool setAccelMode(uint8_t mode);
-    bool setGyroMode(uint8_t mode);
+    bool setAccelMode(lsm6dsv16x_xl_mode_t mode);
+    bool setGyroMode(lsm6dsv16x_gy_mode_t mode);
     bool enableAccelHpFilter(bool enable = true);
     bool enableAccelLPS2(bool enable = true);
     bool enableFastSetMode(bool enable = true);
@@ -95,7 +95,7 @@ class QwDevLSM6DSV16X
     bool setIntFreeFall(sfe_lsm_pin_t pin, bool enable = true);
     bool setIntSleepChange(sfe_lsm_pin_t pin, bool enable = true);
 
-    bool setDataReadyMode(lsm6dsv16x_data_ready_mode_t mode);
+    bool setDataReadyMode(lsm6dsv16x_data_ready_mode_t);
 
     // Tap Settings
     bool enableTapInterrupt(bool enable = true);

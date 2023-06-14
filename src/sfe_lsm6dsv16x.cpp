@@ -65,7 +65,7 @@ int32_t QwDevLSM6DSV16X::readRegisterRegion(uint8_t offset, uint8_t *data, uint1
 }
 
 /// @brief Sets the scale of the acceleromter's readings 2g - 16g.
-/// @param val The scale of the accelerometer, other values include:
+/// @param scale The scale of the accelerometer, other values include:
 ///		LSM6DSV16X_2g
 ///		LSM6DSV16X_4g
 ///		LSM6DSV16X_8g
@@ -86,7 +86,7 @@ bool QwDevLSM6DSV16X::setAccelFullScale(lsm6dsv16x_xl_full_scale_t scale)
 }
 
 /// @brief Sets the scale of the gyroscopes's readings 125, 250, 500, 1000, 2000, or 4000 degrees per second
-/// @param val The scale of the gyroscope, other values include:
+/// @param scale The scale of the gyroscope, other values include:
 ///		LSM6DSV16X_125dps
 ///		LSM6DSV16X_250dps
 ///		LSM6DSV16X_500dps
@@ -109,7 +109,7 @@ bool QwDevLSM6DSV16X::setGyroFullScale(lsm6dsv16x_gy_full_scale_t scale)
 }
 
 /// @brief Retrieves the scale of the accelerometer's readings
-/// @param The accelerometer's scale value
+/// @param scale The accelerometer's scale value
 /// @return Returns the gyroscope's scale setting.
 bool QwDevLSM6DSV16X::getAccelFullScale(lsm6dsv16x_xl_full_scale_t *scale)
 {
@@ -123,7 +123,7 @@ bool QwDevLSM6DSV16X::getAccelFullScale(lsm6dsv16x_xl_full_scale_t *scale)
 }
 
 /// @brief Retrieves the scale of the accelerometer's readings
-/// @param The gyroscope's scale value
+/// @param scale The gyroscope's scale value
 /// @return Returns the gyroscope's scale setting.
 bool QwDevLSM6DSV16X::getGyroFullScale(lsm6dsv16x_gy_full_scale_t *scale)
 {
@@ -151,7 +151,7 @@ uint8_t QwDevLSM6DSV16X::getUniqueId()
 }
 
 /// @brief Retrieves raw temperature values.
-/// @param The raw temp value.
+/// @param tempVal The raw temp value.
 /// @return Returns raw temperature value.
 bool QwDevLSM6DSV16X::getRawTemp(int16_t *tempVal)
 {
@@ -164,7 +164,7 @@ bool QwDevLSM6DSV16X::getRawTemp(int16_t *tempVal)
 }
 
 /// @brief Retrieves raw register values for accelerometer data
-/// @param Raw accelerometer data direct from the register.
+/// @param accelData Raw accelerometer data direct from the register.
 /// @return True on successful execution.
 bool QwDevLSM6DSV16X::getRawAccel(sfe_lsm_raw_data_t *accelData)
 {
@@ -182,7 +182,7 @@ bool QwDevLSM6DSV16X::getRawAccel(sfe_lsm_raw_data_t *accelData)
 }
 
 /// @brief Retrieves raw register values for gyroscope data
-/// @param Raw gyroscope data direct from the register
+/// @param gyroData Raw gyroscope data direct from the register
 /// @return True on successful execution.
 bool QwDevLSM6DSV16X::getRawGyro(sfe_lsm_raw_data_t *gyroData)
 {
@@ -216,7 +216,7 @@ bool QwDevLSM6DSV16X::getRawQvar(int16_t *qvarData)
 
 /// @brief Takes raw register values and converts them according to the
 /// accelerometer's scale setting.
-/// @param Acceleromter data
+/// @param accelData Acceleromter converted to according to the set scale value data
 /// @return True on successful execution.
 bool QwDevLSM6DSV16X::getAccel(sfe_lsm_data_t *accelData)
 {
@@ -269,8 +269,8 @@ bool QwDevLSM6DSV16X::getAccel(sfe_lsm_data_t *accelData)
 }
 
 /// @brief Takes raw register values and converts them according to the
-/// gyroscope's scale setting.
-/// @param gyroData
+/// gyroscope's scale setting.j
+/// @param gyroData The converted raw gyroscopic data, converterd according to the selected scale.
 /// @return True on successful execution.
 bool QwDevLSM6DSV16X::getGyro(sfe_lsm_data_t *gyroData)
 {
@@ -333,7 +333,7 @@ bool QwDevLSM6DSV16X::getGyro(sfe_lsm_data_t *gyroData)
 }
 
 /// @brief Converts 2g scale to milli-g's
-/// @param data
+/// @param Accelerometer data to convert
 /// @return Data converted to milli-g's
 float QwDevLSM6DSV16X::convert2gToMg(int16_t data)
 {
@@ -341,7 +341,7 @@ float QwDevLSM6DSV16X::convert2gToMg(int16_t data)
 }
 
 /// @brief Converts 4g scale to milli-g's
-/// @param data
+/// @param Accelerometer data to convert
 /// @return Data converted to milli-g's
 float QwDevLSM6DSV16X::convert4gToMg(int16_t data)
 {
@@ -349,7 +349,7 @@ float QwDevLSM6DSV16X::convert4gToMg(int16_t data)
 }
 
 /// @brief Converts 8g scale to milli-g's
-/// @param data
+/// @param Accelerometer data to convert
 /// @return Data converted to milli-g's
 float QwDevLSM6DSV16X::convert8gToMg(int16_t data)
 {
@@ -357,7 +357,7 @@ float QwDevLSM6DSV16X::convert8gToMg(int16_t data)
 }
 
 /// @brief Converts 16g scale to milli-g's
-/// @param data
+/// @param Accelerometer data to convert
 /// @return Data converted to milli-g's
 float QwDevLSM6DSV16X::convert16gToMg(int16_t data)
 {
@@ -365,7 +365,7 @@ float QwDevLSM6DSV16X::convert16gToMg(int16_t data)
 }
 
 /// @brief Converts 125 degrees per second scale to milli-degrees-per-second
-/// @param data
+/// @param Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert125dpsToMdps(int16_t data)
 {
@@ -373,7 +373,7 @@ float QwDevLSM6DSV16X::convert125dpsToMdps(int16_t data)
 }
 
 /// @brief Converts 250 degrees per second scale to milli-degrees-per-second
-/// @param data
+/// @param Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert250dpsToMdps(int16_t data)
 {
@@ -381,7 +381,7 @@ float QwDevLSM6DSV16X::convert250dpsToMdps(int16_t data)
 }
 
 /// @brief Converts 500 degrees per second scale to milli-degrees-per-second
-/// @param data
+/// @param Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert500dpsToMdps(int16_t data)
 {
@@ -389,7 +389,7 @@ float QwDevLSM6DSV16X::convert500dpsToMdps(int16_t data)
 }
 
 /// @brief Converts 1000 degrees per second scale to milli-degrees-per-second
-/// @param data
+/// @param Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert1000dpsToMdps(int16_t data)
 {
@@ -397,7 +397,7 @@ float QwDevLSM6DSV16X::convert1000dpsToMdps(int16_t data)
 }
 
 /// @brief Converts 2000 degrees per second scale to milli-degrees-per-second
-/// @param data
+/// @param Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert2000dpsToMdps(int16_t data)
 {
@@ -405,7 +405,7 @@ float QwDevLSM6DSV16X::convert2000dpsToMdps(int16_t data)
 }
 
 /// @brief Converts 4000 degrees per second scale to milli-degrees-per-second
-/// @param data
+/// @param Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convert4000dpsToMdps(int16_t data)
 {
@@ -413,44 +413,14 @@ float QwDevLSM6DSV16X::convert4000dpsToMdps(int16_t data)
 }
 
 /// @brief Converts temperature to celsius.
-/// @param data
+/// @param Gyroscopic data to convert
 /// @return Data converted to milli-degrees-per-second
 float QwDevLSM6DSV16X::convertToCelsius(int16_t data)
 {
     return (lsm6dsv16x_from_lsb_to_celsius(data));
 }
 
-//
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////
-// General Settings
-//
-//
-//
-//
-
-//////////////////////////////////////////////////////////////////////////////////
-// setDeviceConfig()
-//
-//
-//  Parameter   Description
-//  ---------   -----------------------------
-//  enable      Enable the general device configuration - this is a configuration
-//							register in the LSM6DSV16X, not a library implementation.
-// NOT IN LIB
-// bool QwDevLSM6DSV16X::setDeviceConfig(bool enable)
-//{
-//	int32_t retVal;
-//
-//	retVal = lsm6dsv16x_device_conf_set(&sfe_dev, (uint8_t)enable);
-//
-//	if( retVal != 0 )
-//		return false;
-//
-//	return true;
-//}
+/// General Settings//////////////////////////////////////////////////////////////////////////////////
 
 /// @brief Resets all registers.
 /// @return true on successful execution.
@@ -461,13 +431,17 @@ bool QwDevLSM6DSV16X::deviceReset()
     retVal = lsm6dsv16x_reset_set(&sfe_dev, (lsm6dsv16x_reset_t)1);
 
     if (retVal != 0)
+    {
         return false;
+    }
+
+    accelScaleSet = false;
 
     return true;
 }
 
 /// @brief Checks the bit indicating that the device has finished reseting.
-/// @return true on successful execution.
+/// @return true on when the reset is completed.
 bool QwDevLSM6DSV16X::getDeviceReset()
 {
 
@@ -485,6 +459,8 @@ bool QwDevLSM6DSV16X::getDeviceReset()
     return false;
 }
 
+/// @brief  Returns whether register auto-increment is turned on.
+/// @return  Returns true if auto-increment is on and false if it's not.
 bool QwDevLSM6DSV16X::getAutoIncrement()
 {
 
@@ -504,16 +480,20 @@ bool QwDevLSM6DSV16X::getAutoIncrement()
 
 /// @brief Sets the mode of the accelerometer: high performance(default),
 /// lower power, normal.
-/// @param mode
+/// @param mode The accelerometer's performance mode. Possible values:
+///		LSM6DSV16X_XL_HIGH_PERFORMANCE_MD
+///		LSM6DSV16X_XL_HIGH_ACCURACY_ODR_MD
+///		LSM6DSV16X_XL_ODR_TRIGGERED_MD
+///		LSM6DSV16X_XL_LOW_POWER_2_AVG_MD
+///		LSM6DSV16X_XL_LOW_POWER_4_AVG_MD
+///		LSM6DSV16X_XL_LOW_POWER_8_AVG_MD
+///		LSM6DSV16X_XL_NORMAL_MD
 /// @return True on successful operation.
-bool QwDevLSM6DSV16X::setAccelMode(uint8_t mode)
+bool QwDevLSM6DSV16X::setAccelMode(lsm6dsv16x_xl_mode_t mode)
 {
     int32_t retVal;
 
-    if (mode > 6)
-        return false;
-
-    retVal = lsm6dsv16x_xl_mode_set(&sfe_dev, (lsm6dsv16x_xl_mode_t)mode);
+    retVal = lsm6dsv16x_xl_mode_set(&sfe_dev, mode);
 
     if (retVal != 0)
         return false;
@@ -523,16 +503,17 @@ bool QwDevLSM6DSV16X::setAccelMode(uint8_t mode)
 
 /// @brief Sets the mode of the gyroscope: high performance(default),
 /// lower power, normal.
-/// @param mode
+/// @param mode The gyroscope's performance mode. Possible values:
+///		LSM6DSV16X_GY_HIGH_PERFORMANCE_MD
+///		LSM6DSV16X_GY_HIGH_ACCURACY_ODR_MD
+///		LSM6DSV16X_GY_SLEEP_MD
+///		LSM6DSV16X_GY_LOW_POWER_MD
 /// @return True on successful operation.
-bool QwDevLSM6DSV16X::setGyroMode(uint8_t mode)
+bool QwDevLSM6DSV16X::setGyroMode(lsm6dsv16x_gy_mode_t mode)
 {
     int32_t retVal;
 
-    if (mode > 6)
-        return false;
-
-    retVal = lsm6dsv16x_gy_mode_set(&sfe_dev, (lsm6dsv16x_gy_mode_t)mode);
+    retVal = lsm6dsv16x_gy_mode_set(&sfe_dev, mode);
 
     if (retVal != 0)
         return false;
@@ -541,7 +522,7 @@ bool QwDevLSM6DSV16X::setGyroMode(uint8_t mode)
 }
 
 /// @brief Sets the accelerometer's slope filter
-/// @param enable
+/// @param enable Enable/disables the high pass slope filter.
 /// @return True on successful operation.
 bool QwDevLSM6DSV16X::enableAccelHpFilter(bool enable)
 {
@@ -556,7 +537,7 @@ bool QwDevLSM6DSV16X::enableAccelHpFilter(bool enable)
 }
 
 /// @brief Sets the accelerometer's slope filter
-/// @param enable
+/// @param enable Enable/disable the filter settling.
 /// @return True on successful operation.
 bool QwDevLSM6DSV16X::enableFilterSettling(bool enable)
 {
@@ -576,13 +557,13 @@ bool QwDevLSM6DSV16X::enableFilterSettling(bool enable)
 }
 /// @brief Selects the accelerometer's high resolution between first stage
 /// (zero) digital filtering or (one) LPF2 second filtering stage
-/// @param second
+/// @param enable Enable/disable the filter settling.
 /// @return True on successful operation
-bool QwDevLSM6DSV16X::enableAccelLPS2(bool second)
+bool QwDevLSM6DSV16X::enableAccelLPS2(bool enable)
 {
     int32_t retVal;
 
-    retVal = lsm6dsv16x_filt_xl_lp2_set(&sfe_dev, uint8_t(second));
+    retVal = lsm6dsv16x_filt_xl_lp2_set(&sfe_dev, uint8_t(enable));
 
     if (retVal != 0)
         return false;
@@ -641,7 +622,7 @@ bool QwDevLSM6DSV16X::setGyroLP1Bandwidth(uint8_t val)
 }
 
 /// @brief Enables filtering using low pass filter 1.
-/// @param enable
+/// @param Enable accelerometer LPS2 (Low Pass Filter 2) filtering stage.
 /// @return True on successful operation
 bool QwDevLSM6DSV16X::enableAccelLP2Filter(bool enable)
 {
@@ -657,7 +638,7 @@ bool QwDevLSM6DSV16X::enableAccelLP2Filter(bool enable)
 
 /// @brief Sets the bandwitdth for low pass filter 2. The bandwith is dependent on the
 /// selected output data rate, check LSM6DSV16X datasheet for more information..
-/// @param val
+/// @param val accelerometer LPS2 (Low Pass Filter 2) filtering stage.
 /// @return True on successful operation
 bool QwDevLSM6DSV16X::setAccelLP2Bandwidth(uint8_t val)
 {
@@ -813,9 +794,9 @@ bool QwDevLSM6DSV16X::setAccelFifoBatchSet(lsm6dsv16x_fifo_xl_batch_t odr)
     return true;
 }
 
-// @brief FIFO Batch data rate selection for the gyroscope
-// @param val
-// @return True on successful executuion
+/// @brief FIFO Batch data rate selection for the gyroscope
+/// @param val
+/// @return True on successful executuion
 bool QwDevLSM6DSV16X::setGyroFifoBatchSet(lsm6dsv16x_fifo_gy_batch_t odr)
 {
     int32_t retVal;
@@ -828,9 +809,9 @@ bool QwDevLSM6DSV16X::setGyroFifoBatchSet(lsm6dsv16x_fifo_gy_batch_t odr)
     return true;
 }
 
-// @brief Selects decimation for timestamp batching in FIFO
-// @param val
-// @return True on successful executuion
+/// @brief Selects decimation for timestamp batching in FIFO
+/// @param val
+/// @return True on successful executuion
 bool QwDevLSM6DSV16X::setFifoTimestampDec(lsm6dsv16x_fifo_timestamp_batch_t decimation)
 {
     int32_t retVal;
@@ -857,7 +838,7 @@ bool QwDevLSM6DSV16X::setFifoTimestampDec(lsm6dsv16x_fifo_timestamp_batch_t deci
 //
 
 /// @brief Retrieves all interrupt source bits
-/// @param source
+/// @param source interrupt bits
 /// @return True on successful execution
 bool QwDevLSM6DSV16X::getAllInterrupts(lsm6dsv16x_all_sources_t *source)
 {
@@ -873,7 +854,7 @@ bool QwDevLSM6DSV16X::getAllInterrupts(lsm6dsv16x_all_sources_t *source)
 }
 
 /// @brief Sets the active state of the interrupt pin - high or low.
-/// @param openDrain
+/// @param activeLow Enable/disable active low interrupts
 /// @return True on successful execution
 bool QwDevLSM6DSV16X::setInt2DENActiveLow(bool activeLow)
 {
@@ -889,7 +870,8 @@ bool QwDevLSM6DSV16X::setInt2DENActiveLow(bool activeLow)
 }
 
 /// @brief Selects the signal that will be routed to the selected interrupt.
-/// @param val
+/// @param val The interrupt to route.
+/// @param pin The pin to route to.
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setIntRoute(lsm6dsv16x_pin_int_route_t val, sfe_lsm_pin_t pin)
 {
@@ -907,7 +889,8 @@ bool QwDevLSM6DSV16X::setIntRoute(lsm6dsv16x_pin_int_route_t val, sfe_lsm_pin_t 
 }
 
 /// @brief Routes the data ready signal for the accelerometer to the selected pin.
-/// @param enable
+/// @param pin the interrupt pin
+/// @param enable enable/disable accelerometer data ready interrupt
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setIntAccelDataReady(sfe_lsm_pin_t pin, bool enable)
 {
@@ -922,7 +905,8 @@ bool QwDevLSM6DSV16X::setIntAccelDataReady(sfe_lsm_pin_t pin, bool enable)
 }
 
 /// @brief Routes the data ready signal for the Gyroscope to the selected pin.
-/// @param enable, pin
+/// @param pin the interrupt pin
+/// @param enable enable/disable gyroscope data ready interrupt
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setIntGyroDataReady(sfe_lsm_pin_t pin, bool enable)
 {
@@ -937,7 +921,8 @@ bool QwDevLSM6DSV16X::setIntGyroDataReady(sfe_lsm_pin_t pin, bool enable)
 }
 
 /// @brief Enables the single tap interrupt on the selected interrupt pin.
-/// @param enable, pin
+/// @param pin the interrupt pin
+/// @param enable enable/disable single tap interrupt
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setIntSingleTap(sfe_lsm_pin_t pin, bool enable)
 {
@@ -952,23 +937,23 @@ bool QwDevLSM6DSV16X::setIntSingleTap(sfe_lsm_pin_t pin, bool enable)
 }
 
 /// @brief Enables the double tap interrupt on the selected interrupt pin.
-/// @param enable
-/// @param pin
+/// @param pin the interrupt pin
+/// @param enable enable/disable double tap interrupt
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setIntDoubleTap(sfe_lsm_pin_t pin, bool enable)
 {
     lsm6dsv16x_pin_int_route_t int_route;
-    int_route.single_tap = (uint8_t)enable;
+    int_route.double_tap = (uint8_t)enable;
 
     if (setIntRoute(int_route, pin))
         return true;
 
-    return true;
+    return false;
 }
 
 /// @brief Enables the wake up interrupt on the selected interrupt pin.
-/// @param enable
-/// @param pin
+/// @param pin the interrupt pin
+/// @param enable enable/disable wakeup interrupt
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setIntWakeup(sfe_lsm_pin_t pin, bool enable)
 {
@@ -983,7 +968,8 @@ bool QwDevLSM6DSV16X::setIntWakeup(sfe_lsm_pin_t pin, bool enable)
 }
 
 /// @brief Enables the free fall interrupt on one of the interrupt pins.
-/// @param enable, pin
+/// @param pin the interrupt pin
+/// @param enable enable/disable freefall interrupt
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setIntFreeFall(sfe_lsm_pin_t pin, bool enable)
 {
@@ -998,7 +984,8 @@ bool QwDevLSM6DSV16X::setIntFreeFall(sfe_lsm_pin_t pin, bool enable)
 }
 
 /// @brief Enables the sleep change interrupt on one of the interrupt pins.
-/// @param enable, pin
+/// @param pin the interrupt pin
+/// @param enable enable/disable sleep change interrupt
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setIntSleepChange(sfe_lsm_pin_t pin, bool enable)
 {
@@ -1013,13 +1000,15 @@ bool QwDevLSM6DSV16X::setIntSleepChange(sfe_lsm_pin_t pin, bool enable)
 }
 
 /// @brief Enables pulsed data ready mode as opposed to latch - 65us pulse.
-/// @param enable
+/// @param enable Enable/Disable pulsed interrupts
+///		LSM6DSV16X_DRDY_LATCHED
+///		LSM6DSV16X_DRDY_PULSED
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setDataReadyMode(lsm6dsv16x_data_ready_mode_t mode)
+bool QwDevLSM6DSV16X::setDataReadyMode(lsm6dsv16x_data_ready_mode_t pulse)
 {
     int32_t retVal;
 
-    retVal = lsm6dsv16x_data_ready_mode_set(&sfe_dev, mode);
+    retVal = lsm6dsv16x_data_ready_mode_set(&sfe_dev, pulse);
 
     if (retVal != 0)
         return false;
@@ -1028,7 +1017,7 @@ bool QwDevLSM6DSV16X::setDataReadyMode(lsm6dsv16x_data_ready_mode_t mode)
 }
 
 /// @brief Enables the tap interrupt
-/// @param enable
+/// @param enable Enable/disable the tap interrupt
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::enableTapInterrupt(bool enable)
 {
@@ -1047,7 +1036,9 @@ bool QwDevLSM6DSV16X::enableTapInterrupt(bool enable)
 }
 
 /// @brief Enables the selected tap mode: single, double, or single and double
-/// @param mode
+/// @param mode the tap mode. Two possible settings:
+///		LSM6DSV16X_ONLY_SINGLE
+///		LSM6DSV16X_BOTH_SINGLE_DOUBLE
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setTapMode(lsm6dsv16x_tap_mode_t mode)
 {
@@ -1077,7 +1068,7 @@ bool QwDevLSM6DSV16X::getTapMode(lsm6dsv16x_tap_mode_t *mode)
 }
 
 /// @brief Sets the axis with which to detect taps: x, y, or z.
-/// @param directionDetect
+/// @param directionDetect the direction to detect
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setTapDirection(lsm6dsv16x_tap_detection_t directionDetect)
 {
@@ -1093,7 +1084,7 @@ bool QwDevLSM6DSV16X::setTapDirection(lsm6dsv16x_tap_detection_t directionDetect
 }
 
 /// @brief Retrieves the active tap axes.
-/// @param directionDetect
+/// @param directionDetect the direction to detect
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::getTapDirection(lsm6dsv16x_tap_detection_t *directionDetect)
 {
@@ -1109,7 +1100,7 @@ bool QwDevLSM6DSV16X::getTapDirection(lsm6dsv16x_tap_detection_t *directionDetec
 }
 
 /// @brief Sets the tap thresholds for each of the axes.
-/// @param thresholds
+/// @param thresholds the tap sensitivity settings
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setTapThresholds(lsm6dsv16x_tap_thresholds_t thresholds)
 {
@@ -1125,7 +1116,7 @@ bool QwDevLSM6DSV16X::setTapThresholds(lsm6dsv16x_tap_thresholds_t thresholds)
 }
 
 /// @brief Retrieves the thresholds for each of the axes.
-/// @param axisThreshold
+/// @param thresholds the tap sensitivity settings
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::getTapThresholds(lsm6dsv16x_tap_thresholds_t *thresholds)
 {
@@ -1141,7 +1132,7 @@ bool QwDevLSM6DSV16X::getTapThresholds(lsm6dsv16x_tap_thresholds_t *thresholds)
 }
 
 /// @brief Sets the three options for tap "windows": shock, quiet, and tap_gap.
-/// @param shock, quiet, tapGap
+/// @param window the time duration of the three tap settings
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setTapTimeWindows(lsm6dsv16x_tap_time_windows_t window)
 {
@@ -1156,7 +1147,7 @@ bool QwDevLSM6DSV16X::setTapTimeWindows(lsm6dsv16x_tap_time_windows_t window)
 }
 
 /// @brief Retrieves the three tap window settings.
-/// @param tapWindow
+/// @param window the time duration of the three tap settings
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::getTapTimeWindows(lsm6dsv16x_tap_time_windows_t *window)
 {
@@ -1186,7 +1177,7 @@ bool QwDevLSM6DSV16X::getTapTimeWindows(lsm6dsv16x_tap_time_windows_t *window)
 //
 
 /// @brief Enables Qvar inputs.
-/// @param enable
+/// @param enable Enable the analog pins.
 /// @return Returns true on successful write to register.
 bool QwDevLSM6DSV16X::enableAhQvar(bool enable)
 {
@@ -1222,7 +1213,11 @@ bool QwDevLSM6DSV16X::getQvarMode(lsm6dsv16x_ah_qvar_mode_t *mode)
 
 /// @brief Sets the impedance (four possible preset values) for the Analog and QVar
 /// channels.
-/// @param val
+/// @param val The impedance value of the analog input pins.
+///		LSM6DSV16X_2400MOhm
+///		LSM6DSV16X_730MOhm
+///		LSM6DSV16X_300MOhm
+///		LSM6DSV16X_255MOhm
 /// @return Returns true on successful write to register.
 bool QwDevLSM6DSV16X::setQvarImpedance(lsm6dsv16x_ah_qvar_zin_t val)
 {
@@ -1267,10 +1262,10 @@ bool QwDevLSM6DSV16X::checkQvar()
 //
 
 /// @brief Sets the Sensor Hub Output Data Rate
-/// @param Output data rate. Possible values: 
-///		LSM6DSV16X_SH_15Hz 
-///		LSM6DSV16X_SH_30Hz 
-///		LSM6DSV16X_SH_60Hz 
+/// @param rate Output data rate. Possible values:
+///		LSM6DSV16X_SH_15Hz
+///		LSM6DSV16X_SH_30Hz
+///		LSM6DSV16X_SH_60Hz
 ///		LSM6DSV16X_SH_120Hz
 ///		LSM6DSV16X_SH_240Hz
 ///		LSM6DSV16X_SH_480Hz
@@ -1286,7 +1281,7 @@ bool QwDevLSM6DSV16X::setHubODR(lsm6dsv16x_sh_data_rate_t rate)
 }
 
 /// @brief Sets the parameters with which to read from a downstream sensor
-/// @param settings The parameters to read from the downstream sensor. 
+/// @param settings The parameters to read from the downstream sensor.
 /// @param sensor the sensor to address 0 - 4
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setHubSensorRead(uint8_t sensor, lsm6dsv16x_sh_cfg_read_t *settings)
@@ -1321,7 +1316,7 @@ bool QwDevLSM6DSV16X::setHubSensorRead(uint8_t sensor, lsm6dsv16x_sh_cfg_read_t 
 }
 
 /// @brief Sets the parameters with which to write to the downstream sensor.
-/// @param	The parameters for the downstream sensor.  
+/// @param	settings The parameters for the downstream sensor.
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::setHubSensorWrite(lsm6dsv16x_sh_cfg_write_t *settings)
 {
@@ -1336,7 +1331,7 @@ bool QwDevLSM6DSV16X::setHubSensorWrite(lsm6dsv16x_sh_cfg_write_t *settings)
 }
 
 /// @brief Sets the number of sensors connected to the sensor hub.
-/// @param The number of sensor connected. Possible values:
+/// @param numSensors The number of sensor connected. Possible values:
 ///		LSM6DSV16X_SLV_0
 ///		LSM6DSV16X_SLV_0_1
 ///		LSM6DSV16X_SLV_0_1_2
@@ -1356,7 +1351,7 @@ bool QwDevLSM6DSV16X::setNumberHubSensors(lsm6dsv16x_sh_slave_connected_t numSen
 }
 
 /// @brief Enables sensor hub I2C
-/// @param Enable/disable the auxiliary I2C interface
+/// @param enable Enable/disable the auxiliary I2C interface
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::enableAuxiliaryI2C(bool enable)
 {
@@ -1387,7 +1382,7 @@ bool QwDevLSM6DSV16X::readPeripheralSensor(lsm6dsv16x_emb_sh_read_t *shReg, uint
 }
 
 /// @brief Checks the bit indicating a NACK for the given sensor
-/// @param The sensor to check (0 - 3)
+/// @param sensor The sensor to check (0 - 3)
 /// @return Returns true if a NACK on the sensor hub has occurred.
 bool QwDevLSM6DSV16X::getExternalSensorNack(uint8_t sensor)
 {
@@ -1426,7 +1421,7 @@ bool QwDevLSM6DSV16X::getExternalSensorNack(uint8_t sensor)
 }
 
 /// @brief Configures the sensor hub to write only at the FIRST sensor hub cycle.
-/// @param enable/dsiable writing once on first sensor hub
+/// @param enable Enable/disable writing once on first sensor hub
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::enableHubWriteOnceMode(bool enable)
 {
@@ -1444,7 +1439,7 @@ bool QwDevLSM6DSV16X::enableHubWriteOnceMode(bool enable)
 
 /// @brief Enables the main I2C data lines to communicated directly with a sensor
 /// connected to the sensor hub I2C lines.
-/// @param enable/disable the connection between the main I2C interface and the AUX interface.
+/// @param enable enable/disable the connection between the main I2C interface and the AUX interface.
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::enableHubPassThrough(bool enable)
 {
@@ -1458,7 +1453,7 @@ bool QwDevLSM6DSV16X::enableHubPassThrough(bool enable)
 }
 
 /// @brief Enables pull up resistors on the auxiliary I2C lines.
-/// @param Enables or disables the pull ups
+/// @param enable Enables or disables the pull ups
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::enableHubPullUps(bool enable)
 {
@@ -1528,7 +1523,7 @@ bool QwDevLSM6DSV16X::setAccelSelfTest(lsm6dsv16x_xl_self_test_t val)
 }
 
 /// @brief Gyroscope self-test selection
-/// @param The type of self-test to run. Possible values:
+/// @param val The type of self-test to run. Possible values:
 ///		LSM6DSV16X_GY_ST_DISABLE
 ///		LSM6DSV16X_GY_ST_POSITIVE
 ///		LSM6DSV16X_GY_ST_NEGATIVE
