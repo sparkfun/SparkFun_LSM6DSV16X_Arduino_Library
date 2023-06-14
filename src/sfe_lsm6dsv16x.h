@@ -31,13 +31,6 @@ struct sfe_lsm_data_t
     float zData;
 };
 
-struct sfe_hub_sensor_settings_t
-{
-    uint8_t address;
-    uint8_t subAddress;
-    uint8_t lenData;
-};
-
 class QwDevLSM6DSV16X
 {
   public:
@@ -121,12 +114,12 @@ class QwDevLSM6DSV16X
     bool setQvarImpedance(lsm6dsv16x_ah_qvar_zin_t val);
 
     // Sensor Hub Settings
-    bool setHubODR(uint8_t rate);
-    bool setHubSensorRead(uint8_t sensor, sfe_hub_sensor_settings_t *settings);
-    bool setHubSensorWrite(sfe_hub_sensor_settings_t *settings);
-    bool setNumberHubSensors(uint8_t numSensors);
-    bool enableSensorI2C(bool enable);
-    bool readPeripheralSensor(uint8_t *shReg, uint8_t len);
+    bool setHubODR(lsm6dsv16x_sh_data_rate_t rate);
+    bool setHubSensorRead(uint8_t sensor, lsm6dsv16x_sh_cfg_read_t *settings);
+    bool setHubSensorWrite(lsm6dsv16x_sh_cfg_write_t *settings);
+    bool setNumberHubSensors(lsm6dsv16x_sh_slave_connected_t numSensors);
+    bool enableAuxiliaryI2C(bool enable);
+    bool readPeripheralSensor(lsm6dsv16x_emb_sh_read_t *shReg, uint8_t len);
     bool getExternalSensorNack(uint8_t sensor);
     bool enableHubWriteOnceMode(bool enable = true);
     bool enableHubPassThrough(bool enable = true);
@@ -134,8 +127,8 @@ class QwDevLSM6DSV16X
     bool resetSensorHub();
 
     // Self Test
-    bool setAccelSelfTest(uint8_t val);
-    bool setGyroSelfTest(uint8_t val);
+    bool setAccelSelfTest(lsm6dsv16x_xl_self_test_t val);
+    bool setGyroSelfTest(lsm6dsv16x_gy_self_test_t val);
 
     // FIFO Settings
     bool setFifoWatermark(uint8_t val);

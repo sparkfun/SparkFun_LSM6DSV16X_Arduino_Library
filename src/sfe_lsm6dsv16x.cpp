@@ -155,7 +155,7 @@ uint8_t QwDevLSM6DSV16X::getUniqueId()
 /// @return Returns raw temperature value.
 bool QwDevLSM6DSV16X::getRawTemp(int16_t *tempVal)
 {
-    int32_t retVal = lsm6dsv16x_temperature_raw_get(&sfe_dev, &tempVal);
+    int32_t retVal = lsm6dsv16x_temperature_raw_get(&sfe_dev, tempVal);
 
     if (retVal != 0)
         return false;
@@ -1267,15 +1267,17 @@ bool QwDevLSM6DSV16X::checkQvar()
 //
 
 /// @brief Sets the Sensor Hub Output Data Rate
-/// @param rate
+/// @param Output data rate. Possible values: 
+///		LSM6DSV16X_SH_15Hz 
+///		LSM6DSV16X_SH_30Hz 
+///		LSM6DSV16X_SH_60Hz 
+///		LSM6DSV16X_SH_120Hz
+///		LSM6DSV16X_SH_240Hz
+///		LSM6DSV16X_SH_480Hz
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setHubODR(uint8_t rate)
+bool QwDevLSM6DSV16X::setHubODR(lsm6dsv16x_sh_data_rate_t rate)
 {
-    // 15Hz - 480Hz
-    if (rate > 6)
-        return false;
-
-    int32_t retVal = lsm6dsv16x_sh_data_rate_set(&sfe_dev, (lsm6dsv16x_sh_data_rate_t)rate);
+    int32_t retVal = lsm6dsv16x_sh_data_rate_set(&sfe_dev, rate);
 
     if (retVal != 0)
         return false;
@@ -1284,34 +1286,29 @@ bool QwDevLSM6DSV16X::setHubODR(uint8_t rate)
 }
 
 /// @brief Sets the parameters with which to read from a downstream sensor
-/// @param settings
-/// @param sensor
+/// @param settings The parameters to read from the downstream sensor. 
+/// @param sensor the sensor to address 0 - 4
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setHubSensorRead(uint8_t sensor, sfe_hub_sensor_settings_t *settings)
+bool QwDevLSM6DSV16X::setHubSensorRead(uint8_t sensor, lsm6dsv16x_sh_cfg_read_t *settings)
 {
     int32_t retVal;
-    lsm6dsv16x_sh_cfg_read_t tempSett;
 
     if (sensor > 3)
         return false;
 
-    tempSett.slv_add = settings->address;
-    tempSett.slv_subadd = settings->subAddress;
-    tempSett.slv_len = settings->lenData;
-
     switch (sensor)
     {
     case 0:
-        retVal = lsm6dsv16x_sh_slv0_cfg_read(&sfe_dev, &tempSett);
+        retVal = lsm6dsv16x_sh_slv0_cfg_read(&sfe_dev, settings);
         break;
     case 1:
-        retVal = lsm6dsv16x_sh_slv1_cfg_read(&sfe_dev, &tempSett);
+        retVal = lsm6dsv16x_sh_slv1_cfg_read(&sfe_dev, settings);
         break;
     case 2:
-        retVal = lsm6dsv16x_sh_slv2_cfg_read(&sfe_dev, &tempSett);
+        retVal = lsm6dsv16x_sh_slv2_cfg_read(&sfe_dev, settings);
         break;
     case 3:
-        retVal = lsm6dsv16x_sh_slv3_cfg_read(&sfe_dev, &tempSett);
+        retVal = lsm6dsv16x_sh_slv3_cfg_read(&sfe_dev, settings);
         break;
     default:
         return false;
@@ -1324,18 +1321,13 @@ bool QwDevLSM6DSV16X::setHubSensorRead(uint8_t sensor, sfe_hub_sensor_settings_t
 }
 
 /// @brief Sets the parameters with which to write to the downstream sensor.
-/// @param settings
+/// @param	The parameters for the downstream sensor.  
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setHubSensorWrite(sfe_hub_sensor_settings_t *settings)
+bool QwDevLSM6DSV16X::setHubSensorWrite(lsm6dsv16x_sh_cfg_write_t *settings)
 {
     int32_t retVal;
-    lsm6dsv16x_sh_cfg_write_t tempSett;
 
-    tempSett.slv0_add = settings->address;
-    tempSett.slv0_subadd = settings->subAddress;
-    tempSett.slv0_data = settings->lenData;
-
-    retVal = lsm6dsv16x_sh_cfg_write(&sfe_dev, &tempSett);
+    retVal = lsm6dsv16x_sh_cfg_write(&sfe_dev, settings);
 
     if (retVal != 0)
         return false;
@@ -1344,16 +1336,18 @@ bool QwDevLSM6DSV16X::setHubSensorWrite(sfe_hub_sensor_settings_t *settings)
 }
 
 /// @brief Sets the number of sensors connected to the sensor hub.
-/// @param numSensor
+/// @param The number of sensor connected. Possible values:
+///		LSM6DSV16X_SLV_0
+///		LSM6DSV16X_SLV_0_1
+///		LSM6DSV16X_SLV_0_1_2
+///		LSM6DSV16X_SLV_0_1_2_3
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setNumberHubSensors(uint8_t numSensors)
+bool QwDevLSM6DSV16X::setNumberHubSensors(lsm6dsv16x_sh_slave_connected_t numSensors)
 {
 
     int32_t retVal;
-    if (numSensors > 3)
-        return false;
 
-    retVal = lsm6dsv16x_sh_slave_connected_set(&sfe_dev, (lsm6dsv16x_sh_slave_connected_t)numSensors);
+    retVal = lsm6dsv16x_sh_slave_connected_set(&sfe_dev, numSensors);
 
     if (retVal != 0)
         return false;
@@ -1362,9 +1356,9 @@ bool QwDevLSM6DSV16X::setNumberHubSensors(uint8_t numSensors)
 }
 
 /// @brief Enables sensor hub I2C
-/// @param enable
+/// @param Enable/disable the auxiliary I2C interface
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::enableSensorI2C(bool enable)
+bool QwDevLSM6DSV16X::enableAuxiliaryI2C(bool enable)
 {
     int32_t retVal;
 
@@ -1377,14 +1371,14 @@ bool QwDevLSM6DSV16X::enableSensorI2C(bool enable)
 }
 
 /// @brief Reads froms sensor hub output registers
-/// @param shReg
-/// @param len
+/// @param shReg a struct holding 18 members sensor hub register of 1 byte each.
+/// @param len the number of consecutive reads
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::readPeripheralSensor(uint8_t *shReg, uint8_t len)
+bool QwDevLSM6DSV16X::readPeripheralSensor(lsm6dsv16x_emb_sh_read_t *shReg, uint8_t len)
 {
     int32_t retVal;
 
-    retVal = lsm6dsv16x_sh_read_data_raw_get(&sfe_dev, (lsm6dsv16x_emb_sh_read_t *)shReg, len);
+    retVal = lsm6dsv16x_sh_read_data_raw_get(&sfe_dev, shReg, len);
 
     if (retVal != 0)
         return false;
@@ -1393,7 +1387,7 @@ bool QwDevLSM6DSV16X::readPeripheralSensor(uint8_t *shReg, uint8_t len)
 }
 
 /// @brief Checks the bit indicating a NACK for the given sensor
-/// @param sensor
+/// @param The sensor to check (0 - 3)
 /// @return Returns true if a NACK on the sensor hub has occurred.
 bool QwDevLSM6DSV16X::getExternalSensorNack(uint8_t sensor)
 {
@@ -1432,7 +1426,7 @@ bool QwDevLSM6DSV16X::getExternalSensorNack(uint8_t sensor)
 }
 
 /// @brief Configures the sensor hub to write only at the FIRST sensor hub cycle.
-/// @param enable
+/// @param enable/dsiable writing once on first sensor hub
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::enableHubWriteOnceMode(bool enable)
 {
@@ -1450,7 +1444,7 @@ bool QwDevLSM6DSV16X::enableHubWriteOnceMode(bool enable)
 
 /// @brief Enables the main I2C data lines to communicated directly with a sensor
 /// connected to the sensor hub I2C lines.
-/// @param enable
+/// @param enable/disable the connection between the main I2C interface and the AUX interface.
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::enableHubPassThrough(bool enable)
 {
@@ -1463,8 +1457,8 @@ bool QwDevLSM6DSV16X::enableHubPassThrough(bool enable)
     return true;
 }
 
-/// @brief Enables pull up resistors on the sensor hub I2C lines.
-/// @param
+/// @brief Enables pull up resistors on the auxiliary I2C lines.
+/// @param Enables or disables the pull ups
 /// @return Returns true on successful execution
 bool QwDevLSM6DSV16X::enableHubPullUps(bool enable)
 {
@@ -1517,15 +1511,15 @@ bool QwDevLSM6DSV16X::resetSensorHub()
 
 /// @brief Accelerometer self-test selection
 /// @param val
+///		LSM6DSV16X_XL_ST_DISABLE
+///		LSM6DSV16X_XL_ST_POSITIVE
+///		LSM6DSV16X_XL_ST_NEGATIVE
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setAccelSelfTest(uint8_t val)
+bool QwDevLSM6DSV16X::setAccelSelfTest(lsm6dsv16x_xl_self_test_t val)
 {
     int32_t retVal;
 
-    if (val > 2)
-        return false;
-
-    retVal = lsm6dsv16x_xl_self_test_set(&sfe_dev, (lsm6dsv16x_xl_self_test_t)val);
+    retVal = lsm6dsv16x_xl_self_test_set(&sfe_dev, val);
 
     if (retVal != 0)
         return false;
@@ -1534,17 +1528,16 @@ bool QwDevLSM6DSV16X::setAccelSelfTest(uint8_t val)
 }
 
 /// @brief Gyroscope self-test selection
-/// @param val
+/// @param The type of self-test to run. Possible values:
+///		LSM6DSV16X_GY_ST_DISABLE
+///		LSM6DSV16X_GY_ST_POSITIVE
+///		LSM6DSV16X_GY_ST_NEGATIVE
 /// @return Returns true on successful execution
-bool QwDevLSM6DSV16X::setGyroSelfTest(uint8_t val)
+bool QwDevLSM6DSV16X::setGyroSelfTest(lsm6dsv16x_gy_self_test_t val)
 {
     int32_t retVal;
 
-    // 0, 1, or 3
-    if (val > 3)
-        return false;
-
-    retVal = lsm6dsv16x_gy_self_test_set(&sfe_dev, (lsm6dsv16x_gy_self_test_t)val);
+    retVal = lsm6dsv16x_gy_self_test_set(&sfe_dev, val);
 
     if (retVal != 0)
         return false;
