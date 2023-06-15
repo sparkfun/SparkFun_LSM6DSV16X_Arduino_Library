@@ -588,7 +588,7 @@ bool QwDevLSM6DSV16X::enableFastSetMode(bool enable)
 }
 
 /// @brief Enables filtering using low pass filter 1.
-/// @param enable Enable/disable low pass filter 
+/// @param enable Enable/disable low pass filter
 /// @return True on successful operation
 bool QwDevLSM6DSV16X::enableGyroLP1Filter(bool enable)
 {
@@ -688,40 +688,40 @@ uint8_t QwDevLSM6DSV16X::getBlockDataUpdate()
 }
 
 /// @brief Sets the acceleromter's output data rate (ODR)
-/// @param rate output data rate. Possible values: 
-///		LSM6DSV16X_ODR_OFF              
-///		LSM6DSV16X_ODR_AT_1Hz875        
-///		LSM6DSV16X_ODR_AT_7Hz5          
-///		LSM6DSV16X_ODR_AT_15Hz          
-///		LSM6DSV16X_ODR_AT_30Hz          
-///		LSM6DSV16X_ODR_AT_60Hz          
-///		LSM6DSV16X_ODR_AT_120Hz         
-///		LSM6DSV16X_ODR_AT_240Hz         
-///		LSM6DSV16X_ODR_AT_480Hz         
-///		LSM6DSV16X_ODR_AT_960Hz         
-///		LSM6DSV16X_ODR_AT_1920Hz        
-///		LSM6DSV16X_ODR_AT_3840Hz        
-///		LSM6DSV16X_ODR_AT_7680Hz        
-///		LSM6DSV16X_ODR_HA01_AT_15Hz625  
-///		LSM6DSV16X_ODR_HA01_AT_31Hz25   
-///		LSM6DSV16X_ODR_HA01_AT_62Hz5    
-///		LSM6DSV16X_ODR_HA01_AT_125Hz    
-///		LSM6DSV16X_ODR_HA01_AT_250Hz    
-///		LSM6DSV16X_ODR_HA01_AT_500Hz    
-///		LSM6DSV16X_ODR_HA01_AT_1000Hz   
-///		LSM6DSV16X_ODR_HA01_AT_2000Hz   
-///		LSM6DSV16X_ODR_HA01_AT_4000Hz   
-///		LSM6DSV16X_ODR_HA01_AT_8000Hz   
-///		LSM6DSV16X_ODR_HA02_AT_12Hz5    
-///		LSM6DSV16X_ODR_HA02_AT_25Hz     
-///		LSM6DSV16X_ODR_HA02_AT_50Hz     
-///		LSM6DSV16X_ODR_HA02_AT_100Hz    
-///		LSM6DSV16X_ODR_HA02_AT_200Hz    
-///		LSM6DSV16X_ODR_HA02_AT_400Hz    
-///		LSM6DSV16X_ODR_HA02_AT_800Hz    
-///		LSM6DSV16X_ODR_HA02_AT_1600Hz   
-///		LSM6DSV16X_ODR_HA02_AT_3200Hz   
-///		LSM6DSV16X_ODR_HA02_AT_6400Hz   
+/// @param rate output data rate. Possible values:
+///		LSM6DSV16X_ODR_OFF
+///		LSM6DSV16X_ODR_AT_1Hz875
+///		LSM6DSV16X_ODR_AT_7Hz5
+///		LSM6DSV16X_ODR_AT_15Hz
+///		LSM6DSV16X_ODR_AT_30Hz
+///		LSM6DSV16X_ODR_AT_60Hz
+///		LSM6DSV16X_ODR_AT_120Hz
+///		LSM6DSV16X_ODR_AT_240Hz
+///		LSM6DSV16X_ODR_AT_480Hz
+///		LSM6DSV16X_ODR_AT_960Hz
+///		LSM6DSV16X_ODR_AT_1920Hz
+///		LSM6DSV16X_ODR_AT_3840Hz
+///		LSM6DSV16X_ODR_AT_7680Hz
+///		LSM6DSV16X_ODR_HA01_AT_15Hz625
+///		LSM6DSV16X_ODR_HA01_AT_31Hz25
+///		LSM6DSV16X_ODR_HA01_AT_62Hz5
+///		LSM6DSV16X_ODR_HA01_AT_125Hz
+///		LSM6DSV16X_ODR_HA01_AT_250Hz
+///		LSM6DSV16X_ODR_HA01_AT_500Hz
+///		LSM6DSV16X_ODR_HA01_AT_1000Hz
+///		LSM6DSV16X_ODR_HA01_AT_2000Hz
+///		LSM6DSV16X_ODR_HA01_AT_4000Hz
+///		LSM6DSV16X_ODR_HA01_AT_8000Hz
+///		LSM6DSV16X_ODR_HA02_AT_12Hz5
+///		LSM6DSV16X_ODR_HA02_AT_25Hz
+///		LSM6DSV16X_ODR_HA02_AT_50Hz
+///		LSM6DSV16X_ODR_HA02_AT_100Hz
+///		LSM6DSV16X_ODR_HA02_AT_200Hz
+///		LSM6DSV16X_ODR_HA02_AT_400Hz
+///		LSM6DSV16X_ODR_HA02_AT_800Hz
+///		LSM6DSV16X_ODR_HA02_AT_1600Hz
+///		LSM6DSV16X_ODR_HA02_AT_3200Hz
+///		LSM6DSV16X_ODR_HA02_AT_6400Hz
 /// @return True on successful operation
 bool QwDevLSM6DSV16X::setAccelDataRate(lsm6dsv16x_data_rate_t rate)
 {
@@ -737,39 +737,39 @@ bool QwDevLSM6DSV16X::setAccelDataRate(lsm6dsv16x_data_rate_t rate)
 
 /// @brief Sets the gyro's output data rate (ODR)
 /// @param Gyroscope output data rate. Possible values:
-///		LSM6DSV16X_ODR_OFF              
-///		LSM6DSV16X_ODR_AT_1Hz875        
-///		LSM6DSV16X_ODR_AT_7Hz5          
-///		LSM6DSV16X_ODR_AT_15Hz          
-///		LSM6DSV16X_ODR_AT_30Hz          
-///		LSM6DSV16X_ODR_AT_60Hz          
-///		LSM6DSV16X_ODR_AT_120Hz         
-///		LSM6DSV16X_ODR_AT_240Hz         
-///		LSM6DSV16X_ODR_AT_480Hz         
-///		LSM6DSV16X_ODR_AT_960Hz         
-///		LSM6DSV16X_ODR_AT_1920Hz        
-///		LSM6DSV16X_ODR_AT_3840Hz        
-///		LSM6DSV16X_ODR_AT_7680Hz        
-///		LSM6DSV16X_ODR_HA01_AT_15Hz625  
-///		LSM6DSV16X_ODR_HA01_AT_31Hz25   
-///		LSM6DSV16X_ODR_HA01_AT_62Hz5    
-///		LSM6DSV16X_ODR_HA01_AT_125Hz    
-///		LSM6DSV16X_ODR_HA01_AT_250Hz    
-///		LSM6DSV16X_ODR_HA01_AT_500Hz    
-///		LSM6DSV16X_ODR_HA01_AT_1000Hz   
-///		LSM6DSV16X_ODR_HA01_AT_2000Hz   
-///		LSM6DSV16X_ODR_HA01_AT_4000Hz   
-///		LSM6DSV16X_ODR_HA01_AT_8000Hz   
-///		LSM6DSV16X_ODR_HA02_AT_12Hz5    
-///		LSM6DSV16X_ODR_HA02_AT_25Hz     
-///		LSM6DSV16X_ODR_HA02_AT_50Hz     
-///		LSM6DSV16X_ODR_HA02_AT_100Hz    
-///		LSM6DSV16X_ODR_HA02_AT_200Hz    
-///		LSM6DSV16X_ODR_HA02_AT_400Hz    
-///		LSM6DSV16X_ODR_HA02_AT_800Hz    
-///		LSM6DSV16X_ODR_HA02_AT_1600Hz   
-///		LSM6DSV16X_ODR_HA02_AT_3200Hz   
-///		LSM6DSV16X_ODR_HA02_AT_6400Hz   
+///		LSM6DSV16X_ODR_OFF
+///		LSM6DSV16X_ODR_AT_1Hz875
+///		LSM6DSV16X_ODR_AT_7Hz5
+///		LSM6DSV16X_ODR_AT_15Hz
+///		LSM6DSV16X_ODR_AT_30Hz
+///		LSM6DSV16X_ODR_AT_60Hz
+///		LSM6DSV16X_ODR_AT_120Hz
+///		LSM6DSV16X_ODR_AT_240Hz
+///		LSM6DSV16X_ODR_AT_480Hz
+///		LSM6DSV16X_ODR_AT_960Hz
+///		LSM6DSV16X_ODR_AT_1920Hz
+///		LSM6DSV16X_ODR_AT_3840Hz
+///		LSM6DSV16X_ODR_AT_7680Hz
+///		LSM6DSV16X_ODR_HA01_AT_15Hz625
+///		LSM6DSV16X_ODR_HA01_AT_31Hz25
+///		LSM6DSV16X_ODR_HA01_AT_62Hz5
+///		LSM6DSV16X_ODR_HA01_AT_125Hz
+///		LSM6DSV16X_ODR_HA01_AT_250Hz
+///		LSM6DSV16X_ODR_HA01_AT_500Hz
+///		LSM6DSV16X_ODR_HA01_AT_1000Hz
+///		LSM6DSV16X_ODR_HA01_AT_2000Hz
+///		LSM6DSV16X_ODR_HA01_AT_4000Hz
+///		LSM6DSV16X_ODR_HA01_AT_8000Hz
+///		LSM6DSV16X_ODR_HA02_AT_12Hz5
+///		LSM6DSV16X_ODR_HA02_AT_25Hz
+///		LSM6DSV16X_ODR_HA02_AT_50Hz
+///		LSM6DSV16X_ODR_HA02_AT_100Hz
+///		LSM6DSV16X_ODR_HA02_AT_200Hz
+///		LSM6DSV16X_ODR_HA02_AT_400Hz
+///		LSM6DSV16X_ODR_HA02_AT_800Hz
+///		LSM6DSV16X_ODR_HA02_AT_1600Hz
+///		LSM6DSV16X_ODR_HA02_AT_3200Hz
+///		LSM6DSV16X_ODR_HA02_AT_6400Hz
 /// @return True on successful operation
 bool QwDevLSM6DSV16X::setGyroDataRate(lsm6dsv16x_data_rate_t rate)
 {
@@ -798,7 +798,7 @@ bool QwDevLSM6DSV16X::enableTimestamp(bool enable)
     return true;
 }
 
-///FIFO Settting//////////////////////////////////////////////////////////////////////////////////
+/// FIFO Settting//////////////////////////////////////////////////////////////////////////////////
 
 /// @brief Sets the FIFO's watermark threshold.
 /// @param val number of bytes for the FIFO
@@ -816,14 +816,14 @@ bool QwDevLSM6DSV16X::setFifoWatermark(uint8_t val)
 }
 
 /// @brief Fifo mode selection
-/// @param mode The FIFO operation mode. Possible values: 
-///		LSM6DSV16X_BYPASS_MODE            
-///		LSM6DSV16X_FIFO_MODE              
+/// @param mode The FIFO operation mode. Possible values:
+///		LSM6DSV16X_BYPASS_MODE
+///		LSM6DSV16X_FIFO_MODE
 ///		LSM6DSV16X_STREAM_WTM_TO_FULL_MODE
-///		LSM6DSV16X_STREAM_TO_FIFO_MODE    
-///		LSM6DSV16X_BYPASS_TO_STREAM_MODE  
-///		LSM6DSV16X_STREAM_MODE            
-///		LSM6DSV16X_BYPASS_TO_FIFO_MODE    
+///		LSM6DSV16X_STREAM_TO_FIFO_MODE
+///		LSM6DSV16X_BYPASS_TO_STREAM_MODE
+///		LSM6DSV16X_STREAM_MODE
+///		LSM6DSV16X_BYPASS_TO_FIFO_MODE
 /// @return True on successful operation
 bool QwDevLSM6DSV16X::setFifoMode(lsm6dsv16x_fifo_mode_t mode)
 {
@@ -839,19 +839,19 @@ bool QwDevLSM6DSV16X::setFifoMode(lsm6dsv16x_fifo_mode_t mode)
 
 /// @brief FIFO Batch data rate selection for the accelerometer
 /// @param odr FIFO output data rate.
-///		LSM6DSV16X_XL_NOT_BATCHED       
-///		LSM6DSV16X_XL_BATCHED_AT_1Hz875 
-///		LSM6DSV16X_XL_BATCHED_AT_7Hz5   
-///		LSM6DSV16X_XL_BATCHED_AT_15Hz   
-///		LSM6DSV16X_XL_BATCHED_AT_30Hz   
-///		LSM6DSV16X_XL_BATCHED_AT_60Hz   
-///		LSM6DSV16X_XL_BATCHED_AT_120Hz  
-///		LSM6DSV16X_XL_BATCHED_AT_240Hz  
-///		LSM6DSV16X_XL_BATCHED_AT_480Hz  
-///		LSM6DSV16X_XL_BATCHED_AT_960Hz  
-///		LSM6DSV16X_XL_BATCHED_AT_1920Hz 
-///		LSM6DSV16X_XL_BATCHED_AT_3840Hz 
-///		LSM6DSV16X_XL_BATCHED_AT_7680Hz 
+///		LSM6DSV16X_XL_NOT_BATCHED
+///		LSM6DSV16X_XL_BATCHED_AT_1Hz875
+///		LSM6DSV16X_XL_BATCHED_AT_7Hz5
+///		LSM6DSV16X_XL_BATCHED_AT_15Hz
+///		LSM6DSV16X_XL_BATCHED_AT_30Hz
+///		LSM6DSV16X_XL_BATCHED_AT_60Hz
+///		LSM6DSV16X_XL_BATCHED_AT_120Hz
+///		LSM6DSV16X_XL_BATCHED_AT_240Hz
+///		LSM6DSV16X_XL_BATCHED_AT_480Hz
+///		LSM6DSV16X_XL_BATCHED_AT_960Hz
+///		LSM6DSV16X_XL_BATCHED_AT_1920Hz
+///		LSM6DSV16X_XL_BATCHED_AT_3840Hz
+///		LSM6DSV16X_XL_BATCHED_AT_7680Hz
 /// @return True on successful executuion
 bool QwDevLSM6DSV16X::setAccelFifoBatchSet(lsm6dsv16x_fifo_xl_batch_t odr)
 {
@@ -866,20 +866,20 @@ bool QwDevLSM6DSV16X::setAccelFifoBatchSet(lsm6dsv16x_fifo_xl_batch_t odr)
 }
 
 /// @brief FIFO Batch data rate selection for the gyroscope
-/// @param odr FIFO output data rate 
-///		LSM6DSV16X_GY_NOT_BATCHED       
-///		LSM6DSV16X_GY_BATCHED_AT_1Hz875 
-///		LSM6DSV16X_GY_BATCHED_AT_7Hz5   
-///		LSM6DSV16X_GY_BATCHED_AT_15Hz   
-///		LSM6DSV16X_GY_BATCHED_AT_30Hz   
-///		LSM6DSV16X_GY_BATCHED_AT_60Hz   
-///		LSM6DSV16X_GY_BATCHED_AT_120Hz  
-///		LSM6DSV16X_GY_BATCHED_AT_240Hz  
-///		LSM6DSV16X_GY_BATCHED_AT_480Hz  
-///		LSM6DSV16X_GY_BATCHED_AT_960Hz  
-///		LSM6DSV16X_GY_BATCHED_AT_1920Hz 
-///		LSM6DSV16X_GY_BATCHED_AT_3840Hz 
-///		LSM6DSV16X_GY_BATCHED_AT_7680Hz 
+/// @param odr FIFO output data rate
+///		LSM6DSV16X_GY_NOT_BATCHED
+///		LSM6DSV16X_GY_BATCHED_AT_1Hz875
+///		LSM6DSV16X_GY_BATCHED_AT_7Hz5
+///		LSM6DSV16X_GY_BATCHED_AT_15Hz
+///		LSM6DSV16X_GY_BATCHED_AT_30Hz
+///		LSM6DSV16X_GY_BATCHED_AT_60Hz
+///		LSM6DSV16X_GY_BATCHED_AT_120Hz
+///		LSM6DSV16X_GY_BATCHED_AT_240Hz
+///		LSM6DSV16X_GY_BATCHED_AT_480Hz
+///		LSM6DSV16X_GY_BATCHED_AT_960Hz
+///		LSM6DSV16X_GY_BATCHED_AT_1920Hz
+///		LSM6DSV16X_GY_BATCHED_AT_3840Hz
+///		LSM6DSV16X_GY_BATCHED_AT_7680Hz
 /// @return True on successful executuion
 bool QwDevLSM6DSV16X::setGyroFifoBatchSet(lsm6dsv16x_fifo_gy_batch_t odr)
 {
@@ -895,10 +895,10 @@ bool QwDevLSM6DSV16X::setGyroFifoBatchSet(lsm6dsv16x_fifo_gy_batch_t odr)
 
 /// @brief Selects decimation for timestamp batching in FIFO
 /// @param decimation timestamp decimation for FIFO
-///		LSM6DSV16X_TMSTMP_NOT_BATCHED 
-///		LSM6DSV16X_TMSTMP_DEC_1       
-///		LSM6DSV16X_TMSTMP_DEC_8       
-///		LSM6DSV16X_TMSTMP_DEC_32      
+///		LSM6DSV16X_TMSTMP_NOT_BATCHED
+///		LSM6DSV16X_TMSTMP_DEC_1
+///		LSM6DSV16X_TMSTMP_DEC_8
+///		LSM6DSV16X_TMSTMP_DEC_32
 /// @return True on successful executuion
 bool QwDevLSM6DSV16X::setFifoTimestampDec(lsm6dsv16x_fifo_timestamp_batch_t decimation)
 {
