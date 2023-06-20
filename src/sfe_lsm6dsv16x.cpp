@@ -223,14 +223,12 @@ bool QwDevLSM6DSV16X::getAccel(sfe_lsm_data_t *accelData)
 
     int16_t tempVal[3] = {0};
     int32_t retVal;
-    lsm6dsv16x_xl_full_scale_t scale;
 
     retVal = lsm6dsv16x_acceleration_raw_get(&sfe_dev, tempVal);
 
     if (accelScaleSet == false)
     {
-        getAccelFullScale(&scale);
-        fullScaleAccel = scale;
+        getAccelFullScale(&fullScaleAccel);
         accelScaleSet = true;
     }
 
@@ -277,14 +275,12 @@ bool QwDevLSM6DSV16X::getGyro(sfe_lsm_data_t *gyroData)
 
     int32_t retVal;
     int16_t tempVal[3] = {0};
-    lsm6dsv16x_gy_full_scale_t scale;
 
     retVal = lsm6dsv16x_angular_rate_raw_get(&sfe_dev, tempVal);
 
     if (gyroScaleSet == false)
     {
-        getGyroFullScale(&scale);
-        fullScaleGyro = scale;
+        getGyroFullScale(&fullScaleGyro);
         gyroScaleSet = true;
     }
 
