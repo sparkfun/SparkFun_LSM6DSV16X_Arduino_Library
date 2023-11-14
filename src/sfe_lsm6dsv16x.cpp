@@ -292,34 +292,34 @@ bool QwDevLSM6DSV16X::getGyro(sfe_lsm_data_t *gyroData)
     switch (fullScaleGyro)
     {
     case LSM6DSV16X_125dps:
-        gyroData->xData = convert250dpsToMdps(tempVal[0]);
-        gyroData->yData = convert250dpsToMdps(tempVal[1]);
-        gyroData->zData = convert250dpsToMdps(tempVal[2]);
-        break;
-    case LSM6DSV16X_250dps:
-        gyroData->xData = convert4000dpsToMdps(tempVal[0]);
-        gyroData->yData = convert4000dpsToMdps(tempVal[1]);
-        gyroData->zData = convert4000dpsToMdps(tempVal[2]);
-        break;
-    case LSM6DSV16X_500dps:
         gyroData->xData = convert125dpsToMdps(tempVal[0]);
         gyroData->yData = convert125dpsToMdps(tempVal[1]);
         gyroData->zData = convert125dpsToMdps(tempVal[2]);
         break;
-    case LSM6DSV16X_1000dps:
+    case LSM6DSV16X_250dps:
+        gyroData->xData = convert250dpsToMdps(tempVal[0]);
+        gyroData->yData = convert250dpsToMdps(tempVal[1]);
+        gyroData->zData = convert250dpsToMdps(tempVal[2]);
+        break;
+    case LSM6DSV16X_500dps:
         gyroData->xData = convert500dpsToMdps(tempVal[0]);
         gyroData->yData = convert500dpsToMdps(tempVal[1]);
         gyroData->zData = convert500dpsToMdps(tempVal[2]);
         break;
-    case LSM6DSV16X_2000dps:
+    case LSM6DSV16X_1000dps:
         gyroData->xData = convert1000dpsToMdps(tempVal[0]);
         gyroData->yData = convert1000dpsToMdps(tempVal[1]);
         gyroData->zData = convert1000dpsToMdps(tempVal[2]);
         break;
-    case LSM6DSV16X_4000dps:
+    case LSM6DSV16X_2000dps:
         gyroData->xData = convert2000dpsToMdps(tempVal[0]);
         gyroData->yData = convert2000dpsToMdps(tempVal[1]);
         gyroData->zData = convert2000dpsToMdps(tempVal[2]);
+        break;
+    case LSM6DSV16X_4000dps:
+        gyroData->xData = convert4000dpsToMdps(tempVal[0]);
+        gyroData->yData = convert4000dpsToMdps(tempVal[1]);
+        gyroData->zData = convert4000dpsToMdps(tempVal[2]);
         break;
     default:
         return false; // Something has gone wrong
