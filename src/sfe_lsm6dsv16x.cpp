@@ -245,19 +245,19 @@ bool QwDevLSM6DSV16X::getAccel(sfe_lsm_data_t *accelData)
         accelData->zData = convert2gToMg(tempVal[2]);
         break;
     case LSM6DSV16X_4g:
-        accelData->xData = convert16gToMg(tempVal[0]);
-        accelData->yData = convert16gToMg(tempVal[1]);
-        accelData->zData = convert16gToMg(tempVal[2]);
-        break;
-    case LSM6DSV16X_8g:
         accelData->xData = convert4gToMg(tempVal[0]);
         accelData->yData = convert4gToMg(tempVal[1]);
         accelData->zData = convert4gToMg(tempVal[2]);
         break;
-    case LSM6DSV16X_16g:
+    case LSM6DSV16X_8g:
         accelData->xData = convert8gToMg(tempVal[0]);
         accelData->yData = convert8gToMg(tempVal[1]);
         accelData->zData = convert8gToMg(tempVal[2]);
+        break;
+    case LSM6DSV16X_16g:
+        accelData->xData = convert16gToMg(tempVal[0]);
+        accelData->yData = convert16gToMg(tempVal[1]);
+        accelData->zData = convert16gToMg(tempVal[2]);
         break;
     default:
         return false; // Something has gone wrong
