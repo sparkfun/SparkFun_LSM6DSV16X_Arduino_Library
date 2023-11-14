@@ -1,13 +1,7 @@
-# SparkFun LSM6DSV16X Arduino Library
+SparkFun LSM6DSV16X Arduino Library
 ========================================
 
 <table class="table table-hover table-striped table-bordered">
-    <tr>
-        <th class="text-center"> 
-        </th>
-        <th class="text-center">
-        </th>
-    </tr>
     <tr align="center">
         <td><a href="https://www.sparkfun.com/products/21325"><img src="https://cdn.sparkfun.com/assets/parts/2/1/1/1/8/21325_6DOF_3.jpg" alt=""></a></td>
         <td><a href="https://www.sparkfun.com/products/21336"><img src="https://cdn.sparkfun.com/assets/parts/2/1/1/4/4/21336_Micro6DOF_3.jpg" alt=""></a></td>
